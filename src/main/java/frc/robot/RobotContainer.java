@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -30,21 +31,26 @@ public class RobotContainer {
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
 
+    private final JoystickButton testVortex1Button = new JoystickButton(driver, PS4Controller.Button.kCircle.value);
+    private final JoystickButton testVortex2Button = new JoystickButton(driver, PS4Controller.Button.kSquare.value);
+
     /* Subsystems */
-    private final Swerve s_Swerve = new Swerve();
+    // private final Swerve s_Swerve = new Swerve();
+    private final TestVortex vortex1 = new TestVortex();
+    private final TestVortex vortex2 = new TestVortex();
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
-        s_Swerve.setDefaultCommand(
-            new TeleopSwerve(
-                s_Swerve, 
-                () -> -driver.getRawAxis(translationAxis), 
-                () -> -driver.getRawAxis(strafeAxis), 
-                () -> -driver.getRawAxis(rotationAxis), 
-                () -> robotCentric.getAsBoolean()
-            )
-        );
+        // s_Swerve.setDefaultCommand(
+        //     new TeleopSwerve(
+        //         s_Swerve, 
+        //         () -> -driver.getRawAxis(translationAxis), 
+        //         () -> -driver.getRawAxis(strafeAxis), 
+        //         () -> -driver.getRawAxis(rotationAxis), 
+        //         () -> robotCentric.getAsBoolean()
+        //     )
+        // );
 
         // Configure the button bindings
         configureButtonBindings();
@@ -58,7 +64,11 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         /* Driver Buttons */
-        zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
+        // zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
+        testVortex1Button.onTrue(new InstantCommand(() -> vortex1.setPowerToTestVortex1(0.3)));
+        testVortex2Button.onTrue(new InstantCommand(() -> vortex2.setPowerToTestVortex2(0.3)));
+
+        
     }
 
     /**
@@ -68,6 +78,7 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
-        return new exampleAuto(s_Swerve);
+        // return new exampleAuto(s_Swerve);
+        return null;
     }
 }
