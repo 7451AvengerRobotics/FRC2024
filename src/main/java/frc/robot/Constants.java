@@ -148,5 +148,6 @@ public final class Constants {
     public static final int testVortex1ID = 12;
     public static final int testVortex2ID = 13;
     public static final int intakeMotorCAN = 10;
+    public static final int transportMotor = 14;
 
 }
