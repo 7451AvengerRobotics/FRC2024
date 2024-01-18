@@ -21,6 +21,7 @@ import frc.robot.subsystems.*;
 public class RobotContainer {
     /* Controllers */
     private final Joystick driver = new Joystick(0);
+    private final Joystick buttonPanel = new Joystick(1);
 
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -37,7 +38,7 @@ public class RobotContainer {
     /* Subsystems */
     // private final Swerve s_Swerve = new Swerve();
     private final TestVortex vortex1 = new TestVortex();
-    private final TestVortex vortex2 = new TestVortex();
+    
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -65,11 +66,12 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         // zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
-        testVortex1Button.onTrue(new InstantCommand(() -> vortex1.setPowerToTestVortex1(0.3)));
-        testVortex2Button.onTrue(new InstantCommand(() -> vortex2.setPowerToTestVortex2(0.3)));
+        JoystickButton test = new JoystickButton(buttonPanel, 1);
+        test.onTrue(new InstantCommand(() -> vortex1.setPowerToTestVortex1(0.3)));
+        //testVortex2Button.onTrue(new InstantCommand(() -> vortex2.setPowerToTestVortex2(0.3)));
 
         
-    }
+    }   
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
