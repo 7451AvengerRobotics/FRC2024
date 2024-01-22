@@ -152,6 +152,7 @@ public final class Constants {
     public static final int m_index = 13;
     public static final int intakeMotorCAN = 14;
     public static final int transportMotor = 15;
+    public static final int limitSwitchPort = 0;
 
 
 }

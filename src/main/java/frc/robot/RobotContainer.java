@@ -34,12 +34,12 @@ public class RobotContainer {
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
 
     private final JoystickButton testVortex1Button = new JoystickButton(driver, PS4Controller.Button.kCircle.value);
-    private final JoystickButton testVortex2Button = new JoystickButton(driver, PS4Controller.Button.kSquare.value);
+    //private final JoystickButton testVortex2Button = new JoystickButton(driver, PS4Controller.Button.kSquare.value);
+    private final LedHandler led = new LedHandler();
 
     /* Subsystems */
     // private final Swerve s_Swerve = new Swerve();
     private final TestVortex vortex1 = new TestVortex();
-    
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -55,9 +55,13 @@ public class RobotContainer {
         // );
 
         // Configure the button bindings
-        vortex1.setDefaultCommand(new RunCommand(() -> vortex1.setPowerToTestVortex1(0.3), vortex1));
 
+        led.SetBlue();
+   
+      
+        vortex1.setDefaultCommand(new Test(vortex1, led, 0.1));
         configureButtonBindings();
+
     }
 
     /**
@@ -69,11 +73,12 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         // zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
-        JoystickButton test = new JoystickButton(buttonPanel, 1);
-        test.whileTrue(new RunCommand(() -> vortex1.setPowerToTestVortex1(1)));
+ 
+        //test.whileTrue(new RunCommand(() -> vortex2.  setPowerToTestVortex1(1)));
 
-        JoystickButton test1 = new JoystickButton(buttonPanel, 2);
-        test1.whileTrue(new RunCommand(() -> vortex1.setPowerToTestVortex1(0)));
+
+        // JoystickButton test1 = new JoystickButton(buttonPanel, 2);
+        // test1.whileTrue(new Test(vortex1, .4));
         //testVortex2Button.onTrue(new InstantCommand(() -> vortex2.setPowerToTestVortex2(0.3)));
 
         
@@ -90,4 +95,5 @@ public class RobotContainer {
         return null;
     }
 }
+
 
