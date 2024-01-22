@@ -147,5 +147,8 @@ public final class Constants {
 
     public static final int testVortex1ID = 12;
     public static final int testVortex2ID = 13;
+    public static final int m_shooter1 = 11;
+    public static final int m_shooter2 = 12;
+    public static final int m_index = 13;
 
 }
