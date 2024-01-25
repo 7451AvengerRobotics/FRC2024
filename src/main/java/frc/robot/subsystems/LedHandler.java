@@ -4,12 +4,14 @@ import com.ctre.phoenix.led.CANdle;
 import com.ctre.phoenix.led.CANdle.LEDStripType;
 import com.ctre.phoenix.led.CANdle.VBatOutputMode;
 import com.ctre.phoenix.led.CANdleConfiguration;
+import com.ctre.phoenix.led.RainbowAnimation;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LedHandler extends SubsystemBase
 {
     private final CANdle candle = new CANdle(5);
-
+    private final RainbowAnimation rainbow;
     public LedHandler() {
         super();
 
@@ -21,23 +23,30 @@ public class LedHandler extends SubsystemBase
         configAll.brightnessScalar = 1;
         configAll.vBatOutputMode = VBatOutputMode.Modulated;
         candle.configAllSettings(configAll, 100);
+      
+        rainbow = new RainbowAnimation(1, 0.5, 308);
+        
     }
 
     // changing colors
-    public void SetColor(int r, int g, int b)
+    public void setColor(int r, int g, int b)
     {
-        this.candle.setLEDs(r, g, b);
+        candle.setLEDs(r, g, b);
     }
 
-    public void SetBlue()
+    public void setBlue()
     {
-        SetColor(0, 0, 255);
+        setColor(0, 0, 255);
     }
     
-    public void SetGreen()
+    public void setGreen()
     {
-        SetColor(0, 255, 0);
+        setColor(0, 255, 0);
     }
+
+     public void setRainbow(){
+         candle.animate(rainbow);
+     }
 
     
 }

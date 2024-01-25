@@ -24,10 +24,10 @@ public class Test extends Command{
     @Override 
     public void execute(){
         test.setPower(power);
-        led.SetGreen();
+        led.setGreen();
         if (!(test.detected())) {
             test.setPower(0); 
-            led.SetBlue();
+            led.setBlue();
         }
 
     }

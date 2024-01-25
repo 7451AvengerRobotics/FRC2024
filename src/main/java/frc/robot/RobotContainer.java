@@ -39,8 +39,8 @@ public class RobotContainer {
 
     /* Subsystems */
     // private final Swerve s_Swerve = new Swerve();
-    private final TestVortex vortex1 = new TestVortex();
-
+    //private final TestVortex vortex1 = new TestVortex();
+    private final Limelight limelight = new Limelight();
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -56,13 +56,21 @@ public class RobotContainer {
 
         // Configure the button bindings
 
-        led.SetBlue();
+
+       // led.setColor(255, 0, 0);
+       // led.setRainbow();
    
       
-        vortex1.setDefaultCommand(new Test(vortex1, led, 0.1));
+        //vortex1.setDefaultCommand(new Test(vortex1, led, 0.1));
+        limelight.setDefaultCommand(new limelightLedTest(limelight, led));
         configureButtonBindings();
 
     }
+
+
+
+    
+
 
     /**
      * Use this method to define your button->command mappings. Buttons can be created by

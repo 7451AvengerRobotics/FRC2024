@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -11,6 +12,7 @@ public class Limelight extends SubsystemBase {
     NetworkTableEntry tx;
     NetworkTableEntry ty;
     NetworkTableEntry ta;
+    NetworkTableEntry tid;
     double aprilTag;
 
 
@@ -19,7 +21,9 @@ public class Limelight extends SubsystemBase {
         tx = table.getEntry("tx");
         ty = table.getEntry("ty");
         ta = table.getEntry("ta");
-        aprilTag = table.getEntry("tid").getDouble(1);
+        tid = table.getEntry("tid");
+        table.getEntry("pipeline").setNumber(0);
+
 
     }
 
@@ -37,12 +41,19 @@ public class Limelight extends SubsystemBase {
        return ta.getDouble(0.0);
     }
 
+    public double getID(){
+        return tid.getDouble(0);
+    }
+
     
     public void periodic(){
         SmartDashboard.putNumber("XPos", getXPos());
         SmartDashboard.putNumber("YPos", getYPos());
         SmartDashboard.putNumber("Area", getArea());
-        SmartDashboard.putNumber("April Tag", aprilTag);
+        SmartDashboard.putNumber("April Tag", getID());
+
     }
+
+    
  
 }
