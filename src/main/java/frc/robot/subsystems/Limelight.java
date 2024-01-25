@@ -14,6 +14,9 @@ public class Limelight extends SubsystemBase {
     NetworkTableEntry ta;
     NetworkTableEntry tid;
     double aprilTag;
+    double Kp = 0.02; // Proportional control constant
+    double min_command = 0.15; // Minimum amount to slightly move
+    double steering_adjust;
 
 
     public Limelight(){
@@ -44,6 +47,17 @@ public class Limelight extends SubsystemBase {
     public double getID(){
         return tid.getDouble(0);
     }
+
+    public double getRotationAdjust() {
+        double tx = table.getEntry("tx").getDouble(0);
+        double heading_error = -tx;
+        if (tx > 1.0) {
+          steering_adjust = Kp * heading_error - min_command;
+        } else if (tx < 1.0) {
+          steering_adjust = Kp * heading_error + min_command;
+        }
+        return steering_adjust;
+      }
 
     
     public void periodic(){

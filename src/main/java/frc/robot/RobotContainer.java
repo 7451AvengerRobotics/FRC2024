@@ -39,7 +39,7 @@ public class RobotContainer {
 
     /* Subsystems */
     // private final Swerve s_Swerve = new Swerve();
-    //private final TestVortex vortex1 = new TestVortex();
+    private final TestVortex vortex1 = new TestVortex();
     private final Limelight limelight = new Limelight();
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -62,7 +62,7 @@ public class RobotContainer {
    
       
         //vortex1.setDefaultCommand(new Test(vortex1, led, 0.1));
-        limelight.setDefaultCommand(new limelightLedTest(limelight, led));
+        limelight.setDefaultCommand(new testAim(vortex1, limelight));
         configureButtonBindings();
 
     }

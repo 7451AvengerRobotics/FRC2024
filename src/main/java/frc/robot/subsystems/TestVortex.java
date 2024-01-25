@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -8,20 +9,29 @@ import frc.robot.Constants;
 
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType ;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkPIDController;
+
 
 
 public class TestVortex extends SubsystemBase{
    private final CANSparkFlex testVortex1;
    private final CANSparkFlex testVortex2;
-   private final DigitalInput limitSwitch;
+   // private final DigitalInput limitSwitch;
+   public final SparkPIDController m_pidController;
    private boolean active;
+   public final RelativeEncoder m_encoder;
 
 
    public TestVortex(){
     super();
         testVortex1 = new CANSparkFlex(9, MotorType.kBrushless);
         testVortex2 = new CANSparkFlex(19, MotorType.kBrushless);
-        limitSwitch = new DigitalInput(Constants.limitSwitchPort);
+      //   limitSwitch = new DigitalInput(Constants.limitSwitchPort);
+        m_pidController = testVortex1.getPIDController();
+        m_encoder = testVortex1.getEncoder();
+
    }
 
    public void setPower(double power){
@@ -30,7 +40,16 @@ public class TestVortex extends SubsystemBase{
    }
 
    public boolean detected(){
-    return limitSwitch.get();
+      return true;
+   //  return limitSwitch.get();
+   }
+
+   public void setCount(double counts) {
+       if (counts == 0) {
+         m_pidController.setReference(0, CANSparkFlex.ControlType.kPosition);
+      } else {
+      m_pidController.setReference(counts , CANSparkFlex.ControlType.kPosition);
+    }
    }
 
   @Override
@@ -39,9 +58,6 @@ public class TestVortex extends SubsystemBase{
    }
    
 
-   
-   // public void setPowerToTestVortex2(double power){
-   //  testVortex2.set(power);
-   // }
+
     
 }
