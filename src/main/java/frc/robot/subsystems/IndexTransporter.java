@@ -27,7 +27,7 @@ public class IndexTransporter extends SubsystemBase {
         transportMotor.set(0.0);
         isOn=false;
     }
-
+    //Pretty self Explanatory
     public void toggleTransportMotor(){
         if(isOn){
             this.spinTransportMotor();

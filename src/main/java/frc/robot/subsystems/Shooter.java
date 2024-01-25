@@ -10,7 +10,7 @@ import frc.robot.Constants;
 public class Shooter extends SubsystemBase {
 
 
-    private final CANSparkMax m_index;
+    //private final CANSparkMax m_index;
     private final CANSparkFlex m_shooter1;
     private final CANSparkFlex m_shooter2;
 
@@ -21,7 +21,7 @@ public class Shooter extends SubsystemBase {
         
         m_shooter1 = new CANSparkFlex(Constants.m_shooter1, MotorType.kBrushed);
         m_shooter2 = new CANSparkFlex(Constants.m_shooter2, MotorType.kBrushed);
-        m_index = new CANSparkMax(Constants.m_index, MotorType.kBrushed);
+        //m_index = new CANSparkMax(Constants.m_index, MotorType.kBrushed); This is part of 
 
 
     }
