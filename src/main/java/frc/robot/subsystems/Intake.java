@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Intake extends SubsystemBase {
 
     private final CANSparkMax intake;
+    
 
     public Intake(){
         super();
