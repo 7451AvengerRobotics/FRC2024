@@ -24,18 +24,20 @@ public class limelightLedTest extends Command{
     
     @Override 
     public void execute(){
-        if(lime.getXPos()>2)
+        if(lime.getID() == 1)
         {
-            led.setColor(255,0,0);
+            if(lime.getXPos()>2){
+                led.setColor(255,0,0);
+            } else{
+                led.setBlue();
+            }
+            
         }
-        else if(lime.getXPos()<-2)
+        else if(lime.getID() == 2)
         {
             led.setGreen();
         
-        } else{
-            led.setColor(0, 0, 255);
-        }
-
+        } 
     }
     
     @Override
