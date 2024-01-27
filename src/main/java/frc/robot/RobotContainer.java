@@ -57,12 +57,12 @@ public class RobotContainer {
         // Configure the button bindings
 
 
-       // led.setColor(255, 0, 0);
+        led.setColor(255, 0, 0);
        // led.setRainbow();
    
       
-        //vortex1.setDefaultCommand(new Test(vortex1, led, 0.1));
-        limelight.setDefaultCommand(new testAim(vortex1, limelight));
+       // vortex1.setDefaultCommand(new Test(vortex1, led, 0.1));
+        vortex1.setDefaultCommand(new testAim(vortex1, limelight));
         configureButtonBindings();
 
     }

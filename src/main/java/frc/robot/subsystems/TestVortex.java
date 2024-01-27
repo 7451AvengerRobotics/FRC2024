@@ -17,7 +17,7 @@ import com.revrobotics.SparkPIDController;
 
 public class TestVortex extends SubsystemBase{
    private final CANSparkFlex testVortex1;
-   private final CANSparkFlex testVortex2;
+   //private final CANSparkFlex testVortex2;
    // private final DigitalInput limitSwitch;
    public final SparkPIDController m_pidController;
    private boolean active;
@@ -27,16 +27,18 @@ public class TestVortex extends SubsystemBase{
    public TestVortex(){
     super();
         testVortex1 = new CANSparkFlex(9, MotorType.kBrushless);
-        testVortex2 = new CANSparkFlex(19, MotorType.kBrushless);
+       // testVortex2 = new CANSparkFlex(19, MotorType.kBrushless);
       //   limitSwitch = new DigitalInput(Constants.limitSwitchPort);
         m_pidController = testVortex1.getPIDController();
         m_encoder = testVortex1.getEncoder();
+        m_pidController.setP(0.0005);
+
 
    }
 
    public void setPower(double power){
     testVortex1.set(-power);
-    testVortex2.set(power);
+   // testVortex2.set(power);
    }
 
    public boolean detected(){
