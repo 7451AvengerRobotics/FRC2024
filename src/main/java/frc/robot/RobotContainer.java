@@ -33,14 +33,16 @@ public class RobotContainer {
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
 
-    private final JoystickButton testVortex1Button = new JoystickButton(driver, PS4Controller.Button.kCircle.value);
-    //private final JoystickButton testVortex2Button = new JoystickButton(driver, PS4Controller.Button.kSquare.value);
+    private final JoystickButton shooterTest0 = new JoystickButton(driver, PS4Controller.Button.kCircle.value);
+    private final JoystickButton shooterTest1 = new JoystickButton(driver, PS4Controller.Button.kSquare.value);
+    private final JoystickButton shooterTest2 = new JoystickButton(driver, PS4Controller.Button.kTriangle.value);
     private final LedHandler led = new LedHandler();
 
     /* Subsystems */
     // private final Swerve s_Swerve = new Swerve();
     private final TestVortex vortex1 = new TestVortex();
     private final Limelight limelight = new Limelight();
+    private final Shooter shoot = new Shooter();
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -60,10 +62,14 @@ public class RobotContainer {
         led.setColor(255, 0, 0);
        // led.setRainbow();
    
-      
+      shooterTest0.whileTrue(new shootShooter(shoot, 0.25));
+      shooterTest1.whileTrue(new shootShooter(shoot, 0.5));
+      shooterTest2.whileTrue(new shootShooter(shoot, 1));
+
        // vortex1.setDefaultCommand(new Test(vortex1, led, 0.1));
-        vortex1.setDefaultCommand(new testAim(vortex1, limelight));
-        configureButtonBindings();
+    //    shooterTest0.whileTrue(new )
+    //     vortex1.setDefaultCommand(new testAim(vortex1, limelight));
+    //     configureButtonBindings();
 
     }
 
