@@ -11,7 +11,6 @@ public class Intake extends SubsystemBase {
 
     private final CANSparkMax intake;
 
-
     public Intake(){
         super();
         intake = new CANSparkMax(Constants.intakeMotorCAN, MotorType.kBrushless);
@@ -21,12 +20,6 @@ public class Intake extends SubsystemBase {
     public void runMotor(double power){
         intake.set(power);
     }
-
-    public void stopMotor(){
-        intake.set(0);
-    }
-
-    
     
     
 }

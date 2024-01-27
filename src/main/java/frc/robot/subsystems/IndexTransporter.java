@@ -18,8 +18,8 @@ public class IndexTransporter extends SubsystemBase {
     }
 
     //Spins motor
-    public void spinTransportMotor(double power){
-        transportMotor.set(power);
+    public void spinTransportMotor(){
+        transportMotor.set(1.0);
         isOn=true;
     }
     //Stops Motor
@@ -28,9 +28,9 @@ public class IndexTransporter extends SubsystemBase {
         isOn=false;
     }
 
-    public void toggleTransportMotor(double power){
+    public void toggleTransportMotor(){
         if(isOn){
-            this.spinTransportMotor(power);
+            this.spinTransportMotor();
         }else{
             this.stopTransportMotor();
         }

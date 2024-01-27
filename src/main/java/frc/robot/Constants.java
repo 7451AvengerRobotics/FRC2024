@@ -147,14 +147,12 @@ public final class Constants {
 
     // public static final int testVortex1ID = 12;
     // public static final int testVortex2ID = 13;
-    public static final int m_shooter1 = 11;
-    public static final int m_shooter2 = 12;
+    public static final int shooterBottom = 10;
+    public static final int shooterTop = 9;
     public static final int m_index = 13;
     public static final int intakeMotorCAN = 14;
     public static final int transportMotor = 15;
     public static final int limitSwitchPort = 0;
-    public static final int mElevator1 = 16;
-    public static final int mElevator2 = 17;
 
 
 }
