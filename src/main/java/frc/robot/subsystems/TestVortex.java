@@ -39,6 +39,13 @@ public class TestVortex extends SubsystemBase{
     SmartDashboard.putBoolean("Limit Switch State", this.detected());
    }
    
+   public void setCount(double counts) {
+      if (counts == 0) {
+        m_pidController.setReference(0, CANSparkFlex.ControlType.kPosition);
+     } else {
+     m_pidController.setReference(counts , CANSparkFlex.ControlType.kPosition);
+   }
+  }
 
    
    // public void setPowerToTestVortex2(double power){
