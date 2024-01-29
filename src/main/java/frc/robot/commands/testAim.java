@@ -28,7 +28,7 @@ public class testAim extends Command {
 
   @Override
   public void execute() {
-    test.setCount(limelight.getRotationAdjust());
+    //test.setCount(limelight.getRotationAdjust());
   }
 
   @Override
