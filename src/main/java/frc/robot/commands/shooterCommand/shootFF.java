@@ -30,7 +30,7 @@ public class shootFF extends Command{
     
     @Override
     public void end(boolean interrupted){
-        shoot.setFF(voltage, acceleration);
+        shoot.setFF(0, acceleration);
     }
 
     @Override
