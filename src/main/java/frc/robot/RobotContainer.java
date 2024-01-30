@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.autos.*;
 import frc.robot.commands.*;
+import frc.robot.commands.shooterCommand.shootFF;
 import frc.robot.subsystems.*;
 
 /**
@@ -56,8 +57,8 @@ public class RobotContainer {
         // Configure the button bindings
 
        // led.setRainbow();
-      //shooter.setDefaultCommand(new shootShooter(shooter,0));  
-      shooterTest0.whileTrue(new shootShooter(shooter, 1000));
+      shooter.setDefaultCommand(new shootFF(shooter,1, 1));  
+      shooterTest0.whileTrue(new shootFF(shooter, 1, 1));
     //   shooterTest1.whileTrue(new shootShooter(shooter, 0.5));
     //   shooterTest2.whileTruex    (new shootShooter(shooter, 1));
 
