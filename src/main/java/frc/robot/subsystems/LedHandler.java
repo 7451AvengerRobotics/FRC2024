@@ -14,14 +14,18 @@ public class LedHandler extends SubsystemBase
     private final RainbowAnimation rainbow;
     public LedHandler() {
         super();
+        
+        candle.configFactoryDefault();
 
+        candle.configStatusLedState(false);
         // configuration
         CANdleConfiguration configAll = new CANdleConfiguration();
-        configAll.statusLedOffWhenActive = false;
-        configAll.disableWhenLOS = false;
+        configAll.statusLedOffWhenActive = true;
+        configAll.v5Enabled = false;
+        configAll.disableWhenLOS = true;
         configAll.stripType = LEDStripType.RGB;
         configAll.brightnessScalar = 1;
-        configAll.vBatOutputMode = VBatOutputMode.Modulated;
+        // configAll.vBatOutputMode = VBatOutputMode.Modulated;
         candle.configAllSettings(configAll, 100);
       
         rainbow = new RainbowAnimation(1, 0.5, 1);

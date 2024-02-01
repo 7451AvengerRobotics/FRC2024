@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.commands.Test;
 import frc.robot.commands.shooterCommand.shootFF;
 import frc.robot.commands.shooterCommand.shootShooterPercent;
 import frc.robot.subsystems.*;
@@ -42,6 +43,8 @@ public class RobotContainer {
     /* Subsystems */
     // private final Swerve s_Swerve = new Swerve();
     private final Shooter shooter = new Shooter();
+    // private final TestVortex vortex = new TestVortex();
+    // private final LedHandler LED = new LedHandler();
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -69,8 +72,10 @@ public class RobotContainer {
 
 
     shooterTest0.whileTrue(new shootFF(shooter, 6000));//circle
-    shooterTest1.whileTrue(new shootShooterPercent(shooter, 0.333));//square
-    shooterTest2.whileTrue(new shootShooterPercent(shooter, 1));//triangle
+    // shooterTest1.whileTrue(new shootShooterPercent(shooter, 0.333));//square
+    // shooterTest2.whileTrue(new shootShooterPercent(shooter, 1));//triangle
+
+    // vortex.setDefaultCommand(new Test(vortex, LED, 0));
     
        // vortex1.setDefaultCommand(new Test(vortex1, led, 0.1));
     //    shooterTest0.whileTrue(new )
@@ -103,19 +108,19 @@ public class RobotContainer {
         // test1.whileTrue(new Test(vortex1, .4));
         //testVortex2Button.onTrue(new InstantCommand(() -> vortex2.setPowerToTestVortex2(0.3)));
 
-    //     shooterTest0.whileTrue(
-    //     new InstantCommand(() -> shooter.invertMotors(false))
-    //     .andThen(shooter.sysIdQuasistatic(SysIdRoutine.Direction.kForward))
-    //     .andThen(new WaitCommand(7))
-    //     .andThen(shooter.sysIdQuasistatic(SysIdRoutine.Direction.kReverse))
-    //     .andThen(new WaitCommand(7))
-    //     .andThen(shooter.sysIdDynamic(SysIdRoutine.Direction.kForward))
-    //     .andThen(new WaitCommand(7))
-    //     .andThen(shooter.sysIdDynamic(SysIdRoutine.Direction.kReverse)));
+        shooterTest0.whileTrue(
+        new InstantCommand(() -> shooter.invertMotors(false))
+        .andThen(shooter.sysIdQuasistatic(SysIdRoutine.Direction.kForward))
+        .andThen(new WaitCommand(7))
+        .andThen(shooter.sysIdQuasistatic(SysIdRoutine.Direction.kReverse))
+        .andThen(new WaitCommand(7))
+        .andThen(shooter.sysIdDynamic(SysIdRoutine.Direction.kForward))
+        .andThen(new WaitCommand(7))
+        .andThen(shooter.sysIdDynamic(SysIdRoutine.Direction.kReverse)));
 
-    // shooterTest1.whileTrue(shooter.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-    // shooterTest2.whileTrue(shooter.sysIdDynamic(SysIdRoutine.Direction.kForward));
-    // shooterTest3.whileTrue(shooter.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    shooterTest1.whileTrue(shooter.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+    shooterTest2.whileTrue(shooter.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    shooterTest3.whileTrue(shooter.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
 
     }   

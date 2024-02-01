@@ -14,7 +14,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType ;
 public class TestVortex extends SubsystemBase{
    private final CANSparkFlex testVortex1;
    private final CANSparkFlex testVortex2;
-   private final DigitalInput limitSwitch;
+   private final DigitalInput beamBreak;
    private boolean active;
 
 
@@ -22,7 +22,7 @@ public class TestVortex extends SubsystemBase{
     super();
         testVortex1 = new CANSparkFlex(9, MotorType.kBrushless);
         testVortex2 = new CANSparkFlex(19, MotorType.kBrushless);
-        limitSwitch = new DigitalInput(Constants.limitSwitchPort);
+        beamBreak = new DigitalInput(Constants.limitSwitchPort);
    }
 
    public void setPower(double power){
@@ -31,7 +31,7 @@ public class TestVortex extends SubsystemBase{
    }
 
    public boolean detected(){
-    return limitSwitch.get();
+    return beamBreak.get();
    }
 
   @Override

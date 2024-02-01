@@ -35,18 +35,23 @@ public class Shooter extends SubsystemBase {
     //private final CANSparkMax m_index;
     private final CANSparkFlex shooterTop;
     private final CANSparkFlex shooterBottom;
-    private final SimpleMotorFeedforward control;
-  private final MutableMeasure<Voltage> m_appliedVoltage = mutable(Volts.of(0));
-  private final MutableMeasure<Angle> m_distance = mutable(Rotations.of(0));
-  private final MutableMeasure<Velocity<Angle>> m_velocity = mutable(RotationsPerSecond.of(0));
-  private SysIdRoutine routine;
+    private final SimpleMotorFeedforward controlTop;
+    private final SimpleMotorFeedforward controlBot;
+    private final MutableMeasure<Voltage> m_appliedVoltage = mutable(Volts.of(0));
+    private final MutableMeasure<Angle> m_distance = mutable(Rotations.of(0));
+    private final MutableMeasure<Velocity<Angle>> m_velocity = mutable(RotationsPerSecond.of(0));
+    private SysIdRoutine routine;
 
 
 
 
-    private double kS = 0.21531;
-    private double kV = 0.02522 / 12.0;
-    private double kA = 0.00017499 / 12.0;
+    private double topkS = 0;
+    private double topkV = 0;
+    private double topkA = 0;
+
+    private double botKS = 0;
+    private double botKv = 0;
+    private double botKa = 0;
 
 
     
@@ -59,10 +64,14 @@ public class Shooter extends SubsystemBase {
         shooterBottom.restoreFactoryDefaults();
         shooterBottom.setInverted(false);
         shooterTop.setInverted(true);
-        control = new SimpleMotorFeedforward(kS, kV, kA);
+        controlTop = new SimpleMotorFeedforward(topkS, topkV, topkA);
+        controlBot = new SimpleMotorFeedforward(botKS, botKv, botKa);
+
 
         // shooterTop.setOpenLoopRampRate(1);
         // shooterBottom.setOpenLoopRampRate(1);
+
+        setSysIdRoutine(shooterTop, "top-motor");
  
     }
 
@@ -88,40 +97,42 @@ public class Shooter extends SubsystemBase {
     }
 
     public void setFF(double velocity){
-        shooterBottom.setVoltage(control.calculate(velocity));
-        shooterTop.setVoltage(control.calculate(velocity));
+        shooterBottom.setVoltage(controlTop.calculate(velocity));
+        shooterTop.setVoltage(controlBot.calculate(velocity));
     }
 
-  // public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
-  //   return routine.quasistatic(direction);
-  // }
 
-  // public Command sysIdDynamic(SysIdRoutine.Direction direction) {
-  //   return routine.dynamic(direction);
-  // }
 
-  //   public void setSysIdRoutine(CANSparkMax motor, String motorName) {
-  //   RelativeEncoder encoder = motor.getEncoder();
-  //   routine = new SysIdRoutine(new Config(), new SysIdRoutine.Mechanism(
-  //       (Measure<Voltage> voltage) -> motor.set(voltage.in(Volts) / RobotController.getBatteryVoltage()),
-  //       log -> {
-  //         log.motor(motorName)
-  //             .voltage(
-  //                 m_appliedVoltage.mut_replace(
-  //                     motor.get() * RobotController.getBatteryVoltage(), Volts))
-  //             .angularPosition(m_distance.mut_replace(encoder.getPosition(), Rotations))
-  //             .angularVelocity(m_velocity.mut_replace(encoder.getVelocity(), RotationsPerSecond));
-  //       }, this));
-  // }
+    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+        return routine.quasistatic(direction);
+    }
 
-  // public void invertMotors(boolean invert) {
-  //   if (invert != shooterTop.getInverted())
-  //     shooterTop.setInverted(invert);
-  // }
+    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+        return routine.dynamic(direction);
+    }
 
-  // public void stopMotors() {
-  //   shooterTop.set(0);
-  // }
+    public void setSysIdRoutine(CANSparkFlex shooterTop2, String motorName) {
+    RelativeEncoder encoder = shooterTop2.getEncoder();
+    routine = new SysIdRoutine(new Config(), new SysIdRoutine.Mechanism(
+        (Measure<Voltage> voltage) -> shooterTop2.set(voltage.in(Volts) / RobotController.getBatteryVoltage()),
+        log -> {
+          log.motor(motorName)
+              .voltage(
+                  m_appliedVoltage.mut_replace(
+                      shooterTop2.get() * RobotController.getBatteryVoltage(), Volts))
+              .angularPosition(m_distance.mut_replace(encoder.getPosition(), Rotations))
+              .angularVelocity(m_velocity.mut_replace(encoder.getVelocity(), RotationsPerSecond));
+        }, this));
+  }
+
+  public void invertMotors(boolean invert) {
+    if (invert != shooterTop.getInverted())
+      shooterTop.setInverted(invert);
+  }
+
+  public void stopMotors() {
+    shooterTop.set(0);
+  }
 
 
 
