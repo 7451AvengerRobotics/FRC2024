@@ -8,12 +8,11 @@ import frc.robot.subsystems.TestVortex;
 
 public class shootFF extends Command{
     private final Shooter shoot;
-    private final double voltage;
-    private final double acceleration;
-    public shootFF(Shooter shoot, double voltage, double acceleration){
+    private final double rpm;
+    public shootFF(Shooter shoot, double rpm){
         this.shoot = shoot;
-        this.voltage = voltage;
-        this.acceleration = acceleration;
+        this.rpm = rpm;
+  
       
         addRequirements(shoot);
 
@@ -25,12 +24,12 @@ public class shootFF extends Command{
     
     @Override 
     public void execute(){
-        shoot.setFF(voltage, acceleration);
+        shoot.setFF(rpm);
     }
     
     @Override
     public void end(boolean interrupted){
-        shoot.setFF(0, acceleration);
+        shoot.setFF(0);
     }
 
     @Override
