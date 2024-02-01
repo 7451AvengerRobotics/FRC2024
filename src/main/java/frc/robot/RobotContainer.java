@@ -71,7 +71,7 @@ public class RobotContainer {
     //   shooterTest2.whileTruex    (new shootShooter(shooter, 1));
 
 
-    shooterTest0.whileTrue(new shootFF(shooter, 6000));//circle
+    // shooterTest0.whileTrue(new shootFF(shooter, 6000));//circle
     // shooterTest1.whileTrue(new shootShooterPercent(shooter, 0.333));//square
     // shooterTest2.whileTrue(new shootShooterPercent(shooter, 1));//triangle
 
