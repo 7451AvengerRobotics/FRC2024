@@ -14,12 +14,12 @@ public class IndexTransporter extends SubsystemBase {
     {
         super();
         // Initializing the Motor
-        transportMotor = new CANSparkMax(Constants.transportMotor, MotorType.kBrushed);
+        transportMotor = new CANSparkMax(Constants.transportMotor, MotorType.kBrushless);
     }
 
     //Spins motor
-    public void spinTransportMotor(){
-        transportMotor.set(1.0);
+    public void spinTransportMotor(double power){
+        transportMotor.set(power);
         isOn=true;
     }
     //Stops Motor
@@ -28,9 +28,9 @@ public class IndexTransporter extends SubsystemBase {
         isOn=false;
     }
 
-    public void toggleTransportMotor(){
+    public void toggleTransportMotor(double speed){
         if(isOn){
-            this.spinTransportMotor();
+            this.spinTransportMotor(speed);
         }else{
             this.stopTransportMotor();
         }

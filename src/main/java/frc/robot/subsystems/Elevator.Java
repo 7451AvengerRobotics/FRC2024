@@ -27,6 +27,7 @@ public class Elevator extends SubsystemBase
     public void moveElevator(double power)
     {
         mElevator1.set(power);
+        mElevator2.set(power);
     }
     // Sets power of Elevator to zero
     public void stopElevator()
