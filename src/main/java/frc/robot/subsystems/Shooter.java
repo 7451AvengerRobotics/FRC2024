@@ -19,6 +19,7 @@ import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.units.Voltage;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -53,6 +54,9 @@ public class Shooter extends SubsystemBase {
     private double botKS = 0.090092;
     private double botKv = 0.0017978;
     private double botKa = 0.00011993;
+    private final DigitalInput beamBreak;
+     private boolean active;
+
 
 
     
@@ -61,17 +65,17 @@ public class Shooter extends SubsystemBase {
         
         shooterTop =  new CANSparkFlex(Constants.shooterTop, MotorType.kBrushless);
         shooterBottom =  new CANSparkFlex(Constants.shooterBottom, MotorType.kBrushless);
+
         feeder = new CANSparkMax(41, MotorType.kBrushless);
+        
         feeder.setInverted(true);
-        shooterBottom.restoreFactoryDefaults();
+
         shooterBottom.setInverted(false);
         shooterTop.setInverted(true);
         controlTop = new SimpleMotorFeedforward(topkS, topkV, topkA);
         controlBot = new SimpleMotorFeedforward(botKS, botKv, botKa);
-
-
-        // shooterTop.setOpenLoopRampRate(1);
-        // shooterBottom.setOpenLoopRampRate(1);
+        
+        beamBreak = new DigitalInput(0);
 
         setSysIdRoutine(shooterBottom, "bot-motor");
  
@@ -82,8 +86,6 @@ public class Shooter extends SubsystemBase {
         shooterBottom.set(power);
        
     }
-
-
 
     public void setBottom(double power){
         shooterBottom.set(power);
@@ -139,6 +141,15 @@ public class Shooter extends SubsystemBase {
   public void feed(double power){
     feeder.set(power);
   }
+
+  public boolean breaked(){
+    return beamBreak.get();
+   }
+
+  @Override
+   public void periodic(){
+    SmartDashboard.putBoolean("Limit Switch State", this.breaked());
+   }
 
 
 
