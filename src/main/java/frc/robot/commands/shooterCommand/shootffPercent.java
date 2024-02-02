@@ -6,14 +6,14 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.TestVortex;
 
 
-public class shootFF extends Command{
+public class shootffPercent extends Command{
     private final Shooter shoot;
-    private final double rpm;
-    public shootFF(Shooter shoot, double rpm){
+    private final double powerTop;
+    private final double rpmFF;
+    public shootffPercent(Shooter shoot, double powerTop, double rpmFF){
         this.shoot = shoot;
-        this.rpm = rpm;
-  
-      
+        this.powerTop = powerTop;
+        this.rpmFF = rpmFF;
         addRequirements(shoot);
 
     }
@@ -24,15 +24,15 @@ public class shootFF extends Command{
     
     @Override 
     public void execute(){
-        shoot.setFF(rpm);
-        shoot.feed(0.5);
-
+        shoot.setBottom(powerTop);
+        shoot.setFF(rpmFF);
+        
     }
     
     @Override
     public void end(boolean interrupted){
+        shoot.setBottom(0);
         shoot.setFF(0);
-        shoot.feed(0);
     }
 
     @Override

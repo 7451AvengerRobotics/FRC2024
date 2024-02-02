@@ -23,12 +23,13 @@ public class shootShooterPercent extends Command{
     
     @Override 
     public void execute(){
-        shoot.shoot(powerTop);
+        shoot.setBottom(powerTop);
+        
     }
     
     @Override
     public void end(boolean interrupted){
-        shoot.shoot(0);
+        shoot.setBottom(0);
     }
 
     @Override

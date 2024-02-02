@@ -6,12 +6,12 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.TestVortex;
 
 
-public class shootFF extends Command{
+public class shooterIndex extends Command{
     private final Shooter shoot;
-    private final double rpm;
-    public shootFF(Shooter shoot, double rpm){
+    private final double percent;
+    public shooterIndex(Shooter shoot, double percent){
         this.shoot = shoot;
-        this.rpm = rpm;
+        this.percent = percent;
   
       
         addRequirements(shoot);
@@ -24,14 +24,13 @@ public class shootFF extends Command{
     
     @Override 
     public void execute(){
-        shoot.setFF(rpm);
-        shoot.feed(0.5);
+        shoot.feed(percent);
+        
 
     }
     
     @Override
     public void end(boolean interrupted){
-        shoot.setFF(0);
         shoot.feed(0);
     }
 

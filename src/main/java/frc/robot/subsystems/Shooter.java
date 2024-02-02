@@ -35,6 +35,7 @@ public class Shooter extends SubsystemBase {
     //private final CANSparkMax m_index;
     private final CANSparkFlex shooterTop;
     private final CANSparkFlex shooterBottom;
+    private final CANSparkMax feeder;
     private final SimpleMotorFeedforward controlTop;
     private final SimpleMotorFeedforward controlBot;
     private final MutableMeasure<Voltage> m_appliedVoltage = mutable(Volts.of(0));
@@ -45,13 +46,13 @@ public class Shooter extends SubsystemBase {
 
 
 
-    private double topkS = 0;
-    private double topkV = 0;
-    private double topkA = 0;
+    private double topkS = -0.015666;
+    private double topkV = 0.0018151;
+    private double topkA = 0.00033602;
 
-    private double botKS = 0;
-    private double botKv = 0;
-    private double botKa = 0;
+    private double botKS = 0.090092;
+    private double botKv = 0.0017978;
+    private double botKa = 0.00011993;
 
 
     
@@ -60,7 +61,8 @@ public class Shooter extends SubsystemBase {
         
         shooterTop =  new CANSparkFlex(Constants.shooterTop, MotorType.kBrushless);
         shooterBottom =  new CANSparkFlex(Constants.shooterBottom, MotorType.kBrushless);
-        //m_index = new CANSparkMax(Constants.m_index, MotorType.kBrushless);
+        feeder = new CANSparkMax(41, MotorType.kBrushless);
+        feeder.setInverted(true);
         shooterBottom.restoreFactoryDefaults();
         shooterBottom.setInverted(false);
         shooterTop.setInverted(true);
@@ -71,7 +73,7 @@ public class Shooter extends SubsystemBase {
         // shooterTop.setOpenLoopRampRate(1);
         // shooterBottom.setOpenLoopRampRate(1);
 
-        setSysIdRoutine(shooterTop, "top-motor");
+        setSysIdRoutine(shooterBottom, "bot-motor");
  
     }
 
@@ -97,8 +99,8 @@ public class Shooter extends SubsystemBase {
     }
 
     public void setFF(double velocity){
-        shooterBottom.setVoltage(controlTop.calculate(velocity));
-        shooterTop.setVoltage(controlBot.calculate(velocity));
+        shooterBottom.setVoltage(controlBot.calculate(velocity));
+        shooterTop.setVoltage(controlTop.calculate(velocity));
     }
 
 
@@ -126,13 +128,18 @@ public class Shooter extends SubsystemBase {
   }
 
   public void invertMotors(boolean invert) {
-    if (invert != shooterTop.getInverted())
-      shooterTop.setInverted(invert);
+    if (invert != shooterBottom.getInverted())
+      shooterBottom.setInverted(invert);
   }
 
   public void stopMotors() {
-    shooterTop.set(0);
+    shooterBottom.set(0);
   }
+
+  public void feed(double power){
+    feeder.set(power);
+  }
+
 
 
 
