@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.shooterCommand.feedCommand;
@@ -40,15 +40,18 @@ public class RobotContainer {
     /* Subsystems */
     // private final Swerve s_Swerve = new Swerve();
     private final Shooter shooter = new Shooter();
+
     // private final TestVortex vortex = new TestVortex();
     private final LedHandler LED = new LedHandler();
+    private final Feeder feeder = new Feeder();
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
 
     configureButtonBindings();
 
-    shooter.setDefaultCommand(new feedCommand(shooter, 0.3).until(shooter::breaked));
+    feeder.setDefaultCommand(new feedCommand(feeder, 0.1).until(feeder::detected));
+    shooter.setDefaultCommand(new shootFF(shooter, 3000));
 
     }
 
@@ -67,10 +70,9 @@ public class RobotContainer {
         /* Driver Buttons */
     
 
-
-     shooterTest1.whileTrue(Commands.sequence(new shootFF(shooter, 6000), new WaitCommand(2), new feedCommand(shooter, 0.5)));
-
-
+    shooterTest1.whileTrue(new ParallelCommandGroup(new shootFF(shooter, 5500), 
+    new WaitCommand(2).andThen(new feedCommand(feeder, 1))));
+    
 
 
     }   

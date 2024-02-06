@@ -21,12 +21,12 @@ public class IntakeRunCommand extends Command {
 
     @Override
     public void execute(){
-        rIntake.runMotor(rPower);
+        rIntake.intake(rPower);
     }
 
     @Override
     public void end(boolean interrupted){
-        rIntake.runMotor(0);
+        rIntake.intake(0);
 
     }
 

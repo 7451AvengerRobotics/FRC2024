@@ -1,42 +1,32 @@
 package frc.robot.subsystems;
 
 import static edu.wpi.first.units.MutableMeasure.mutable;
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.units.Voltage;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants;
 
 public class Shooter extends SubsystemBase {
 
 
-    //private final CANSparkMax m_index;
     private final CANSparkFlex shooterTop;
     private final CANSparkFlex shooterBottom;
-    private final CANSparkMax feeder;
     private final SimpleMotorFeedforward controlTop;
     private final SimpleMotorFeedforward controlBot;
     private final MutableMeasure<Voltage> m_appliedVoltage = mutable(Volts.of(0));
@@ -54,8 +44,6 @@ public class Shooter extends SubsystemBase {
     private double botKS = 0.090092;
     private double botKv = 0.0017978;
     private double botKa = 0.00011993;
-    private final DigitalInput beamBreak;
-     private boolean active;
 
 
 
@@ -66,17 +54,13 @@ public class Shooter extends SubsystemBase {
         shooterTop =  new CANSparkFlex(Constants.shooterTop, MotorType.kBrushless);
         shooterBottom =  new CANSparkFlex(Constants.shooterBottom, MotorType.kBrushless);
 
-        feeder = new CANSparkMax(41, MotorType.kBrushless);
         
-        feeder.setInverted(true);
 
         shooterBottom.setInverted(false);
         shooterTop.setInverted(true);
         controlTop = new SimpleMotorFeedforward(topkS, topkV, topkA);
         controlBot = new SimpleMotorFeedforward(botKS, botKv, botKa);
         
-        beamBreak = new DigitalInput(0);
-
         setSysIdRoutine(shooterBottom, "bot-motor");
  
     }
@@ -89,6 +73,7 @@ public class Shooter extends SubsystemBase {
 
     public void setBottom(double power){
         shooterBottom.set(power);
+
     }
 
     public void setTop(double power){
@@ -138,17 +123,8 @@ public class Shooter extends SubsystemBase {
     shooterBottom.set(0);
   }
 
-  public void feed(double power){
-    feeder.set(power);
-  }
-
-  public boolean breaked(){
-    return beamBreak.get();
-   }
-
   @Override
    public void periodic(){
-    SmartDashboard.putBoolean("Limit Switch State", this.breaked());
    }
 
 

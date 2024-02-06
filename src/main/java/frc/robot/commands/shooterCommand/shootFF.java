@@ -1,9 +1,7 @@
 package frc.robot.commands.shooterCommand;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.LedHandler;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.TestVortex;
 
 
 public class shootFF extends Command{
@@ -25,14 +23,12 @@ public class shootFF extends Command{
     @Override 
     public void execute(){
         shoot.setFF(rpm);
-        shoot.feed(0.5);
 
     }
     
     @Override
     public void end(boolean interrupted){
-        shoot.setFF(0);
-        shoot.feed(0);
+        shoot.setFF(3000);
     }
 
     @Override

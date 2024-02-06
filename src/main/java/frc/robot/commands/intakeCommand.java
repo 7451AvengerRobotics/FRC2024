@@ -1,17 +1,18 @@
-package frc.robot.commands.shooterCommand;
+package frc.robot.commands  ;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Feeder;
+import frc.robot.subsystems.Intake;
 
-public class feedCommand extends Command{
-       private final Feeder feeder;
+
+public class intakeCommand extends Command{
+    private final Intake intake;
     private final double percent;
-    public feedCommand(Feeder feed, double percent){
-        this.feeder = feed;
+    public intakeCommand(Intake intake, double percent){
+        this.intake = intake;
         this.percent = percent;
   
       
-        addRequirements(feeder);
+        addRequirements(intake);
 
     }
 
@@ -21,19 +22,17 @@ public class feedCommand extends Command{
     
     @Override 
     public void execute(){
-        feeder.feed(percent);
-        
-
+        intake.intake(percent);
     }
     
     @Override
     public void end(boolean interrupted){
-        feeder.feed(0);
+        intake.intake(0);
     }
 
     @Override
     public boolean isFinished(){
         return false;
     }
-    
 }
+
