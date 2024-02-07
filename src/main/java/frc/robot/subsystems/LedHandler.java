@@ -28,6 +28,8 @@ public class LedHandler extends SubsystemBase
         candle.configAllSettings(configAll, 100);
       
         rainbow = new RainbowAnimation(1, 0.5, 1);
+
+        candle.setLEDs(0, 0, 255);
         
     }
 

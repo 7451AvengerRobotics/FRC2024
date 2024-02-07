@@ -10,7 +10,7 @@ public class setLedColorCommand extends Command {
     private final int gVal;
     private final int bVal;
 
-    public setLedColorCommand(LedHandler led, int red, int blue, int green){
+    public setLedColorCommand(LedHandler led, int red, int green, int blue){
         this.led = led;
         this.rVal = red;
         this.gVal = green;
@@ -18,8 +18,21 @@ public class setLedColorCommand extends Command {
     }
 
     @Override
+    public void initialize(){
+    }
+
+    @Override
     public void execute(){
         led.setColor(rVal, gVal, bVal);
+    }
+
+    @Override
+    public void end(boolean interrupted){
+    }
+
+    @Override
+    public boolean isFinished(){
+        return false;
     }
 
     

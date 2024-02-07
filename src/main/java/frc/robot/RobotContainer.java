@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.shooterCommand.feedCommand;
+import frc.robot.commands.shooterCommand.setLedColorCommand;
 import frc.robot.commands.shooterCommand.shootFF;
 import frc.robot.subsystems.*;
 
@@ -33,7 +34,7 @@ public class RobotContainer {
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
 
     private final JoystickButton shooterTest0 = new JoystickButton(driver, PS4Controller.Button.kCircle.value);
-    private final JoystickButton shooterTest1 = new JoystickButton(driver, PS4Controller.Button.kSquare.value);
+    private final JoystickButton squareButton = new JoystickButton(driver, PS4Controller.Button.kSquare.value);
     private final JoystickButton shooterTest2 = new JoystickButton(driver, PS4Controller.Button.kTriangle.value);
     private final JoystickButton shooterTest3 = new JoystickButton(driver, PS4Controller.Button.kCross.value);
 
@@ -45,13 +46,16 @@ public class RobotContainer {
     private final LedHandler LED = new LedHandler();
     private final Feeder feeder = new Feeder();
 
+    
+
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
 
     configureButtonBindings();
 
-    feeder.setDefaultCommand(new feedCommand(feeder, 0.1).until(feeder::detected));
-    shooter.setDefaultCommand(new shootFF(shooter, 3000));
+
+    feeder.setDefaultCommand(new ParallelCommandGroup(new feedCommand(feeder, - 0.1), new setLedColorCommand(LED, 0, 0, 255)).until(feeder::detected).andThen(new setLedColorCommand(LED, 0, 255, 0)));
+    shooter.setDefaultCommand(new shootFF(shooter, 1000));
 
     }
 
@@ -70,8 +74,8 @@ public class RobotContainer {
         /* Driver Buttons */
     
 
-    shooterTest1.whileTrue(new ParallelCommandGroup(new shootFF(shooter, 5500), 
-    new WaitCommand(2).andThen(new feedCommand(feeder, 1))));
+    squareButton.whileTrue(new ParallelCommandGroup(new shootFF(shooter, 1500), 
+     new WaitCommand(2).andThen(new feedCommand(feeder, -0.2).andThen(new setLedColorCommand(LED, 0, 0, 255)))));
     
 
 
