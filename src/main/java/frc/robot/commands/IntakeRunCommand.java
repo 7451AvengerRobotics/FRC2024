@@ -5,13 +5,13 @@ import frc.robot.subsystems.Intake;
 
 public class IntakeRunCommand extends Command {
 
-    private final Intake rIntake;
-    private final double rPower;
+    private final Intake intake;
+    private final double power;
 
     public IntakeRunCommand (Intake intake, double power){
-        this.rIntake = intake;
-        this.rPower = power;
-        addRequirements(rIntake);
+        this.intake = intake;
+        this.power = power;
+        addRequirements(intake);
     }
 
     @Override
@@ -21,12 +21,12 @@ public class IntakeRunCommand extends Command {
 
     @Override
     public void execute(){
-        rIntake.intake(rPower);
+        intake.intake(power);
     }
 
     @Override
     public void end(boolean interrupted){
-        rIntake.intake(0);
+        intake.intake(0);
 
     }
 
