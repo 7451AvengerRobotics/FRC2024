@@ -1,4 +1,4 @@
-package frc.robot.commands.shooterCommand;
+package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.LedHandler;
@@ -10,7 +10,7 @@ public class setLedColorCommand extends Command {
     private final int gVal;
     private final int bVal;
 
-    public setLedColorCommand(LedHandler led, int red, int blue, int green){
+    public setLedColorCommand(LedHandler led, int red, int green, int blue){
         this.led = led;
         this.rVal = red;
         this.gVal = green;
