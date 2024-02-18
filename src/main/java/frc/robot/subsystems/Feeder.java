@@ -14,7 +14,7 @@ public class Feeder extends SubsystemBase {
 
     public Feeder(){
         super();
-        feeder = new CANSparkMax(Constants.feederCAN, MotorType.kBrushless);
+        feeder = new CANSparkMax(Constants.feeder, MotorType.kBrushless);
         beamBreak = new DigitalInput(0);
         
 

@@ -17,7 +17,7 @@ public class IndexTransporter extends SubsystemBase {
     {
         super();
         // Initializing the Motor
-        transportMotor = new CANSparkMax(Constants.transportMotor, MotorType.kBrushless);
+        transportMotor = new CANSparkMax(Constants.index, MotorType.kBrushless);
         beamBreak = new DigitalInput(1);
         
     }

@@ -13,7 +13,7 @@ public class Intake extends SubsystemBase {
 
     public Intake(){
         super();
-        intake = new CANSparkMax(Constants.intakeMotorCAN, MotorType.kBrushless);
+        intake = new CANSparkMax(Constants.intake, MotorType.kBrushless);
 
     }
 

@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LedHandler extends SubsystemBase
 {
-    private final CANdle candle = new CANdle(5);
+    private final CANdle candle = new CANdle(32);
     private final RainbowAnimation rainbow;
     public LedHandler() {
         super();

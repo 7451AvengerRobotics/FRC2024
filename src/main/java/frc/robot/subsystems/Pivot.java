@@ -8,6 +8,7 @@ import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Pivot extends SubsystemBase {
 
@@ -18,14 +19,18 @@ public class Pivot extends SubsystemBase {
 
     public Pivot() {
         
-        pivot  = new CANSparkFlex(25, MotorType.kBrushless);
+        pivot  = new CANSparkFlex(Constants.pivot, MotorType.kBrushless);
 
         encoder = pivot.getEncoder();
 
         m_pidController = pivot.getPIDController();
 
-        pivot.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
-        pivot.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
+        // pivot.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 0);
+        // pivot.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 0);
+
+
+        // pivot.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
+        // pivot.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
 
         kP = 0.00001; 
         kI = 0;

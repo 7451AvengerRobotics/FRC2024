@@ -6,11 +6,19 @@ import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.intakeToIndex;
-import frc.robot.commands.setLedColorCommand;
-import frc.robot.commands.tets;
+import frc.robot.commands.allFeed;
+import frc.robot.commands.climberCommand;
+import frc.robot.commands.climberOneCommand;
+import frc.robot.commands.climberTwoCommand;
+import frc.robot.commands.elevatorOneCommand;
+import frc.robot.commands.elevatorTest;
+import frc.robot.commands.indexCommand;
+import frc.robot.commands.intakeCommand;
+import frc.robot.commands.pivotCommand;
+import frc.robot.commands.fullTransport;
 import frc.robot.commands.shooterCommand.feedCommand;
 import frc.robot.commands.shooterCommand.shootFF;
 import frc.robot.subsystems.*;
@@ -35,17 +43,25 @@ public class RobotContainer {
     // private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
 
     private final JoystickButton squareButton = new JoystickButton(driver, PS4Controller.Button.kSquare.value);
+    private final JoystickButton circleButton = new JoystickButton(driver, PS4Controller.Button.kCircle.value);
+    private final JoystickButton triangleButton = new JoystickButton(driver, PS4Controller.Button.kTriangle.value);
+    private final JoystickButton crossButton = new JoystickButton(driver, PS4Controller.Button.kCross.value);
+    private final JoystickButton righButton = new JoystickButton(driver, PS4Controller.Button.kR1.value);
+
+
 
     /* Subsystems */
-    // private final Swerve s_Swerve = new Swerve();
-    // private final Shooter shooter = new Shooter();
 
-    // private final TestVortex vortex = new TestVortex();
+    // private final Swerve s_Swerve = new Swerve();
+    
     // private final LedHandler LED = new LedHandler();
-    // private final Feeder feeder = new Feeder();
-    // private final IndexTransporter index = new IndexTransporter();
-    // private final Intake intake = new Intake();
-    private final testSparkMax tets = new testSparkMax();
+    private final Shooter shooter = new Shooter();
+    private final IndexTransporter index = new IndexTransporter();
+    private final Intake intake = new Intake();
+    private final Feeder feed = new Feeder();
+    private final Elevator elevator = new Elevator();
+    private final Climbers climbers = new Climbers();
+    private final Pivot pivot = new Pivot();
 
     
 
@@ -54,10 +70,7 @@ public class RobotContainer {
 
     configureButtonBindings();
 
-    //feeder.setDefaultCommand(new feedCommand(feeder, 0.1).until(feeder::detected).andThen(new setLedColorCommand(LED, 0, 255, 0)));
-    //shooter.setDefaultCommand(new shootFF(shooter, 3000));
-    //index.setDefaultCommand(new intakeToIndex(intake, index, LED, 0.5, 0.5));
-    tets.setDefaultCommand(new tets(tets));
+   
 
     }
 
@@ -76,11 +89,14 @@ public class RobotContainer {
         /* Driver Buttons */
     
 
-    // squareButton.whileTrue(new ParallelCommandGroup(new shootFF(shooter, 5500), 
-    // new WaitCommand(2).alongWith(new feedCommand(feeder, 1)).andThen(new setLedColorCommand(LED, 0, 0 , 255))));
-    
-
-
+    intake.setDefaultCommand(new intakeCommand(intake, -0.5));
+    feed.setDefaultCommand(new feedCommand(feed, -0.5));
+    index.setDefaultCommand(new indexCommand(index, -0.5));
+    circleButton.whileTrue(new shootFF(shooter, 6000));
+    squareButton.whileTrue(new elevatorOneCommand(elevator, 0.3));
+    crossButton.whileTrue(new climberOneCommand(climbers, -0.3));
+    righButton.whileTrue(new climberTwoCommand(climbers, 0.3));    
+    triangleButton.whileTrue(new pivotCommand(pivot, 0.1)); 
     }   
 
     /**
