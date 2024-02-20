@@ -5,24 +5,16 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.allFeed;
-import frc.robot.commands.climberCommand;
 import frc.robot.commands.climberOneCommand;
 import frc.robot.commands.climberTwoCommand;
 import frc.robot.commands.elevatorOneCommand;
-import frc.robot.commands.elevatorTest;
 import frc.robot.commands.indexCommand;
 import frc.robot.commands.intakeCommand;
 import frc.robot.commands.pivotCommand;
-import frc.robot.commands.fullTransport;
 import frc.robot.commands.shooterCommand.feedCommand;
 import frc.robot.commands.shooterCommand.shootFF;
 import frc.robot.subsystems.*;
-
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
