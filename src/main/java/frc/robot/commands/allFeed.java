@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.IndexTransporter;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Shooter;
 
 
 public class allFeed extends Command{

@@ -12,9 +12,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.allFeed;
@@ -22,15 +19,12 @@ import frc.robot.commands.climberCommand;
 import frc.robot.commands.climberOneCommand;
 import frc.robot.commands.climberTwoCommand;
 import frc.robot.commands.elevatorOneCommand;
-import frc.robot.commands.elevatorTest;
 import frc.robot.commands.indexCommand;
 import frc.robot.commands.intakeCommand;
 import frc.robot.commands.pivotCommand;
-import frc.robot.commands.fullTransport;
 import frc.robot.commands.shooterCommand.feedCommand;
 import frc.robot.commands.shooterCommand.shootFF;
 import frc.robot.subsystems.*;
-
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -69,7 +63,7 @@ public class RobotContainer {
     private final IndexTransporter index = new IndexTransporter();
     private final Intake intake = new Intake();
     private final Feeder feed = new Feeder();
-    private final Elevator elevator = new Elevator();
+    // private final Elevator elevator = new Elevator();
     private final Climbers climbers = new Climbers();
     private final Pivot pivot = new Pivot();
     private final Swerve swerve = new Swerve();
