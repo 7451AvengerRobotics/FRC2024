@@ -12,14 +12,14 @@ import frc.robot.Constants;
 
 public class Pivot extends SubsystemBase {
 
-    private final CANSparkFlex pivot;
+    private final CANSparkMax pivot;
     private final RelativeEncoder encoder;
     public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
     private SparkPIDController m_pidController;
 
     public Pivot() {
         
-        pivot  = new CANSparkFlex(Constants.pivot, MotorType.kBrushless);
+        pivot  = new CANSparkMax(Constants.pivot, MotorType.kBrushless);
 
         encoder = pivot.getEncoder();
 

@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.allFeed;
@@ -22,6 +24,7 @@ import frc.robot.commands.elevatorOneCommand;
 import frc.robot.commands.indexCommand;
 import frc.robot.commands.intakeCommand;
 import frc.robot.commands.pivotCommand;
+import frc.robot.commands.setLedColorCommand;
 import frc.robot.commands.shooterCommand.feedCommand;
 import frc.robot.commands.shooterCommand.shootFF;
 import frc.robot.subsystems.*;
@@ -58,7 +61,7 @@ public class RobotContainer {
 
     // private final Swerve s_Swerve = new Swerve();
     
-    // private final LedHandler LED = new LedHandler();
+    private final LedHandler LED = new LedHandler();
     private final Shooter shooter = new Shooter();
     private final IndexTransporter index = new IndexTransporter();
     private final Intake intake = new Intake();
@@ -78,20 +81,22 @@ public class RobotContainer {
     swerve.setDefaultCommand(
         new TeleopSwerve(
             swerve, 
-            () -> -(controller.getRawAxis(translationAxis))*0.3, 
-            () -> -(controller.getRawAxis(strafeAxis))*0.3,
-            () -> -(controller.getRawAxis(rotationAxis)*0.3)
+            () -> -(controller.getRawAxis(translationAxis))*1, 
+            () -> -(controller.getRawAxis(strafeAxis))*1,
+            () -> -(controller.getRawAxis(rotationAxis)*-1)
         )
     );
 
     autoChooser = AutoBuilder.buildAutoChooser();
+    intake.setDefaultCommand(new intakeCommand(intake, -0.5));
+
 
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
 
     }
 
-
+    
 
     
 
@@ -106,14 +111,18 @@ public class RobotContainer {
         /* Driver Buttons */
     
 
-    // intake.setDefaultCommand(new intakeCommand(intake, -0.5));
-    // feed.setDefaultCommand(new feedCommand(feed, -0.5));
-    // index.setDefaultCommand(new indexCommand(index, -0.5));
-    // circleButton.whileTrue(new shootFF(shooter, 6000));
+     //feed.setDefaultCommand(new feedCommand(feed, -0.5));
+     intake.setDefaultCommand(new intakeCommand(intake, -0.5));
+     index.setDefaultCommand(new indexCommand(index, -0.5));
+     feed.setDefaultCommand(new feedCommand(feed, -0.7));   
+     shooter.setDefaultCommand(new shootFF(shooter, 6000));
+     crossButton.whileTrue(new shootFF(shooter, 6000));
+     circleButton.whileTrue(new ParallelCommandGroup(new shootFF(shooter, 6000), new WaitCommand(2)).andThen(new feedCommand(feed, -0.7)));
     // squareButton.whileTrue(new elevatorOneCommand(elevator, 0.3));
-    // crossButton.whileTrue(new climberOneCommand(climbers, -0.3));
-    // righButton.whileTrue(new climberTwoCommand(climbers, 0.3));    
+    //crossButton.whileTrue(new climberOneCommand(climbers, -0.3));
+    //righButton.whileTrue(new climberTwoCommand(climbers, 0.3));    
     // triangleButton.whileTrue(new pivotCommand(pivot, 0.1)); 
+    
      }   
 
     /**
