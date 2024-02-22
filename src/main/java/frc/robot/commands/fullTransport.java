@@ -1,6 +1,7 @@
 package frc.robot.commands  ;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Feeder;
@@ -35,12 +36,7 @@ public class fullTransport extends Command{
     
     @Override 
     public void execute(){
-        new SequentialCommandGroup(
-        new ParallelCommandGroup(
-        new intakeCommand(intake, intakePercent), 
-        new indexCommand(index, indexPercent),
-        new feedCommand(feed, 0.5)).until(feed::detected)
-        );
+        
     }
     
     @Override

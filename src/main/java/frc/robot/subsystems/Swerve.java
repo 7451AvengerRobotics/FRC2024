@@ -18,6 +18,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.DoubleArrayPublisher;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -41,6 +42,9 @@ public class Swerve extends SubsystemBase {
             new SwerveModule(2, Constants.Swerve.Mod2.constants),
             new SwerveModule(3, Constants.Swerve.Mod3.constants)
         };
+
+        Timer.delay(1.0);
+        resetModulesToAbsolute();
 
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getGyroYaw(), getModulePositions());
 
@@ -83,8 +87,10 @@ public class Swerve extends SubsystemBase {
         SmartDashboard.putNumber("SetChassisSpeedX", chassisSpeed.vxMetersPerSecond);
         SmartDashboard.putNumber("SetChassisSpeedY", chassisSpeed.vyMetersPerSecond);
         SmartDashboard.putNumber("SetChassisSpeedOmega", chassisSpeed.omegaRadiansPerSecond);
+        
+        ChassisSpeeds targetSpeed = ChassisSpeeds.discretize(chassisSpeed, 0.02);
 
-        SwerveModuleState[] desiredStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(chassisSpeed);
+        SwerveModuleState[] desiredStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(targetSpeed);
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.Swerve.maxSpeed);
         moduleStatePublisher.set(new double[] {
             desiredStates[0].angle.getDegrees(), desiredStates[0].speedMetersPerSecond,

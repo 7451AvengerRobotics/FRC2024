@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -114,11 +115,13 @@ public class RobotContainer {
      //feed.setDefaultCommand(new feedCommand(feed, -0.5));
      intake.setDefaultCommand(new intakeCommand(intake, -0.5));
      index.setDefaultCommand(new indexCommand(index, -0.5));
-     feed.setDefaultCommand(new feedCommand(feed, -0.7));   
-     shooter.setDefaultCommand(new shootFF(shooter, 6000));
-     crossButton.whileTrue(new shootFF(shooter, 6000));
-     circleButton.whileTrue(new ParallelCommandGroup(new shootFF(shooter, 6000), new WaitCommand(2)).andThen(new feedCommand(feed, -0.7)));
-    // squareButton.whileTrue(new elevatorOneCommand(elevator, 0.3));
+     feed.setDefaultCommand(new feedCommand(feed, -0.7).until(feed::detected));   
+     shooter.setDefaultCommand(new shootFF(shooter, 3000));
+     crossButton.whileTrue(Commands.sequence(
+        new shootFF(shooter, 6000), 
+        new WaitCommand(0.5).andThen(
+        new feedCommand(feed, 0.7))));
+    // // squareButton.whileTrue(new elevatorOneCommand(elevator, 0.3));
     //crossButton.whileTrue(new climberOneCommand(climbers, -0.3));
     //righButton.whileTrue(new climberTwoCommand(climbers, 0.3));    
     // triangleButton.whileTrue(new pivotCommand(pivot, 0.1)); 
