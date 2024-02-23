@@ -12,7 +12,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
-import com.ctre.phoenix.led.TwinkleAnimation;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
@@ -27,6 +26,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -37,7 +37,7 @@ public class Swerve extends SubsystemBase {
     public Pigeon2 gyro;
     public SwerveDrivePoseEstimator m_poseEstimator;
     public Eyes eyes;
-    // private final ProfiledPIDController thetaController;
+    private final ProfiledPIDController thetaController;
 
 
     public Swerve() {
@@ -46,15 +46,15 @@ public class Swerve extends SubsystemBase {
         gyro.setYaw(0);
         eyes = new Eyes();
 
-    //     thetaController =
-    //     new ProfiledPIDController(
-    //         0.6, //TODO:: Adjust kP Value
-    //         0,
-    //         0.4, //TODO: Adjust kD Value
-    //         new TrapezoidProfile.Constraints(
-    //             Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecond, Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecondSquared));
-    // thetaController.enableContinuousInput(-Math.PI, Math.PI);
-    // thetaController.setTolerance(0.1);//TODO:: Need to tune this value as well
+        thetaController =
+        new ProfiledPIDController(
+            0.6, //TODO:: Adjust kP Value
+            0,
+            0.4, //TODO: Adjust kD Value
+            new TrapezoidProfile.Constraints(
+                Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecond, Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecondSquared));
+    thetaController.enableContinuousInput(-Math.PI, Math.PI);
+    thetaController.setTolerance(0.1);//TODO:: Need to tune this value as well
 
         mSwerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.constants),
@@ -80,13 +80,26 @@ public class Swerve extends SubsystemBase {
     }
 
     // public void autoRotate(Pose2d pose){
+    //     double dt = TimedRobot.kDefaultPeriod;
+
     //     Pose2d currentPose = this.getPose();
+    //     Twist2d twist_vel = getChassisSpeeds().dtheta;
+    //     ChassisSpeeds updated = new ChassisSpeeds(twist_vel.dx / dt, twist_vel.dy / dt, twist_vel.dtheta / dt);
+
     //     Twist2d fieldVelo = 
     //     Rotation2d rotationToGoal = currentPose.getTranslation().minus(currentPose.getTranslation()).getAngle();
 
     //     thetaController.reset(currentPose.getRotation().getRadians(), );
 
     // }
+
+    // public Twist2d fieldVelocity() {
+    //     Translation2d linearFieldVelocity =
+    //         new Translation2d(getChassisSpeeds().dx, getChassisSpeeds().dy).rotateBy(this.getPose().getRotation());
+    //     return new Twist2d(
+    //         linearFieldVelocity.getX(), linearFieldVelocity.getY(), );
+    //   }
+
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
         SwerveModuleState[] swerveModuleStates =
@@ -107,7 +120,60 @@ public class Swerve extends SubsystemBase {
         for(SwerveModule mod : mSwerveMods){
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
         }
-    }    
+    } 
+    
+    // public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
+
+    //     double dt = TimedRobot.kDefaultPeriod;
+
+    //     ChassisSpeeds chassisSpeeds = fieldRelative
+    //     ? ChassisSpeeds.fromFieldRelativeSpeeds(translation.getX(), translation.getY(), rotation, swerveOdometry.getPoseMeters().getRotation())
+    //     : new ChassisSpeeds(translation.getX(), translation.getY(), rotation);
+
+    //     Pose2d robot_pose_vel = new Pose2d(chassisSpeeds.vxMetersPerSecond * dt, chassisSpeeds.vyMetersPerSecond * dt,
+    //         Rotation2d.fromRadians(chassisSpeeds.omegaRadiansPerSecond * dt));
+    //     Twist2d twist_vel = new Pose2d().log(robot_pose_vel);
+    //     ChassisSpeeds updated = new ChassisSpeeds(twist_vel.dx / dt, twist_vel.dy / dt, twist_vel.dtheta / dt);
+
+    //     SwerveModuleState[] swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(updated);
+
+    //     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
+    
+    //     for(SwerveModule mod : mSwerveMods){
+    //         mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
+    //     }
+    // }
+
+    public ChassisSpeeds getFieldRelativeChassisSpeeds() {
+        return new ChassisSpeeds(
+                getChassisSpeeds().vxMetersPerSecond * getPose().getRotation().getCos()
+                        - getChassisSpeeds().vyMetersPerSecond * getPose().getRotation().getSin(),
+                getChassisSpeeds().vyMetersPerSecond * getPose().getRotation().getCos()
+                        + getChassisSpeeds().vxMetersPerSecond * getPose().getRotation().getSin(),
+                getChassisSpeeds().omegaRadiansPerSecond);
+    }
+
+    public ChassisSpeeds getChassisSpeeds() {
+        return Constants.Swerve.swerveKinematics.toChassisSpeeds(
+                mSwerveMods[0].getState(),
+                mSwerveMods[1].getState(),
+                mSwerveMods[2].getState(),
+                mSwerveMods[3].getState());
+    }
+
+
+    public double getFieldRelativeXVelocity() {
+        return getFieldRelativeChassisSpeeds().vxMetersPerSecond;
+    }
+
+    public double getFieldRelativeYVelocity() {
+        return getFieldRelativeChassisSpeeds().vyMetersPerSecond;
+    }
+
+    public double getFieldRelativeAngularVelocity() {
+        return getFieldRelativeChassisSpeeds().omegaRadiansPerSecond;
+    }
+
 
     /* Used by SwerveControllerCommand in Auto */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
