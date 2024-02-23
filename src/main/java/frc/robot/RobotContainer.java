@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -42,9 +41,9 @@ public class RobotContainer {
 
     private final JoystickButton squareButton = new JoystickButton(driver, PS4Controller.Button.kSquare.value);
     private final JoystickButton circleButton = new JoystickButton(driver, PS4Controller.Button.kCircle.value);
-    private final JoystickButton triangleButton = new JoystickButton(driver, PS4Controller.Button.kTriangle.value);
-    private final JoystickButton crossButton = new JoystickButton(driver, PS4Controller.Button.kCross.value);
-    private final JoystickButton righButton = new JoystickButton(driver, PS4Controller.Button.kR1.value);
+    //private final JoystickButton triangleButton = new JoystickButton(driver, PS4Controller.Button.kTriangle.value);
+    //private final JoystickButton crossButton = new JoystickButton(driver, PS4Controller.Button.kCross.value);
+    //private final JoystickButton righButton = new JoystickButton(driver, PS4Controller.Button.kR1.value);
 
 
 
@@ -58,7 +57,7 @@ public class RobotContainer {
     private final Feeder feed = new Feeder();
     // private final Elevator elevator = new Elevator();
     private final Climbers climbers = new Climbers();
-    private final Pivot pivot = new Pivot();
+    //private final Pivot pivot = new Pivot();
     private final Swerve swerve = new Swerve();
 
     
