@@ -8,15 +8,19 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
+import com.ctre.phoenix.led.TwinkleAnimation;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
@@ -29,6 +33,7 @@ public class Swerve extends SubsystemBase {
     public Pigeon2 gyro;
     public SwerveDrivePoseEstimator m_poseEstimator;
     public Eyes eyes;
+    // private final ProfiledPIDController thetaController;
 
 
     public Swerve() {
@@ -36,6 +41,16 @@ public class Swerve extends SubsystemBase {
         gyro.getConfigurator().apply(new Pigeon2Configuration());
         gyro.setYaw(0);
         eyes = new Eyes();
+
+    //     thetaController =
+    //     new ProfiledPIDController(
+    //         0.6, //TODO:: Adjust kP Value
+    //         0,
+    //         0.4, //TODO: Adjust kD Value
+    //         new TrapezoidProfile.Constraints(
+    //             Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecond, Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecondSquared));
+    // thetaController.enableContinuousInput(-Math.PI, Math.PI);
+    // thetaController.setTolerance(0.1);//TODO:: Need to tune this value as well
 
         mSwerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.constants),
@@ -59,6 +74,15 @@ public class Swerve extends SubsystemBase {
              VecBuilder.fill(1.5, 1.5, 1.5)
           );
     }
+
+    // public void autoRotate(Pose2d pose){
+    //     Pose2d currentPose = this.getPose();
+    //     Twist2d fieldVelo = 
+    //     Rotation2d rotationToGoal = currentPose.getTranslation().minus(currentPose.getTranslation()).getAngle();
+
+    //     thetaController.reset(currentPose.getRotation().getRadians(), );
+
+    // }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
         SwerveModuleState[] swerveModuleStates =
