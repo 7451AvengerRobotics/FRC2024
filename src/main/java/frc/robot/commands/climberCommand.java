@@ -2,14 +2,17 @@ package frc.robot.commands  ;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Climbers;
+import frc.robot.subsystems.Swerve;
 
 
 public class climberCommand extends Command{
     private final Climbers climbers;
     private final double percent;
-    public climberCommand(Climbers climb, double percent){
+    private final Swerve drive;
+    public climberCommand(Climbers climb, Swerve drive, double percent){
         this.climbers = climb;
         this.percent = percent;
+        this.drive = drive;
   
       
         addRequirements(climbers);
@@ -22,7 +25,15 @@ public class climberCommand extends Command{
     
     @Override 
     public void execute(){
-        climbers.setPower(percent);
+        if (drive.getGryoRoll() > 10){
+            climbers.setClibmerTwo(percent + 0.2);
+            climbers.setClimberOne(percent - 0.2);
+        } else if (drive.getGryoRoll() < - 10){
+            climbers.setClibmerTwo(percent - 0.2);
+            climbers.setClimberOne(percent + 0.2);
+        }else{ 
+            climbers.setPower(percent);
+        }
     }
     
     @Override

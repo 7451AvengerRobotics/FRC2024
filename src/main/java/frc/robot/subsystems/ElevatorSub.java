@@ -6,12 +6,13 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class Elevator extends SubsystemBase 
+public class ElevatorSub extends SubsystemBase 
 {
+
     //Initializes Variables
     private final CANSparkMax ele1;
     private final CANSparkMax ele2;
-    public Elevator()
+    public ElevatorSub()
     {
         super();
         ele1 = new CANSparkMax(Constants.mElevator1, MotorType.kBrushless);
@@ -32,9 +33,5 @@ public class Elevator extends SubsystemBase
     public void setElevatorTwo(double power){
         ele2.set(power);
     }
-
-
-
-
 
 }

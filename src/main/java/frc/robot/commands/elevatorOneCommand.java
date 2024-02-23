@@ -1,13 +1,13 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Elevator;    
+import frc.robot.subsystems.ElevatorSub;
 
 
 public class elevatorOneCommand extends Command{
-    private final Elevator elevator;
+    private final ElevatorSub elevator;
     private final double power;
-    public elevatorOneCommand(Elevator elevator, double power){
+    public elevatorOneCommand(ElevatorSub elevator, double power){
         this.elevator = elevator;
         this.power = power;
   

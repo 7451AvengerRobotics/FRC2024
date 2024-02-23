@@ -1,10 +1,6 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.commands.PathPlannerAuto;
-
-import edu.wpi.first.math.proto.Controller;
-import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PS4Controller;
@@ -17,15 +13,9 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.TeleopSwerve;
-import frc.robot.commands.allFeed;
 import frc.robot.commands.climberCommand;
-import frc.robot.commands.climberOneCommand;
-import frc.robot.commands.climberTwoCommand;
-import frc.robot.commands.elevatorOneCommand;
 import frc.robot.commands.indexCommand;
 import frc.robot.commands.intakeCommand;
-import frc.robot.commands.pivotCommand;
-import frc.robot.commands.setLedColorCommand;
 import frc.robot.commands.shooterCommand.feedCommand;
 import frc.robot.commands.shooterCommand.shootFF;
 import frc.robot.subsystems.*;
@@ -62,7 +52,6 @@ public class RobotContainer {
 
     // private final Swerve s_Swerve = new Swerve();
     
-    private final LedHandler LED = new LedHandler();
     private final Shooter shooter = new Shooter();
     private final IndexTransporter index = new IndexTransporter();
     private final Intake intake = new Intake();
@@ -88,8 +77,13 @@ public class RobotContainer {
         )
     );
 
-    autoChooser = AutoBuilder.buildAutoChooser();
     intake.setDefaultCommand(new intakeCommand(intake, -0.5));
+    index.setDefaultCommand(new indexCommand(index, -0.5));
+    feed.setDefaultCommand(new feedCommand(feed, -0.2).until(feed::detected));   
+    shooter.setDefaultCommand(new shootFF(shooter, 1000));
+
+
+    autoChooser = AutoBuilder.buildAutoChooser();
 
 
 
@@ -111,22 +105,15 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
     
-
-     //feed.setDefaultCommand(new feedCommand(feed, -0.5));
-     intake.setDefaultCommand(new intakeCommand(intake, -0.5));
-     index.setDefaultCommand(new indexCommand(index, -0.5));
-     feed.setDefaultCommand(new feedCommand(feed, -0.7).until(feed::detected));   
-     shooter.setDefaultCommand(new shootFF(shooter, 3000));
-     crossButton.whileTrue(Commands.sequence(
-        new shootFF(shooter, 6000), 
-        new WaitCommand(0.5).andThen(
-        new feedCommand(feed, 0.7))));
-    // // squareButton.whileTrue(new elevatorOneCommand(elevator, 0.3));
-    //crossButton.whileTrue(new climberOneCommand(climbers, -0.3));
-    //righButton.whileTrue(new climberTwoCommand(climbers, 0.3));    
-    // triangleButton.whileTrue(new pivotCommand(pivot, 0.1)); 
+    
+        circleButton.whileTrue(new ParallelCommandGroup(new shootFF(shooter, 5500), 
+                                                        new WaitCommand(2))
+                                .andThen(new feedCommand(feed, 1)));
+        squareButton.whileTrue(new climberCommand(climbers, swerve, 0.3));
     
      }   
+
+
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
