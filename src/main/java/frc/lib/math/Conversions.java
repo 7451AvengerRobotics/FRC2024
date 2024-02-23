@@ -32,6 +32,11 @@ public class Conversions {
         return wheelMeters;
     }
 
+    public static double degreesToFalcon(double degrees, double gearRatio) {
+        return degrees / (360.0 / (gearRatio * 2048.0));
+    }
+
+
     /**
      * @param wheelMeters Wheel Distance: (in Meters)
      * @param circumference Wheel Circumference: (in Meters)
