@@ -21,9 +21,7 @@ public class feedCommand extends Command{
     
     @Override 
     public void execute(){
-        feeder.feed(percent);
-        
-
+                feeder.feed(percent);
     }
     
     @Override

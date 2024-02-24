@@ -24,14 +24,16 @@ public class Pivot extends SubsystemBase {
 
         m_pidController = pivot.getPIDController();
 
-        // pivot.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 0);
-        // pivot.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 0);
+
+        encoder.setPosition(0);
+        pivot.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 49);
+        pivot.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 0);
 
 
-        // pivot.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
-        // pivot.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
+        pivot.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
+        pivot.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
 
-        kP = 0.00001; 
+        kP = 1; 
         kI = 0;
         kD = 0; 
         kIz = 0; 
@@ -64,7 +66,6 @@ public class Pivot extends SubsystemBase {
 
     @Override
     public void periodic(){
-        SmartDashboard.putNumber("EncoderPosition", encoder.getPosition());
+        SmartDashboard.putNumber("PivotEncoderPosition", this.getEncoderPosition());
     }
-    
 }

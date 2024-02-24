@@ -72,19 +72,19 @@ public class SwerveModule {
         return Rotation2d.fromRotations(angleEncoder.getAbsolutePosition().getValue());
     }
 
-    public double makePositiveRotations(double rotations ){
-        double degrees = rotations;
-        degrees = degrees % 1;
-        if (degrees < 0.0){
-            degrees = degrees + 1;
-        }
-        return degrees;
+    // public double makePositiveRotations(double rotations ){
+    //     double degrees = rotations;
+    //     degrees = degrees % 1;
+    //     if (degrees < 0.0){
+    //         degrees = degrees + 1;
+    //     }
+    //     return degrees;
 
-    }
+    // }
 
-    public double makePositiveRotations(Rotation2d anAngle){
-        return makePositiveRotations(anAngle.getRotations());
-    }
+    // public double makePositiveRotations(Rotation2d anAngle){
+    //     return makePositiveRotations(anAngle.getRotations());
+    // }
 
     public void resetToAbsolute(){
         // double absolutePosition = makePositiveRotations(getCANcoder().getRotations() - angleOffset.getRotations());

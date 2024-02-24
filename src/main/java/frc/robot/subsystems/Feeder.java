@@ -3,8 +3,10 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.SwerveModule;
 
 public class Feeder extends SubsystemBase {
 
@@ -28,5 +30,8 @@ public class Feeder extends SubsystemBase {
         feeder.set(power);
     }
     
-    
+     @Override
+    public void periodic(){
+        SmartDashboard.putBoolean("Dtected", this.detected());
+    }
 }

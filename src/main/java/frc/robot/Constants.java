@@ -164,9 +164,28 @@ public final class Constants {
         public static final double ampRedY = 8.0;
         public static final double ampRedR = 270;
     }
+/*
+ * ------5------------1-2
+ * ----6--10--9-------4-3
+ * -------------------8-7
+ * -------------------11-12
+ */
 
+
+    public static final int w = 5;
+    public static final int a = 6;
+    public static final int s = 10;
+    public static final int d = 9;
+    public static final int one = 1;
+    public static final int two = 2;
+    public static final int three = 4;
+    public static final int four = 3;
+    public static final int five = 8;
+    public static final int six = 7;
+    public static final int seven = 11;
+    public static final int eight = 12;
     // public static final int testVortex1ID = 12;
-    // public static final int testVortex2ID = 13;
+    // public static final int testVortex2ID = 13
     public static final int shooterTop = 27;
     public static final int shooterBottom = 28;
     public static final int feeder = 32;

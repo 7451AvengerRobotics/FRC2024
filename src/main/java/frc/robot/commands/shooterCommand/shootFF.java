@@ -28,7 +28,7 @@ public class shootFF extends Command{
     
     @Override
     public void end(boolean interrupted){
-        shoot.setFF(3000);
+      
     }
 
     @Override
