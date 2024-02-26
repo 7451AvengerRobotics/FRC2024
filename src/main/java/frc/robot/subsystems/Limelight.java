@@ -11,6 +11,7 @@ public class Limelight extends SubsystemBase {
     NetworkTableEntry tx;
     NetworkTableEntry ty;
     NetworkTableEntry ta;
+    NetworkTableEntry tv;
     NetworkTableEntry tid;
     double aprilTag;
     double Kp = 0.02; // Proportional control constant
@@ -23,6 +24,7 @@ public class Limelight extends SubsystemBase {
         tx = table.getEntry("tx");
         ty = table.getEntry("ty");
         ta = table.getEntry("ta");
+        tv = table.getEntry("tv");
         tid = table.getEntry("tid");
         table.getEntry("pipeline").setNumber(0);
 
@@ -33,6 +35,10 @@ public class Limelight extends SubsystemBase {
 
     public double getXPos(){
         return tx.getDouble(0.0);
+    }
+
+    public double getTV(){
+        return tv.getDouble(0.0);
     }
 
     public double getYPos(){

@@ -18,10 +18,10 @@ public class Eyes extends SubsystemBase {
 
     public void updateData() {
         //TODO: This must be tuned to specific robot
-        tx = LimelightHelpers.getTX("");
-        ty = LimelightHelpers.getTY("");
-        ta = LimelightHelpers.getTA("");
-        tID = LimelightHelpers.getFiducialID("");
+        tx = LimelightHelpers.getTX("limelight");
+        ty = LimelightHelpers.getTY("limelight");
+        ta = LimelightHelpers.getTA("limelight");
+        tID = LimelightHelpers.getFiducialID("limelight");
 
         SmartDashboard.putNumber("AprilTagX", tx);
         SmartDashboard.putNumber("AprilTagY", ty);
@@ -47,7 +47,7 @@ public class Eyes extends SubsystemBase {
         Pose2d pose;
 
         //TODO: This must be tuned to specific robot
-        pose = LimelightHelpers.getBotPose2d_wpiBlue("");
+        pose = LimelightHelpers.getBotPose2d_wpiBlue("limelight");
 
         return pose;
 
