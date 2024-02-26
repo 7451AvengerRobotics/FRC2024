@@ -1,6 +1,8 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PS4Controller;
@@ -18,6 +20,7 @@ import frc.robot.commands.climberOneCommand;
 import frc.robot.commands.climberTwoCommand;
 import frc.robot.commands.indexCommand;
 import frc.robot.commands.intakeCommand;
+import frc.robot.commands.limelightLedTest;
 import frc.robot.commands.pivotCommand;
 import frc.robot.commands.setPivotPosition;
 import frc.robot.commands.shooterCommand.feedCommand;
@@ -39,7 +42,7 @@ public class RobotContainer {
     private final int strafeAxis = PS4Controller.Axis.kLeftX.value;
     private final int rotationAxis = PS4Controller.Axis.kRightX.value;
 
-   private final SendableChooser<Command> autoChooser;
+   //private final SendableChooser<Command> autoChooser;
 
     /* Driver Buttons */
     // private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
@@ -63,6 +66,8 @@ public class RobotContainer {
     private final Climbers climbers = new Climbers();
     private final Pivot pivot = new Pivot();
     private final Swerve swerve = new Swerve();
+    private final Limelight limelight = new Limelight();
+    private int increment = 1;
 
     
 
@@ -74,23 +79,23 @@ public class RobotContainer {
     swerve.setDefaultCommand(
         new TeleopSwerve(
             swerve, 
-            () -> -(controller.getRawAxis(translationAxis))*1, 
-            () -> -(controller.getRawAxis(strafeAxis))*-1,
-            () -> -(controller.getRawAxis(rotationAxis)*-1)
+            () -> -(controller.getRawAxis(translationAxis))*0.4, 
+            () -> -(controller.getRawAxis(strafeAxis))*-0.4,
+            () -> -(controller.getRawAxis(rotationAxis)*-0.4)
         )
     );
 
-     intake.setDefaultCommand(new intakeCommand(intake, -0.5));
-     index.setDefaultCommand(new indexCommand(index, -0.4));
-     feed.setDefaultCommand(new feedCommand(feed, -0.1).until(feed::detected));   
-     shooter.setDefaultCommand(new shootFF(shooter, 3000));
+    //   intake.setDefaultCommand(new intakeCommand(intake, -0.5));
+    //   index.setDefaultCommand(new indexCommand(index, -0.3));
+      feed.setDefaultCommand(new feedCommand(feed, -0.1).until(feed::detected));   
+      shooter.setDefaultCommand(new shootFF(shooter, 3000));
 
 
-    autoChooser = AutoBuilder.buildAutoChooser();
+    //autoChooser = AutoBuilder.buildAutoChooser();
 
 
 
-    SmartDashboard.putData("Auto Chooser", autoChooser);
+    //SmartDashboard.putData("Auto Chooser", autoChooser);
 
     }
 
@@ -107,33 +112,34 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
 
-        JoystickButton midCone = new JoystickButton(buttonPanel, Constants.w);
-        JoystickButton midCube = new JoystickButton(buttonPanel, Constants.a);
-        JoystickButton pivotButton = new JoystickButton(buttonPanel, Constants.s);
-        JoystickButton highCone = new JoystickButton(buttonPanel, Constants.d);
-        JoystickButton ampButton = new JoystickButton(buttonPanel, 1); 
-        JoystickButton resetPivot = new JoystickButton(buttonPanel, 2); 
+        JoystickButton wKey = new JoystickButton(buttonPanel, Constants.w);
+        JoystickButton aKey = new JoystickButton(buttonPanel, Constants.a);
+        JoystickButton s = new JoystickButton(buttonPanel, Constants.s);
+        JoystickButton d = new JoystickButton(buttonPanel, Constants.d);
+        JoystickButton one = new JoystickButton(buttonPanel, 1); 
+        JoystickButton two = new JoystickButton(buttonPanel, 2); 
 
-        
-        midCone.whileTrue(new climberCommand(climbers,swerve, 0.3));
-        midCube.whileTrue(new climberOneCommand(climbers, 0.3));
-        highCone.whileTrue(new climberTwoCommand(climbers,0.3));
-        pivotButton.onTrue(new setPivotPosition(pivot, 10));
-        ampButton.onTrue(new setPivotPosition(pivot, 49));
-        resetPivot.onTrue(new setPivotPosition(pivot, 5));
+        one.onTrue(new setPivotPosition(pivot, 36));
+        d.onTrue(new setPivotPosition(pivot, 38));
+        s.onTrue(new setPivotPosition(pivot, 37));
+        aKey.onTrue(new setPivotPosition(pivot, 45));
+        wKey.onTrue(new setPivotPosition(pivot, 42.37));
+        two.onTrue(new setPivotPosition(pivot, 12));
+        squareButton.onTrue(new setPivotPosition(pivot, 0));
+      
+
         /* Driver Buttons */
         
         //circleButton.whileTrue(Commands.parallel((new shootFF(shooter, 5500))).andThen(new feedCommand(feed, 1)));
-        squareButton.whileTrue(new climberCommand(climbers, swerve, 0.3));
         // triangleButton.whileTrue(new climberOneCommand(climbers, 0.3)); //moves down
         // crossButton.whileTrue(new climberTwoCommand(climbers, 0.5));//moves down
         // r1Button.whileTrue(new climberOneCommand(climbers, -0.3)); // move up
         // r2Button.whileTrue(new climberTwoCommand(climbers, -0.5)); //move up
         triangleButton.onTrue(new setPivotPosition(pivot, 49));
-        circleButton.whileTrue(new ParallelCommandGroup(new shootFF(shooter, 6000), 
-    new WaitCommand(2).andThen(new feedCommand(feed, -0.4))));
+        circleButton.whileTrue(new ParallelCommandGroup(new shootFF(shooter, 3000), 
+    new WaitCommand(2).andThen(new feedCommand(feed, -0.3))));
 
-     }   
+     }      
 
 
 
@@ -145,7 +151,7 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
        // An ExampleCommand will run in autonomous
         // return new exampleAuto(s_Swerve);
-       return autoChooser.getSelected();
+       return new PathPlannerAuto("test");
         //return null;
     }
 }

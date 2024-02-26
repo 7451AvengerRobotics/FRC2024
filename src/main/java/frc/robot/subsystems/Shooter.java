@@ -38,11 +38,11 @@ public class Shooter extends SubsystemBase {
 
 
     private double topkS = -0.015666;
-    private double topkV = 0.0018151;
+    private double topkV = 0.0020151;
     private double topkA = 0.00033602;
 
     private double botKS = 0.090092;
-    private double botKv = 0.0017978;
+    private double botKv = 0.0020978;
     private double botKa = 0.00011993;
 
 
@@ -125,6 +125,7 @@ public class Shooter extends SubsystemBase {
 
   @Override
    public void periodic(){
+
    }
 
 

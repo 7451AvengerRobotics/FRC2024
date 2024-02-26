@@ -58,7 +58,7 @@ public class Limelight extends SubsystemBase {
         return steering_adjust;
       }
 
-    
+    @Override
     public void periodic(){
         SmartDashboard.putNumber("XPos", getXPos());
         SmartDashboard.putNumber("YPos", getYPos());
