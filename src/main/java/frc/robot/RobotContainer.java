@@ -65,7 +65,7 @@ public class RobotContainer {
     // private final Elevator elevator = new Elevator();
     private final Climbers climbers = new Climbers();
     private final Pivot pivot = new Pivot();
-    private final Swerve swerve = new Swerve();
+    public final Swerve swerve = new Swerve();
     private final Limelight limelight = new Limelight();
     private int increment = 1;
 
