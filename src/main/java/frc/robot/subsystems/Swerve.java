@@ -42,15 +42,15 @@ public class Swerve extends SubsystemBase {
         gyro.setYaw(0);
         eyes = new Eyes();
 
-        m_poseEstimator =
-          new SwerveDrivePoseEstimator(
-             Constants.Swerve.swerveKinematics,
-             gyro.getRotation2d(),
-             getModulePositions(),
-             new Pose2d(),
-             VecBuilder.fill(0.1, 0.1, 0.1),
-             VecBuilder.fill(1.5, 1.5, 1.5)
-          );
+        // m_poseEstimator =
+        //   new SwerveDrivePoseEstimator(
+        //      Constants.Swerve.swerveKinematics,
+        //      gyro.getRotation2d(),
+        //      getModulePositions(),
+        //      new Pose2d(),
+        //      VecBuilder.fill(0.1, 0.1, 0.1),
+        //      VecBuilder.fill(1.5, 1.5, 1.5)
+        //   );
 
         mSwerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.constants),
@@ -211,10 +211,10 @@ public class Swerve extends SubsystemBase {
     public void periodic(){
         swerveOdometry.update(getGyroYaw(), getModulePositions());
 
-         if (LimelightHelpers.getTV("limelight") == true) {
-            m_poseEstimator.addVisionMeasurement(eyes.getRobotPose(), Timer.getFPGATimestamp() - (LimelightHelpers.getLatency_Pipeline("limelight")/1000.0) - (LimelightHelpers.getLatency_Capture("limelight")/1000.0));
+        //  if (LimelightHelpers.getTV("limelight") == true) {
+        //     m_poseEstimator.addVisionMeasurement(eyes.getRobotPose(), Timer.getFPGATimestamp() - (LimelightHelpers.getLatency_Pipeline("limelight")/1000.0) - (LimelightHelpers.getLatency_Capture("limelight")/1000.0));
 
-         }
+        //  }
         for(SwerveModule mod : mSwerveMods){
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Angle", mod.getPosition().angle.getDegrees());

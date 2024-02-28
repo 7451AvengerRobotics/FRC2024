@@ -34,7 +34,7 @@ public class autoAimCommand extends Command{
         double rotation = targetAngle - robotAngle;
 
         // Rotate the robot towards the target
-        drive.drive(new Translation2d(0, 0), rotation, false, false);
+        drive.drive(new Translation2d(0, 0), -rotation, false, false);
     } else {
         // If no target is detected, stop the robot
         drive.drive(new Translation2d(0, 0), 0, false, false);

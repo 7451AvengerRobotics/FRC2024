@@ -25,14 +25,22 @@ public class climberCommand extends Command{
     
     @Override 
     public void execute(){
-        if (drive.getGyroPitch() > 10){
-            climbers.setClibmerTwo(percent - 0.2);
-            climbers.setClimberOne(percent + 0.2);
-        } else if (drive.getGyroPitch() < - 10){
+        if (drive.getGyroPitch() > 5){
             climbers.setClibmerTwo(percent + 0.2);
-            climbers.setClimberOne(percent - 0.2);
+            climbers.setClimberOne(-percent + 0.2);
+        } else if (drive.getGyroPitch() < - 5){
+            climbers.setClibmerTwo(percent - 0.2);
+            climbers.setClimberOne(-percent - 0.2);
         }else{ 
             climbers.setPower(percent);
+        }
+
+        if (climbers.climber1Detected()){
+            climbers.setClimberOne(0);
+        }
+        
+        if (climbers.climber2Detected()){
+            climbers.setClibmerTwo(0);
         }
     }
     
