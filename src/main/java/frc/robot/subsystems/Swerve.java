@@ -22,10 +22,10 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.DoubleArrayPublisher;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -62,15 +62,7 @@ public class Swerve extends SubsystemBase {
         rotPidController.enableContinuousInput(-Math.PI, Math.PI);
         rotPidController.setIZone(3);
 
-        // m_poseEstimator =
-        //   new SwerveDrivePoseEstimator(
-        //      Constants.Swerve.swerveKinematics,
-        //      gyro.getRotation2d(),
-        //      getModulePositions(),
-        //      new Pose2d(),
-        //      VecBuilder.fill(0.1, 0.1, 0.1),
-        //      VecBuilder.fill(1.5, 1.5, 1.5)
-        //   );
+
 
         mSwerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.constants),
@@ -84,14 +76,29 @@ public class Swerve extends SubsystemBase {
 
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getGyroYaw(), getModulePositions());
 
+        m_poseEstimator =
+            new SwerveDrivePoseEstimator(
+          Constants.Swerve.swerveKinematics,
+          gyro.getRotation2d(),
+          new SwerveModulePosition[] {
+            mSwerveMods[0].getPosition(),
+            mSwerveMods[1].getPosition(),
+            mSwerveMods[2].getPosition(),
+            mSwerveMods[3].getPosition()
+          },
+          new Pose2d(),
+          VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
+          VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)));
+
+
         AutoBuilder.configureHolonomic(
                 this::getPose, // Robot pose supplier
                 this::setPose, // Method to reset odometry (will be called if your auto has a starting pose)
                 this::getChassisSpeed, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
                 this::setChassisSpeed, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
                 new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                        new PIDConstants(3.3, 0.0, 0.0), // Translation PID constants
-                        new PIDConstants(1, 0.0, 0.0), // Rotation PID constants
+                        new PIDConstants(5, 0.0, 0.0), // Translation PID constants
+                        new PIDConstants(0, 0.0, 0.0), // Rotation PID constants
                         5, // Max module speed, in m/s
                         0.39,
                         new ReplanningConfig() // Drive base radius in meters. Distance from robot center to furthest module.
@@ -157,7 +164,24 @@ public class Swerve extends SubsystemBase {
         for(SwerveModule mod : mSwerveMods){
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
         }
-    }    
+    }
+    
+    public void poseDrive(
+        double xSpeed, double ySpeed, double rot, boolean fieldRelative, double periodSeconds) {
+      var swerveModuleStates =
+          Constants.Swerve.swerveKinematics.toSwerveModuleStates(
+              ChassisSpeeds.discretize(
+                  fieldRelative
+                      ? ChassisSpeeds.fromFieldRelativeSpeeds(
+                          xSpeed, ySpeed, rot, m_poseEstimator.getEstimatedPosition().getRotation())
+                      : new ChassisSpeeds(xSpeed, ySpeed, rot),
+                  periodSeconds));
+      SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
+      mSwerveMods[0].setDesiredState(swerveModuleStates[0], false);
+      mSwerveMods[1].setDesiredState(swerveModuleStates[1],false);
+      mSwerveMods[2].setDesiredState(swerveModuleStates[2], false);
+      mSwerveMods[3].setDesiredState(swerveModuleStates[3], false);
+    }
 
     /* Used by SwerveControllerCommand in Auto */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
@@ -233,6 +257,25 @@ public class Swerve extends SubsystemBase {
         goalHeading = deltaPos.getAngle();
       }
 
+    public void updateOdometry() {
+        m_poseEstimator.update(
+            gyro.getRotation2d(),
+            new SwerveModulePosition[] {
+              mSwerveMods[0].getPosition(),
+              mSwerveMods[1].getPosition(),
+              mSwerveMods[2].getPosition(),
+              mSwerveMods[3].getPosition()
+            });
+        
+    LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+    if(limelightMeasurement.tagCount >= 2)
+    {
+      m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
+      m_poseEstimator.addVisionMeasurement(
+          limelightMeasurement.pose,
+          limelightMeasurement.timestampSeconds);
+        }
+    }
     public void updateAlliance() {
         Optional<Alliance> ally = DriverStation.getAlliance();
             if (ally.isPresent()) {
@@ -274,10 +317,6 @@ public class Swerve extends SubsystemBase {
     public void periodic(){
         swerveOdometry.update(getGyroYaw(), getModulePositions());
 
-        //  if (LimelightHelpers.getTV("limelight") == true) {
-        //     m_poseEstimator.addVisionMeasurement(eyes.getRobotPose(), Timer.getFPGATimestamp() - (LimelightHelpers.getLatency_Pipeline("limelight")/1000.0) - (LimelightHelpers.getLatency_Capture("limelight")/1000.0));
-
-        //  }
         for(SwerveModule mod : mSwerveMods){
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Angle", mod.getPosition().angle.getDegrees());

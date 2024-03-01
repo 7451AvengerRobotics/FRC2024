@@ -2,7 +2,7 @@ package frc.robot.commands.shooterCommand  ;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.commands.Misc.setLedColorCommand;
+import frc.robot.commands.setLedColorCommand;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.LedHandler;
 import frc.robot.subsystems.Shooter;

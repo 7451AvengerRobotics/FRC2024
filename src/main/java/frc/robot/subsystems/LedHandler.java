@@ -3,9 +3,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.led.CANdle;
 import com.ctre.phoenix.led.CANdle.LEDStripType;
 import com.ctre.phoenix.led.CANdleConfiguration;
-import com.ctre.phoenix.led.FireAnimation;
-import com.ctre.phoenix.led.RainbowAnimation;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LedHandler extends SubsystemBase

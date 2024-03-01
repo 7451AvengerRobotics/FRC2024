@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.4896821805055864,
-      "y": 5.574358195791997
+      "x": 0.8996502608389847,
+      "y": 4.282253179890976
     },
-    "rotation": 0
+    "rotation": -45.0
   },
   "command": {
     "type": "sequential",
@@ -18,13 +18,25 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "Far1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Far2"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Auto1Path1"
+                  "pathName": "Far3"
                 }
               },
               {
@@ -43,34 +55,10 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Auto1Path2"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "ramp"
+                  "pathName": "Far4"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Auto2Path3"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Auto2Path4"
           }
         },
         {
@@ -82,6 +70,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "3Notes",
   "choreoAuto": false
 }

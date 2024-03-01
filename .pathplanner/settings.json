@@ -2,8 +2,14 @@
   "robotWidth": 0.8128,
   "robotLength": 0.95,
   "holonomicMode": true,
-  "pathFolders": [],
-  "autoFolders": [],
+  "pathFolders": [
+    "3NoteAutoClose",
+    "Far Folder",
+    "3NoteAutoFar"
+  ],
+  "autoFolders": [
+    "3Notes"
+  ],
   "defaultMaxVel": 4.75,
   "defaultMaxAccel": 4.0,
   "defaultMaxAngVel": 650.0,

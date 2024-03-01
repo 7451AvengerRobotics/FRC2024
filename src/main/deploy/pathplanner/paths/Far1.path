@@ -3,53 +3,43 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.49,
-        "y": 5.57
+        "x": 0.8996502608389847,
+        "y": 4.282253179890976
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.8947741881248894,
-        "y": 6.3785161971272935
+        "x": 0.8996502608389847,
+        "y": 3.614632778048327
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.793721758262023,
-        "y": 6.4758981238009925
+        "x": 8.04775064614323,
+        "y": 0.749493538930016
       },
       "prevControl": {
-        "x": 3.0132039536278494,
-        "y": 6.395574012313737
-      },
-      "nextControl": {
-        "x": 6.08890138302222,
-        "y": 6.534327279805212
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 7.997587145826723,
-        "y": 7.430241005203245
-      },
-      "prevControl": {
-        "x": 4.94953284093994,
-        "y": 7.401026427201135
+        "x": 0.7753211512129138,
+        "y": 0.6323851734722
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.75,
+      "rotationDegrees": 0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 1.0,
+      "waypointRelativePos": 0.75,
       "command": {
         "type": "sequential",
         "data": {
@@ -77,9 +67,9 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "3NoteAutoFar",
+  "folder": "Far Folder",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -49.68589983950276,
     "velocity": 0
   },
   "useDefaultConstraints": true

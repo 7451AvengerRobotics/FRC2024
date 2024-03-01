@@ -3,41 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.49,
-        "y": 5.57
+        "x": 8.05,
+        "y": 0.75
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.8947741881248894,
-        "y": 6.3785161971272935
+        "x": 3.176042643098124,
+        "y": 0.6089635003806371
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.793721758262023,
-        "y": 6.4758981238009925
+        "x": 0.9292510892714109,
+        "y": 4.25265235145855
       },
       "prevControl": {
-        "x": 3.0132039536278494,
-        "y": 6.395574012313737
-      },
-      "nextControl": {
-        "x": 6.08890138302222,
-        "y": 6.534327279805212
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 7.997587145826723,
-        "y": 7.430241005203245
-      },
-      "prevControl": {
-        "x": 4.94953284093994,
-        "y": 7.401026427201135
+        "x": 0.9292510892714106,
+        "y": 1.4712362193992905
       },
       "nextControl": null,
       "isLocked": false,
@@ -49,18 +33,11 @@
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 1.0,
+      "waypointRelativePos": 0.4,
       "command": {
         "type": "sequential",
         "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "fullIntake"
-              }
-            }
-          ]
+          "commands": []
         }
       }
     }
@@ -73,11 +50,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": -46.52951378047365,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "3NoteAutoFar",
+  "folder": "Far Folder",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

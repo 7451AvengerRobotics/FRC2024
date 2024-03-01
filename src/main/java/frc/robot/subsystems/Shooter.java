@@ -151,11 +151,11 @@ public class Shooter extends SubsystemBase {
 
 
 
-  @Override
-   public void periodic(){
-        SmartDashboard.putNumber("ShooterTop Current", this.getshootTopCurrent());
-        SmartDashboard.putNumber("ShooterBot Current", this.getshootBotCurrent());
-   }
+  // @Override
+  //  public void periodic(){
+  //       SmartDashboard.putNumber("ShooterTop Current", this.getshootTopCurrent());
+  //       SmartDashboard.putNumber("ShooterBot Current", this.getshootBotCurrent());
+  //  }
 
 
 

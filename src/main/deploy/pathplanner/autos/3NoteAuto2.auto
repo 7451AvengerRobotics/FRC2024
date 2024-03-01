@@ -45,6 +45,12 @@
                 "data": {
                   "pathName": "Auto1Path2"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ramp"
+                }
               }
             ]
           }
@@ -56,35 +62,15 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Auto1Path3"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "fullIntake"
-                }
-              }
-            ]
+            "pathName": "Auto2Path3"
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Auto1Path4"
-                }
-              }
-            ]
+            "pathName": "Auto2Path4"
           }
         },
         {
