@@ -152,9 +152,9 @@ public class RobotContainer {
         JoystickButton a = new JoystickButton(buttonPanel, Constants.a);
         JoystickButton s = new JoystickButton(buttonPanel, Constants.s);
         JoystickButton d = new JoystickButton(buttonPanel, Constants.d);
-        JoystickButton one = new JoystickButton(buttonPanel, 1); 
-        JoystickButton two = new JoystickButton(buttonPanel, 2); 
-        JoystickButton three = new JoystickButton(buttonPanel, Constants.three);
+        JoystickButton intakeButton = new JoystickButton(buttonPanel, Constants.one); 
+        JoystickButton outtakeButton = new JoystickButton(buttonPanel, Constants.two); 
+        JoystickButton eject = new JoystickButton(buttonPanel, Constants.three);
         JoystickButton four = new JoystickButton(buttonPanel, Constants.four);
         JoystickButton five = new JoystickButton(buttonPanel, Constants.five);
         JoystickButton six = new JoystickButton(buttonPanel, Constants.six);
@@ -178,7 +178,8 @@ public class RobotContainer {
       s.onTrue(new ParallelCommandGroup(new setPivotPosition(pivot, 2), new elevatorPositionCommand(elevator, 0, 0)));
 
     //Stage
-      a.onTrue((new climberCommand(climbers, swerve, 0.8)
+      a.onTrue(( 
+      new climberCommand(climbers, swerve, 0.8)
                 .until(climbers::climbersDetected))
                     .andThen(new feedCommand(feed, 0.7).raceWith(new WaitCommand(1))));
     
@@ -186,25 +187,13 @@ public class RobotContainer {
 
         /* Driver Buttons */
 
-        
-
-
-         seven.onTrue(new setPivotPosition(pivot, 8));
-         eight.onTrue(new ParallelCommandGroup(new setPivotPosition(pivot, 47), 
+        intakeButton.whileTrue(new allFeed(feed, intake, index, -0.5, -0.5, -0.5).until(feed::detected).andThen(new setLedColorCommand(led, 0, 255, 0))); // 1
+        outtakeButton.whileTrue(new allFeed(feed, intake, index, 0.5, 0.5, 0.5)); // 2     
+        eject.onTrue( new setPivotPosition(pivot, 40).andThen(new feedCommand(feed, 1).raceWith(new setLedColorCommand(led, 255, 0, 0)))); // 3
+        four.onTrue(new setClimberPos(climbers, 283, -283)); // 4
+        five.onTrue(new setClimberPos(climbers, 0, 0)); // 5
+        eight.onTrue(new ParallelCommandGroup(new setPivotPosition(pivot, 47), 
         new elevatorPositionCommand(elevator, -135, 555390)).raceWith(new WaitCommand(1)));
-
-        one.onTrue(new setClimberPos(climbers, 211.46446228027344, -224.79605));
-        squareButton.whileTrue(new allFeed(feed, intake, index, -0.5, -0.5, -0.1).until(feed::detected));
-        five.whileTrue(new climberOneCommand(climbers, 0.3));
-        six.whileTrue(new climberOneCommand(climbers, -0.3));
-         three.onTrue(new setClimberPos(climbers, 283, -280));
-         four.onTrue(new setClimberPos(climbers, 0, 0));
-      
-
-
-       
-
-
      }      
 
 
