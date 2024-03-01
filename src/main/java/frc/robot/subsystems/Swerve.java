@@ -71,8 +71,8 @@ public class Swerve extends SubsystemBase {
                 this::getChassisSpeed, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
                 this::setChassisSpeed, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
                 new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                        new PIDConstants(3.3, 0.0, 0.0), // Translation PID constants
-                        new PIDConstants(1, 0.0, 0.0), // Rotation PID constants
+                        new PIDConstants(5, 0.0, 0.0), // Translation PID constants
+                        new PIDConstants(0, 0.0, 0.0), // Rotation PID constants
                         5, // Max module speed, in m/s
                         0.39,
                         new ReplanningConfig() // Drive base radius in meters. Distance from robot center to furthest module.
@@ -209,7 +209,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public void updateOdometry() {
-        m_poseEstimator.update(
+        swerveOdometry.update(
             gyro.getRotation2d(),
             new SwerveModulePosition[] {
               mSwerveMods[0].getPosition(),
@@ -218,14 +218,14 @@ public class Swerve extends SubsystemBase {
               mSwerveMods[3].getPosition()
             });
 
-            LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
-            if(limelightMeasurement.tagCount >= 2)
-            {
-              m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
-              m_poseEstimator.addVisionMeasurement(
-                  limelightMeasurement.pose,
-                  limelightMeasurement.timestampSeconds);
-            }
+            // LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+            // if(limelightMeasurement.tagCount >= 2)
+            // {
+            //   m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
+            //   m_poseEstimator.addVisionMeasurement(
+            //       limelightMeasurement.pose,
+            //       limelightMeasurement.timestampSeconds);
+            // }
           }
 
     @Override

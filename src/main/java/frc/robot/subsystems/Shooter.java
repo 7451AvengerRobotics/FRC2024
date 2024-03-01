@@ -16,6 +16,7 @@ import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -27,6 +28,7 @@ public class Shooter extends SubsystemBase {
 
     private final CANSparkFlex shooterTop;
     private final CANSparkFlex shooterBottom;
+    //private final RelativeEncoder topEncoder;
     private final SimpleMotorFeedforward controlTop;
     private final SimpleMotorFeedforward controlBot;
     private final MutableMeasure<Voltage> m_appliedVoltage = mutable(Volts.of(0));
@@ -37,13 +39,13 @@ public class Shooter extends SubsystemBase {
 
 
 
-    private double topkS = -0.015666;
-    private double topkV = 0.0020151;
-    private double topkA = 0.00033602;
+    private double topkS = 0.041971;
+    private double topkV = 0.0018209;
+    private double topkA = 0.00021685;
 
-    private double botKS = 0.090092;
-    private double botKv = 0.0020978;
-    private double botKa = 0.00011993;
+    private double botKS = 0.11178;
+    private double botKv = 0.0018043;
+    private double botKa = 0.00011078;
 
 
 
@@ -68,7 +70,6 @@ public class Shooter extends SubsystemBase {
     public void shoot(double power){
         shooterTop.set(power);
         shooterBottom.set(power);
-       
     }
 
     public void setBottom(double power){
@@ -122,10 +123,38 @@ public class Shooter extends SubsystemBase {
   public void stopMotors() {
     shooterBottom.set(0);
   }
+  public double getShooterBottomVoltage(){
+   return shooterBottom.getBusVoltage();
+  }
+
+  public double getShooterTopVoltage(){
+    return shooterTop.getBusVoltage();
+  }
+
+  public double getShooterBotRpm(){
+    return controlBot.calculate(3000);
+  }
+
+  
+  public double getShooterTopRpm(){
+    return controlTop.calculate(3000);
+  }
+
+
+  public double getshootTopCurrent(){
+    return shooterTop.getOutputCurrent();
+  }
+
+    public double getshootBotCurrent(){
+    return shooterBottom.getOutputCurrent();
+  }
+
+
 
   @Override
    public void periodic(){
-
+        SmartDashboard.putNumber("ShooterTop Current", this.getshootTopCurrent());
+        SmartDashboard.putNumber("ShooterBot Current", this.getshootBotCurrent());
    }
 
 

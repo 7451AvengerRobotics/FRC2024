@@ -1,6 +1,7 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj.GenericHID;
@@ -15,7 +16,9 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.commands.allFeed;
 import frc.robot.commands.climberCommand;
 import frc.robot.commands.climberOneCommand;
 import frc.robot.commands.climberTwoCommand;
@@ -25,8 +28,10 @@ import frc.robot.commands.indexCommand;
 import frc.robot.commands.intakeCommand;
 import frc.robot.commands.limelightLedTest;
 import frc.robot.commands.pivotCommand;
+import frc.robot.commands.setClimberPos;
 import frc.robot.commands.setLedColorCommand;
 import frc.robot.commands.setPivotPosition;
+import frc.robot.commands.shootPercentage;
 import frc.robot.commands.shooterCommand.autoAimCommand;
 import frc.robot.commands.shooterCommand.feedCommand;
 import frc.robot.commands.shooterCommand.shootFF;
@@ -38,6 +43,7 @@ import frc.robot.subsystems.*;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+    
     /* Controllers */
     private final Joystick buttonPanel = new Joystick(0);
 
@@ -83,6 +89,16 @@ public class RobotContainer {
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
 
+    NamedCommands.registerCommand("shoot", new ParallelCommandGroup(new shootFF(shooter, 6000), 
+                    new WaitCommand(1).andThen(
+                        new feedCommand(feed, -0.7))).andThen(
+                            new setLedColorCommand(led, 0, 0, 255)).withTimeout(2));
+
+    NamedCommands.registerCommand("fullIntake", new allFeed(feed, intake, index, -0.5, -0.5, -0.1).until(feed::detected));
+
+    NamedCommands.registerCommand("pivot", new setPivotPosition(pivot, 5.4).withTimeout(1));
+
+
     configureButtonBindings();
 
     swerve.setDefaultCommand(
@@ -94,18 +110,16 @@ public class RobotContainer {
             () -> robotCentric.getAsBoolean()
         )
     );
-       intake.setDefaultCommand(new intakeCommand(intake, -0.5).until(
-                feed::detected));
+    //    intake.setDefaultCommand(new intakeCommand(intake, -0.7).until(
+    //             feed::detected));
 
-        index.setDefaultCommand(new indexCommand(index, -0.6).until(
-                feed::detected));
+    //     index.setDefaultCommand(new indexCommand(index, -0.7).until(
+    //             feed::detected));
 
-      feed.setDefaultCommand(new feedCommand(feed, -0.5).alongWith(
-            new setLedColorCommand(led, 0, 0, 255)).until(
-                feed::detected).andThen(
-                    new setLedColorCommand(led, 0, 255, 0))); 
-
-      shooter.setDefaultCommand(new shootFF(shooter, 4500));
+    //   feed.setDefaultCommand(new feedCommand(feed, -0.1).alongWith(
+    //         new setLedColorCommand(led, 0, 0, 255)).until(
+    //             feed::detected).andThen(new setLedColorCommand(led, 0, 255, 0)));
+       shooter.setDefaultCommand(new shootFF(shooter, 4500));
 
 
     //autoChooser = AutoBuilder.buildAutoChooser();
@@ -140,7 +154,7 @@ public class RobotContainer {
         JoystickButton six = new JoystickButton(buttonPanel, Constants.six);
         JoystickButton seven = new JoystickButton(buttonPanel, Constants.seven);
         JoystickButton eight = new JoystickButton(buttonPanel, Constants.eight);
-
+        
 
 
     //Amp 
@@ -148,37 +162,51 @@ public class RobotContainer {
 
 
     //Shoot
-      d.whileTrue(new ParallelCommandGroup(new shootFF(shooter, 5500), 
-                    new WaitCommand(1).andThen(
+      d.whileTrue(new ParallelCommandGroup(new shootFF(shooter, 6000), 
+                    new WaitCommand(2).andThen(
                         new feedCommand(feed, -0.7))).andThen(
                             new setLedColorCommand(led, 0, 0, 255)));
 
     //Reset
-      s.onTrue(new ParallelCommandGroup(new setPivotPosition(pivot, 0), new elevatorPositionCommand(elevator, 0, 0)));
+      s.onTrue(new ParallelCommandGroup(new setPivotPosition(pivot, 2), new elevatorPositionCommand(elevator, 0, 0)));
 
     //Stage
-      a.onTrue(new ParallelCommandGroup(
-     new setPivotPosition(pivot, 35), 
-        new elevatorPositionCommand(elevator, - 99.145751953125, 406393.53125)).raceWith(new WaitCommand(1))
-            .andThen(new climberCommand(climbers, swerve, 0.8)
+      a.onTrue((new climberCommand(climbers, swerve, 0.8)
                 .until(climbers::climbersDetected))
-                    .andThen(new feedCommand(feed, 0.7)));
+                    .andThen(new feedCommand(feed, 0.7).raceWith(new WaitCommand(1))));
     
       
 
         /* Driver Buttons */
 
-        one.whileTrue(new ParallelCommandGroup(new intakeCommand(intake, 0.5), new indexCommand(index, 0.5)));
-        two.whileTrue(new setPivotPosition(pivot, 33).raceWith(new WaitCommand(1)).andThen(new feedCommand(feed, 1)));
+        // one.whileTrue(new ParallelCommandGroup(new intakeCommand(intake, 0.5), new indexCommand(index, 0.5)));
+        // two.onTrue(new setPivotPosition(pivot, 6.75));
+        // three.onTrue(new setPivotPosition(pivot, 7));
+        // four.onTrue(new setPivotPosition(pivot, 7.25));
+        // five.onTrue(new setPivotPosition(pivot, 7.5));
+         //six.onTrue(new setPivotPosition(pivot, 7.75));
+         seven.onTrue(new setPivotPosition(pivot, 8));
+         eight.onTrue(new ParallelCommandGroup(new setPivotPosition(pivot, 47), 
+        new elevatorPositionCommand(elevator, -135, 555390)).raceWith(new WaitCommand(1)));
+//211.4644622802734446228027344
+//-224.796051025390621 - lcimber 2
+        one.onTrue(new setClimberPos(climbers, 211.46446228027344, -224.79605));
+        squareButton.whileTrue(new allFeed(feed, intake, index, -0.5, -0.5, -0.1).until(feed::detected));
+        five.whileTrue(new climberOneCommand(climbers, 0.3));
+        six.whileTrue(new climberOneCommand(climbers, -0.3));
+         three.onTrue(new setClimberPos(climbers, 283, -280));
+         four.onTrue(new setClimberPos(climbers, 0, 0));
+        // // three.whileTrue(new elevatorTest(elevator, 0.4));
+        // // four.whileTrue(new elevatorTest(elevator, -0.4));
+        // five.whileTrue(new climberOneCommand(climbers, 0.7));
+        // six.whileTrue(new climberTwoCommand(climbers, -0.7));
+        // seven.whileTrue(new climberOneCommand(climbers, -0.7).until(climbers::climber1Detected));
+        // eight.whileTrue(new climberTwoCommand(climbers, 0.7).until(climbers::climber2Detected));
 
-        three.whileTrue(new elevatorTest(elevator, 0.4));
-        four.whileTrue(new elevatorTest(elevator, -0.4));
-        five.whileTrue(new climberOneCommand(climbers, 0.7));
-        six.whileTrue(new climberTwoCommand(climbers, -0.7));
-        seven.whileTrue(new climberOneCommand(climbers, -0.7).until(climbers::climber1Detected));
-        eight.whileTrue(new climberTwoCommand(climbers, 0.7).until(climbers::climber2Detected));
+        // resetGyro.onTrue(new InstantCommand(() -> swerve.zeroHeading()));
 
-        resetGyro.onTrue(new InstantCommand(() -> swerve.zeroHeading()));
+
+       
 
 
      }      

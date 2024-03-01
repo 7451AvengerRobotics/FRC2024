@@ -12,7 +12,7 @@ public class LedHandler extends SubsystemBase
 {
     private final CANdle candle = new CANdle(5);
     // private final RainbowAnimation rainbow;
-    // private final FireAnimation fire;
+    //private final FireAnimation fire;
     public LedHandler() {
         super();
         
@@ -29,6 +29,8 @@ public class LedHandler extends SubsystemBase
         // configAll.vBatOutputMode = VBatOutputMode.Modulated;
       
         candle.configAllSettings(configAll, 100);
+        //fire = new FireAnimation(1, 1, 0, 1, 0.3);
+       // candle.animate(fire);
         candle.setLEDs(0, 0, 255);
 
         
