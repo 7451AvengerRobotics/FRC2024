@@ -92,8 +92,7 @@ public class RobotContainer {
     public RobotContainer() {
 
     NamedCommands.registerCommand("shoot", 
-                        new feedCommand(feed, -0.7).andThen(
-                            new shootFF(shooter, 0).withTimeout(0.5))
+                        new feedCommand(feed, -0.7).withTimeout(0.5)
                             );
 
     NamedCommands.registerCommand("fullIntake", 
