@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.util.Optional;
+
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -7,7 +9,10 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -20,27 +25,42 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.DoubleArrayPublisher;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
+import frc.robot.Robot;
 import frc.robot.SwerveModule;
 
 public class Swerve extends SubsystemBase {
+    public boolean onRedAlliance;
+    public Robot thisRobot;
     public SwerveDriveOdometry swerveOdometry;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
     public SwerveDrivePoseEstimator m_poseEstimator;
     public Eyes eyes;
+    public PIDController rotPidController = new PIDController(6, 1,0.2f);
+
     private DoubleArrayPublisher moduleStatePublisher = NetworkTableInstance.getDefault()
             .getDoubleArrayTopic("/ModuleStates").publish();
+
+    public Rotation2d goalHeading = new Rotation2d();
+
+      AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
+
+
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID, "7451CANivore");
         gyro.getConfigurator().apply(new Pigeon2Configuration());
         gyro.setYaw(0);
         eyes = new Eyes();
+        rotPidController.enableContinuousInput(-Math.PI, Math.PI);
+        rotPidController.setIZone(3);
 
         // m_poseEstimator =
         //   new SwerveDrivePoseEstimator(
@@ -206,6 +226,49 @@ public class Swerve extends SubsystemBase {
             mod.resetToAbsolute();
         }
     }
+
+    public void aimAtPoint(Translation2d point) {
+        Translation2d currentPos = getPose().getTranslation();
+        Translation2d deltaPos = currentPos.minus(point);
+        goalHeading = deltaPos.getAngle();
+      }
+
+    public void updateAlliance() {
+        Optional<Alliance> ally = DriverStation.getAlliance();
+            if (ally.isPresent()) {
+                if (ally.get() == Alliance.Red) {
+                    onRedAlliance = true;
+                }
+            if (ally.get() == Alliance.Blue) {
+                onRedAlliance = false;
+        }
+        }
+    }
+    
+    public void setGoalHeadingToGoal(){
+        if(onRedAlliance){
+            aimAtPoint(Constants.goalPositions.redGoalPos);
+        }else{
+            aimAtPoint(Constants.goalPositions.blueGoalPos);
+     }
+      }
+
+      public void driveClosedLoopHeading(Translation2d translation) {
+
+        double rot = rotPidController.calculate(gyro.getRotation2d().getRadians(),
+            goalHeading.getRadians());
+    
+        drive(
+            translation,
+            rot,
+            true,
+            false);
+      }
+
+      public void aimAtGoal(){
+        setGoalHeadingToGoal();
+        driveClosedLoopHeading(new Translation2d());
+      }
 
     @Override
     public void periodic(){
