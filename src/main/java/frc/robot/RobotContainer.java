@@ -53,6 +53,8 @@ public class RobotContainer {
     private final int strafeAxis = PS4Controller.Axis.kLeftX.value;
     private final int rotationAxis = PS4Controller.Axis.kRightX.value;
 
+    private final SendableChooser<Command> autoChooser;
+
    //private final SendableChooser<Command> autoChooser;
 
     /* Driver Buttons */
@@ -89,14 +91,19 @@ public class RobotContainer {
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
 
-    NamedCommands.registerCommand("shoot", new ParallelCommandGroup(new shootFF(shooter, 6000), 
-                    new WaitCommand(1).andThen(
-                        new feedCommand(feed, -0.7))).andThen(
-                            new setLedColorCommand(led, 0, 0, 255)).withTimeout(2));
+    NamedCommands.registerCommand("shoot", 
+                        new feedCommand(feed, -0.7).andThen(
+                            new shootFF(shooter, 0).withTimeout(0.5))
+                            );
 
-    NamedCommands.registerCommand("fullIntake", new allFeed(feed, intake, index, -0.5, -0.5, -0.1).until(feed::detected));
+    NamedCommands.registerCommand("fullIntake", 
+                        new allFeed(feed, intake, index, -0.5, -0.5, -0.1).until(feed::detected));
 
-    NamedCommands.registerCommand("pivot", new setPivotPosition(pivot, 5.4).withTimeout(1));
+    NamedCommands.registerCommand("ramp", new shootFF(shooter, 6000));
+
+    autoChooser = AutoBuilder.buildAutoChooser();
+    SmartDashboard.putData("Auto Chooser", autoChooser);
+    
 
 
     configureButtonBindings();
@@ -221,7 +228,7 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
        // An ExampleCommand will run in autonomous
         // return new exampleAuto(s_Swerve);
-       return new PathPlannerAuto("test");
+        return autoChooser.getSelected();
         //return null;
     }
 }

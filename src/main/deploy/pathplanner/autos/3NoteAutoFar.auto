@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3491521419562087,
-      "y": 5.597779868883561
+      "x": 1.4896821805055864,
+      "y": 5.574358195791997
     },
     "rotation": 0
   },
@@ -24,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "path3"
+                  "pathName": "Auto1Path1"
                 }
               },
               {
@@ -34,18 +34,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "path4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot"
           }
         },
         {
@@ -55,22 +43,34 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "path1"
+                  "pathName": "Auto1Path2"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "fullIntake"
+                  "name": "ramp"
                 }
               }
             ]
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "path2"
+            "pathName": "Auto2Path3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Auto2Path4"
           }
         },
         {
