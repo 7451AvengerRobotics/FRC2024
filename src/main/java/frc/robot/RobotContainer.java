@@ -170,7 +170,7 @@ public class RobotContainer {
 
     //Shoot
       d.whileTrue(new ParallelCommandGroup(new shootFF(shooter, 6000), 
-                    new WaitCommand(2).andThen(
+                    new WaitCommand(1.5).andThen(
                         new feedCommand(feed, -0.7))).andThen(
                             new setLedColorCommand(led, 0, 0, 255)));
 
