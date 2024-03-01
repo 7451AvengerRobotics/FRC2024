@@ -193,12 +193,11 @@ public class RobotContainer {
 
         /* Driver Buttons */
 
-        intakeButton.whileTrue(new allFeed(feed, intake, index, -0.5, -0.5, -0.1).until(feed::detected).andThen(new setLedColorCommand(led, 0, 255, 0))); // 1
-        outtakeButton.whileTrue(new allFeed(feed, intake, index, 0.5, 0.5, 0.5)); // 2     
-        eject.onTrue(new setLedColorCommand(led, 255, 0, 0).withTimeout(0.1).andThen( new setPivotPosition(pivot, 40).withTimeout(0.1).andThen(new feedCommand(feed, 1).raceWith(new WaitCommand(0.1)).andThen(new setLedColorCommand(led, 0, 0, 255))))); // 3
-        four.onTrue(new setClimberPos(climbers, 283, -283)); // 4
-        five.onTrue(new setClimberPos(climbers, 0, 0)); // 5
-        eight.onTrue(new ParallelCommandGroup(new setPivotPosition(pivot, 47), 
+        
+
+
+         seven.onTrue(new setPivotPosition(pivot, 8));
+         eight.onTrue(new ParallelCommandGroup(new setPivotPosition(pivot, 47), 
         new elevatorPositionCommand(elevator, -135, 555390)).raceWith(new WaitCommand(1)));
      }      
 
