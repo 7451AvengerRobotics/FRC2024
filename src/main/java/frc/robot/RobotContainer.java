@@ -18,23 +18,23 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.TeleopSwerve;
-import frc.robot.commands.allFeed;
-import frc.robot.commands.climberCommand;
-import frc.robot.commands.climberOneCommand;
-import frc.robot.commands.climberTwoCommand;
-import frc.robot.commands.elevatorPositionCommand;
-import frc.robot.commands.elevatorTest;
-import frc.robot.commands.indexCommand;
-import frc.robot.commands.intakeCommand;
-import frc.robot.commands.limelightLedTest;
-import frc.robot.commands.pivotCommand;
-import frc.robot.commands.setClimberPos;
-import frc.robot.commands.setLedColorCommand;
-import frc.robot.commands.setPivotPosition;
-import frc.robot.commands.shootPercentage;
+import frc.robot.commands.ClimberCommand.climberCommand;
+import frc.robot.commands.ClimberCommand.climberOneCommand;
+import frc.robot.commands.ClimberCommand.climberTwoCommand;
+import frc.robot.commands.ClimberCommand.setClimberPos;
+import frc.robot.commands.ElevatorCommand.elevatorPositionCommand;
+import frc.robot.commands.ElevatorCommand.elevatorTest;
+import frc.robot.commands.Misc.limelightLedTest;
+import frc.robot.commands.Misc.setLedColorCommand;
+import frc.robot.commands.PivotCommands.pivotCommand;
+import frc.robot.commands.PivotCommands.setPivotPosition;
+import frc.robot.commands.RetrieveDisc.allFeed;
+import frc.robot.commands.RetrieveDisc.indexCommand;
+import frc.robot.commands.RetrieveDisc.intakeCommand;
 import frc.robot.commands.shooterCommand.autoAimCommand;
 import frc.robot.commands.shooterCommand.feedCommand;
 import frc.robot.commands.shooterCommand.shootFF;
+import frc.robot.commands.shooterCommand.shootPercentage;
 import frc.robot.subsystems.*;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -160,6 +160,7 @@ public class RobotContainer {
         JoystickButton six = new JoystickButton(buttonPanel, Constants.six);
         JoystickButton seven = new JoystickButton(buttonPanel, Constants.seven);
         JoystickButton eight = new JoystickButton(buttonPanel, Constants.eight);
+     
         
 
 
@@ -185,31 +186,20 @@ public class RobotContainer {
 
         /* Driver Buttons */
 
-        // one.whileTrue(new ParallelCommandGroup(new intakeCommand(intake, 0.5), new indexCommand(index, 0.5)));
-        // two.onTrue(new setPivotPosition(pivot, 6.75));
-        // three.onTrue(new setPivotPosition(pivot, 7));
-        // four.onTrue(new setPivotPosition(pivot, 7.25));
-        // five.onTrue(new setPivotPosition(pivot, 7.5));
-         //six.onTrue(new setPivotPosition(pivot, 7.75));
+        
+
+
          seven.onTrue(new setPivotPosition(pivot, 8));
          eight.onTrue(new ParallelCommandGroup(new setPivotPosition(pivot, 47), 
         new elevatorPositionCommand(elevator, -135, 555390)).raceWith(new WaitCommand(1)));
-//211.4644622802734446228027344
-//-224.796051025390621 - lcimber 2
+
         one.onTrue(new setClimberPos(climbers, 211.46446228027344, -224.79605));
         squareButton.whileTrue(new allFeed(feed, intake, index, -0.5, -0.5, -0.1).until(feed::detected));
         five.whileTrue(new climberOneCommand(climbers, 0.3));
         six.whileTrue(new climberOneCommand(climbers, -0.3));
          three.onTrue(new setClimberPos(climbers, 283, -280));
          four.onTrue(new setClimberPos(climbers, 0, 0));
-        // // three.whileTrue(new elevatorTest(elevator, 0.4));
-        // // four.whileTrue(new elevatorTest(elevator, -0.4));
-        // five.whileTrue(new climberOneCommand(climbers, 0.7));
-        // six.whileTrue(new climberTwoCommand(climbers, -0.7));
-        // seven.whileTrue(new climberOneCommand(climbers, -0.7).until(climbers::climber1Detected));
-        // eight.whileTrue(new climberTwoCommand(climbers, 0.7).until(climbers::climber2Detected));
-
-        // resetGyro.onTrue(new InstantCommand(() -> swerve.zeroHeading()));
+      
 
 
        

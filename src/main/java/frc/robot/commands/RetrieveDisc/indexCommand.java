@@ -1,18 +1,18 @@
-package frc.robot.commands.shooterCommand  ;
+package frc.robot.commands.RetrieveDisc  ;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Feeder;
+import frc.robot.subsystems.IndexTransporter;
 
 
-public class feedCommand extends Command{
-    private final Feeder feed;
+public class indexCommand extends Command{
+    private final IndexTransporter index;
     private final double percent;
-    public feedCommand(Feeder feed, double percent){
-        this.feed = feed;
+    public indexCommand(IndexTransporter index, double percent){
+        this.index = index;
         this.percent = percent;
   
       
-        addRequirements(feed);
+        addRequirements(index);
 
     }
 
@@ -22,12 +22,12 @@ public class feedCommand extends Command{
     
     @Override 
     public void execute(){
-        feed.feed(percent);
+        index.spinMotor(percent);
     }
     
     @Override
     public void end(boolean interrupted){
-        feed.feed(0);
+        index.spinMotor(0);
     }
 
     @Override

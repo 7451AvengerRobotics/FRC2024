@@ -1,18 +1,18 @@
-package frc.robot.commands.shooterCommand  ;
+package frc.robot.commands.PivotCommands  ;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Feeder;
+import frc.robot.subsystems.Pivot;
 
 
-public class feedCommand extends Command{
-    private final Feeder feed;
+public class pivotCommand extends Command{
+    private final Pivot pivot;
     private final double percent;
-    public feedCommand(Feeder feed, double percent){
-        this.feed = feed;
+    public pivotCommand(Pivot pivot, double percent){
+        this.pivot = pivot;
         this.percent = percent;
   
       
-        addRequirements(feed);
+        addRequirements(pivot);
 
     }
 
@@ -22,12 +22,12 @@ public class feedCommand extends Command{
     
     @Override 
     public void execute(){
-        feed.feed(percent);
+        pivot.setPower(percent);
     }
     
     @Override
     public void end(boolean interrupted){
-        feed.feed(0);
+        pivot.setPower(0);
     }
 
     @Override
