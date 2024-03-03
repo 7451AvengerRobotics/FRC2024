@@ -92,18 +92,17 @@ public class RobotContainer {
     public RobotContainer() {
 
     NamedCommands.registerCommand("shoot", 
-                        new ParallelCommandGroup(new shootFF(shooter, 6000), 
-                    new WaitCommand(1.5).andThen(
-                        new feedCommand(feed, -0.7))).withTimeout(1)
+                        new feedCommand(feed, -0.7).raceWith(new WaitCommand(0.75))
                             );
 
     NamedCommands.registerCommand("fullIntake", 
                         new allFeed(feed, intake, index, -0.5, -0.5, -0.1).until(feed::detected));
 
-    NamedCommands.registerCommand("ramp", new shootFF(shooter, 6000));
+    //NamedCommands.registerCommand("ramp", new shootFF(shooter, 6000));
 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
+
     
 
 
@@ -118,6 +117,7 @@ public class RobotContainer {
             () -> robotCentric.getAsBoolean()
         )
     );
+    
     //    intake.setDefaultCommand(new intakeCommand(intake, -0.7).until(
     //             feed::detected));
 
@@ -166,22 +166,29 @@ public class RobotContainer {
         six.whileTrue(new InstantCommand(() -> swerve.aimAtGoal()));
 
         seven.onTrue(new setPivotPosition(pivot, 9.5));
+
+        eject.onTrue(new setPivotPosition(pivot, 33).raceWith(new WaitCommand(0.4)).andThen(new feedCommand(feed, 1)));
      
         
 
 
     //Amp 
-      w.onTrue(new ParallelCommandGroup(new setPivotPosition(pivot, 40), new elevatorPositionCommand(elevator, - 99.145751953125, 406393.53125)));
+      w.onTrue(new ParallelCommandGroup(new setPivotPosition(pivot, 40), 
+                    new elevatorPositionCommand(elevator, - 99.145751953125, 406393.53125)));
 
 
     //Shoot
       d.whileTrue(new ParallelCommandGroup(new shootFF(shooter, 6000), 
-                    new WaitCommand(1.5).andThen(
+                    new WaitCommand(0.75).andThen(
                         new feedCommand(feed, -0.7))).andThen(
-                            new setLedColorCommand(led, 0, 0, 255)));
+                            new setLedColorCommand(led, 0, 0, 255)).andThen(
+                                new ParallelCommandGroup(new setPivotPosition(pivot, 2), 
+                                    new elevatorPositionCommand(elevator, 0, 0))));
 
     //Reset
-      s.onTrue(new ParallelCommandGroup(new setPivotPosition(pivot, 2), new elevatorPositionCommand(elevator, 0, 0)));
+      s.onTrue(new ParallelCommandGroup(
+        new setPivotPosition(pivot, 2), 
+            new elevatorPositionCommand(elevator, 0, 0)));
 
     //Stage
       a.onTrue(( 
