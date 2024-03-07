@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "shoot"
+            "name": "shootFirst"
           }
         },
         {
@@ -51,6 +51,6 @@
       ]
     }
   },
-  "folder": "3Notes",
+  "folder": "2Notes",
   "choreoAuto": false
 }

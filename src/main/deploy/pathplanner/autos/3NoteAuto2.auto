@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.4896821805055864,
-      "y": 5.574358195791997
+      "x": 0.857297007033385,
+      "y": 6.710309340732804
     },
-    "rotation": 0
+    "rotation": 58.29455173027439
   },
   "command": {
     "type": "sequential",
@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "shoot"
+            "name": "shootFirst"
           }
         },
         {
@@ -24,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Auto1Path1"
+                  "pathName": "2 Note Right1"
                 }
               },
               {
@@ -41,15 +41,15 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "Auto1Path2"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "ramp"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "2NoteRight2"
                 }
               }
             ]

@@ -39,11 +39,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 1.4484739855255706,
+    "rotation": 0.031317867843242635,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "4NoteAuto1",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

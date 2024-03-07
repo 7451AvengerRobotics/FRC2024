@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.690272142110121,
+        "x": 2.69,
         "y": 5.57
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8939352569969783,
+        "x": 1.8936631148868575,
         "y": 5.57
       },
       "isLocked": false,
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "3NoteAutoClose",
+  "folder": "4NoteAuto1",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

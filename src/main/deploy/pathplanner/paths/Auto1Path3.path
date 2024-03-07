@@ -16,11 +16,11 @@
     },
     {
       "anchor": {
-        "x": 2.5905008158090483,
+        "x": 2.69,
         "y": 5.574358195791997
       },
       "prevControl": {
-        "x": 1.5905008158090483,
+        "x": 1.69,
         "y": 5.574358195791997
       },
       "nextControl": null,
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "3NoteAutoClose",
+  "folder": "4NoteAuto1",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

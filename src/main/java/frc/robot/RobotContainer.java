@@ -92,8 +92,12 @@ public class RobotContainer {
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
 
-        NamedCommands.registerCommand("shoot", new WaitCommand(1).andThen(
+        NamedCommands.registerCommand("shootFirst", new WaitCommand(1.2).andThen(
             new feedCommand(feed, -0.7)).andThen(
+                new setLedColorCommand(led, 0, 0, 255)).withTimeout(0.1));
+
+        NamedCommands.registerCommand("shoot",
+            new feedCommand(feed, -0.7).andThen(
                 new setLedColorCommand(led, 0, 0, 255)).withTimeout(0.1));
 
         NamedCommands.registerCommand("fullIntake", new allFeed(feed, intake, index, -0.5, -0.5, -0.2).until(feed::detected));
@@ -109,7 +113,7 @@ public class RobotContainer {
 
 
     led.setDefaultCommand(new setLedColorCommand(led, 0, 0, 255));
-    shooter.setDefaultCommand(new shootFF(shooter, 4500, feed));
+    shooter.setDefaultCommand(new shootFF(shooter, 5000, feed));
 
 
 
@@ -185,7 +189,7 @@ public class RobotContainer {
     //Shoot
 
         d.whileTrue(new shootFF(shooter, 6000, feed).raceWith(
-            new WaitCommand(1)).andThen(
+            new WaitCommand(0.65)).andThen(
                 new ParallelCommandGroup(
                         new feedCommand(feed, -1), 
                         new indexCommand(index, -0.5))).andThen(

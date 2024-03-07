@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.21575404634404,
-        "y": 6.651755158003897
+        "x": 1.49,
+        "y": 5.57
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.215754046344041,
-        "y": 6.651755158003897
+        "x": 1.8647467694650086,
+        "y": 4.890771480344673
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.712715279924141,
-        "y": 6.768863523461712
+        "x": 2.5474297102440375,
+        "y": 4.351321779566637
       },
       "prevControl": {
-        "x": 5.70558333698693,
-        "y": 6.8039960330990565
+        "x": 1.9267553733176173,
+        "y": 4.948574443401493
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,11 +39,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0,
+    "rotation": -40.480160812320875,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "4NoteAuto1",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

@@ -3,29 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.49,
-        "y": 5.57
+        "x": 0.86,
+        "y": 6.71
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.8947741881248894,
-        "y": 6.3785161971272935
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 4.793721758262023,
-        "y": 6.4758981238009925
-      },
-      "prevControl": {
-        "x": 3.0132039536278494,
-        "y": 6.395574012313737
-      },
-      "nextControl": {
-        "x": 6.08890138302222,
-        "y": 6.534327279805212
+        "x": 3.2063963534807267,
+        "y": 6.709614747817872
       },
       "isLocked": false,
       "linkedName": null
@@ -36,8 +20,8 @@
         "y": 7.430241005203245
       },
       "prevControl": {
-        "x": 4.94953284093994,
-        "y": 7.401026427201135
+        "x": 5.08586753828312,
+        "y": 6.7972584818242
       },
       "nextControl": null,
       "isLocked": false,
@@ -49,7 +33,7 @@
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 1.0,
+      "waypointRelativePos": 0.5,
       "command": {
         "type": "sequential",
         "data": {
@@ -79,7 +63,7 @@
   "reversed": false,
   "folder": "3NoteAutoFar",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 57.14788239976478,
     "velocity": 0
   },
   "useDefaultConstraints": true

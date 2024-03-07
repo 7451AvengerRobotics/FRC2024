@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "shoot"
+            "name": "shootFirst"
           }
         },
         {
@@ -80,19 +80,13 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "pivot"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "New New Path"
+                  "pathName": "Auto1Path5"
                 }
               },
               {
@@ -107,12 +101,18 @@
         {
           "type": "named",
           "data": {
+            "name": "pivot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "shoot"
           }
         }
       ]
     }
   },
-  "folder": "3Notes",
+  "folder": "4Notes",
   "choreoAuto": false
 }
