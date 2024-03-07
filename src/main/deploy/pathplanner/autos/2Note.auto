@@ -18,18 +18,6 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "Far1"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Far2"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [

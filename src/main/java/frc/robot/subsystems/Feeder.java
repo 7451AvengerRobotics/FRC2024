@@ -24,6 +24,10 @@ public class Feeder extends SubsystemBase {
     public boolean detected(){
         return !beamBreak.get();
        }
+
+    public boolean notDetected(){
+        return beamBreak.get();
+       }
     
     public void feed(double power){
         feeder.set(power);

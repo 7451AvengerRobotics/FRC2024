@@ -4,8 +4,9 @@
   "holonomicMode": true,
   "pathFolders": [
     "3NoteAutoClose",
+    "3NoteAutoFar",
     "Far Folder",
-    "3NoteAutoFar"
+    "2NoteRight"
   ],
   "autoFolders": [
     "3Notes"

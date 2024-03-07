@@ -1,41 +1,40 @@
 package frc.robot;
 
+import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
-
+import com.ctre.phoenix6.Utils;
+import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.commands.TeleopSwerve;
+import frc.robot.Constants.Swerve;
+import frc.robot.commands.climberTwoCommand;
+import frc.robot.commands.setClimberPos;
 import frc.robot.commands.ClimberCommand.climberCommand;
 import frc.robot.commands.ClimberCommand.climberOneCommand;
-import frc.robot.commands.ClimberCommand.climberTwoCommand;
-import frc.robot.commands.ClimberCommand.setClimberPos;
 import frc.robot.commands.ElevatorCommand.elevatorPositionCommand;
-import frc.robot.commands.ElevatorCommand.elevatorTest;
-import frc.robot.commands.Misc.limelightLedTest;
 import frc.robot.commands.Misc.setLedColorCommand;
-import frc.robot.commands.PivotCommands.pivotCommand;
+import frc.robot.commands.PivotCommands.pivotWithLimelight;
 import frc.robot.commands.PivotCommands.setPivotPosition;
 import frc.robot.commands.RetrieveDisc.allFeed;
 import frc.robot.commands.RetrieveDisc.indexCommand;
-import frc.robot.commands.RetrieveDisc.intakeCommand;
-import frc.robot.commands.shooterCommand.autoAimCommand;
 import frc.robot.commands.shooterCommand.feedCommand;
 import frc.robot.commands.shooterCommand.shootFF;
-import frc.robot.commands.shooterCommand.shootPercentage;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.Swerve.CommandSwerveDrivetrain;
+import frc.robot.subsystems.Swerve.Telemetry;
+import frc.robot.subsystems.Swerve.generated.TunerConstants;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -47,28 +46,16 @@ public class RobotContainer {
     /* Controllers */
     private final Joystick buttonPanel = new Joystick(0);
 
-    private final PS4Controller controller = new PS4Controller(1) ;
+ private final CommandPS4Controller joystick = new CommandPS4Controller(1);
     /* Drive Controls */
-    private final int translationAxis = PS4Controller.Axis.kLeftY.value;
-    private final int strafeAxis = PS4Controller.Axis.kLeftX.value;
-    private final int rotationAxis = PS4Controller.Axis.kRightX.value;
 
-    private final SendableChooser<Command> autoChooser;
 
-   //private final SendableChooser<Command> autoChooser;
 
-    /* Driver Buttons */
-    // private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
-    // private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+   private final SendableChooser<Command> autoChooser;
 
-    private final JoystickButton squareButton = new JoystickButton(controller, PS4Controller.Button.kSquare.value);
-    private final JoystickButton circleButton = new JoystickButton(controller, PS4Controller.Button.kCircle.value);
-    private final JoystickButton robotCentric = new JoystickButton(controller, PS4Controller.Button.kPS.value);
-    private final JoystickButton resetGyro = new JoystickButton(controller, PS4Controller.Button.kTouchpad.value);
-    private final JoystickButton triangleButton = new JoystickButton(controller, PS4Controller.Button.kTriangle.value);
-    private final JoystickButton crossButton = new JoystickButton(controller, PS4Controller.Button.kCross.value);
-    private final JoystickButton r1Button = new JoystickButton(controller, PS4Controller.Button.kR1.value);
-    private final JoystickButton r2Button = new JoystickButton(controller, PS4Controller.Button.kR2.value);
+
+
+
 
 
 
@@ -83,57 +70,53 @@ public class RobotContainer {
     public final Swerve swerve = new Swerve();
     private final Limelight limelight = new Limelight();
     private final LedHandler led = new LedHandler();
-    private int increment = 1;
 
 
-    
+  private double MaxSpeed = TunerConstants.kSpeedAt12VoltsMps; // kSpeedAt12VoltsMps desired top speed
+  private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
+
+  /* Setting up bindings for necessary control of the swerve drive platform */
+  // My joystick
+  private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
+
+  private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
+      .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
+      .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
+                                                               // driving in open loop
+  private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
+  private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
+  private final Telemetry logger = new Telemetry(MaxSpeed);
+
+
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
 
-    NamedCommands.registerCommand("shoot", 
-                        new feedCommand(feed, -0.7).raceWith(new WaitCommand(0.75))
-                            );
+        NamedCommands.registerCommand("shoot", new WaitCommand(1).andThen(
+            new feedCommand(feed, -0.7)).andThen(
+                new setLedColorCommand(led, 0, 0, 255)).withTimeout(0.1));
 
-    NamedCommands.registerCommand("fullIntake", 
-                        new allFeed(feed, intake, index, -0.5, -0.5, -0.1).until(feed::detected));
+        NamedCommands.registerCommand("fullIntake", new allFeed(feed, intake, index, -0.5, -0.5, -0.2).until(feed::detected));
 
-    //NamedCommands.registerCommand("ramp", new shootFF(shooter, 6000));
+        NamedCommands.registerCommand("pivot", new pivotWithLimelight(pivot, limelight).withTimeout(0.5));
 
-    autoChooser = AutoBuilder.buildAutoChooser();
-    SmartDashboard.putData("Auto Chooser", autoChooser);
 
     
 
 
     configureButtonBindings();
 
-    swerve.setDefaultCommand(
-        new TeleopSwerve(
-            swerve, 
-            () -> -(controller.getRawAxis(translationAxis))*0.8, 
-            () -> -(controller.getRawAxis(strafeAxis))*0.8,
-            () -> -(controller.getRawAxis(rotationAxis)*-0.8),
-            () -> robotCentric.getAsBoolean()
-        )
-    );
-    
-    //    intake.setDefaultCommand(new intakeCommand(intake, -0.7).until(
-    //             feed::detected));
-
-    //     index.setDefaultCommand(new indexCommand(index, -0.7).until(
-    //             feed::detected));
-
-    //   feed.setDefaultCommand(new feedCommand(feed, -0.1).alongWith(
-    //         new setLedColorCommand(led, 0, 0, 255)).until(
-    //             feed::detected).andThen(new setLedColorCommand(led, 0, 255, 0)));
-       shooter.setDefaultCommand(new shootFF(shooter, 4500));
 
 
-    //autoChooser = AutoBuilder.buildAutoChooser();
+    led.setDefaultCommand(new setLedColorCommand(led, 0, 0, 255));
+    shooter.setDefaultCommand(new shootFF(shooter, 4500, feed));
 
 
-    //SmartDashboard.putData("Auto Chooser", autoChooser);
+
+    autoChooser = AutoBuilder.buildAutoChooser();
+
+
+    SmartDashboard.putData("Auto Chooser", autoChooser);
 
     }
 
@@ -150,6 +133,31 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
 
+         drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
+        drivetrain.applyRequest(() -> drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with
+                                                                                           // negative Y (forward)
+            .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+            .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
+        ));
+
+    joystick.R1().whileTrue( drivetrain.applyRequest(() -> drive.withVelocityX(-joystick.getLeftY() * MaxSpeed*0.3) // Drive forward with
+                                                                                           // negative Y (forward)
+            .withVelocityY(-joystick.getLeftX() * MaxSpeed*0.3) // Drive left with negative X (left)
+            .withRotationalRate(-joystick.getRightX() * MaxAngularRate*0.3) // Drive counterclockwise with negative X (left)
+        ));    
+
+    joystick.triangle().whileTrue(drivetrain.applyRequest(() -> brake));
+    joystick.circle().whileTrue(drivetrain
+        .applyRequest(() -> point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))));
+
+    // reset the field-centric heading on left bumper press
+    joystick.L1().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
+
+    if (Utils.isSimulation()) {
+      drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
+    }
+    drivetrain.registerTelemetry(logger::telemeterize);
+
         JoystickButton w = new JoystickButton(buttonPanel, Constants.w);
         JoystickButton a = new JoystickButton(buttonPanel, Constants.a);
         JoystickButton s = new JoystickButton(buttonPanel, Constants.s);
@@ -163,49 +171,68 @@ public class RobotContainer {
         JoystickButton seven = new JoystickButton(buttonPanel, Constants.seven);
         JoystickButton eight = new JoystickButton(buttonPanel, Constants.eight);
 
-        six.whileTrue(new InstantCommand(() -> swerve.aimAtGoal()));
+        
 
-        seven.onTrue(new setPivotPosition(pivot, 9.5));
 
-        eject.onTrue(new setPivotPosition(pivot, 33).raceWith(new WaitCommand(0.4)).andThen(new feedCommand(feed, 1)));
-     
         
 
 
     //Amp 
-      w.onTrue(new ParallelCommandGroup(new setPivotPosition(pivot, 40), 
-                    new elevatorPositionCommand(elevator, - 99.145751953125, 406393.53125)));
+      w.onTrue(new ParallelCommandGroup(new setPivotPosition(pivot, 38), 
+                new elevatorPositionCommand(elevator, - 99.145751953125, 406393.53125)).raceWith(new WaitCommand(1)));
 
 
     //Shoot
-      d.whileTrue(new ParallelCommandGroup(new shootFF(shooter, 6000), 
-                    new WaitCommand(0.75).andThen(
-                        new feedCommand(feed, -0.7))).andThen(
-                            new setLedColorCommand(led, 0, 0, 255)).andThen(
-                                new ParallelCommandGroup(new setPivotPosition(pivot, 2), 
-                                    new elevatorPositionCommand(elevator, 0, 0))));
 
-    //Reset
-      s.onTrue(new ParallelCommandGroup(
-        new setPivotPosition(pivot, 2), 
-            new elevatorPositionCommand(elevator, 0, 0)));
+        d.whileTrue(new shootFF(shooter, 6000, feed).raceWith(
+            new WaitCommand(1)).andThen(
+                new ParallelCommandGroup(
+                        new feedCommand(feed, -1), 
+                        new indexCommand(index, -0.5))).andThen(
+                        new setLedColorCommand(led, 0, 0, 255)));
+
+  //Reset
+        s.onTrue(new ParallelCommandGroup(new setPivotPosition(pivot, 2), 
+            new elevatorPositionCommand(elevator, 0, 0),
+            new setClimberPos(climbers, 0, 0)));
 
     //Stage
-      a.onTrue(( 
-      new climberCommand(climbers, swerve, 0.8)
+        a.onTrue(( 
+            new climberCommand(climbers, 0.8)
                 .until(climbers::climbersDetected))
-                    .andThen(new feedCommand(feed, 0.7).raceWith(new WaitCommand(1))));
+                    .andThen(new setPivotPosition(pivot, 10).raceWith(new WaitCommand(1))));
     
-      
-
-        /* Driver Buttons */
+        intakeButton.onTrue(new ParallelCommandGroup(
+            new setPivotPosition(pivot, 3), 
+            new allFeed(feed, intake, index, -0.4, -0.4, -0.3)).until(feed::detected).andThen(
+                new setLedColorCommand(led, 0, 255, 0)).andThen(
+                    new feedCommand(feed, 0.1).raceWith(new WaitCommand(0.2))));
 
         
+         outtakeButton.onTrue(new ParallelCommandGroup(
+            new allFeed(feed, intake, index, 0.5, 0.5, 0.2).andThen(
+                new setLedColorCommand(led, 0, 0, 255))));
+
+        eject.whileTrue(new setLedColorCommand(led, 255, 0, 0).andThen(
+            new ParallelCommandGroup(new setPivotPosition(pivot, 40), 
+            new feedCommand(feed, 0.2)).andThen(
+                new setLedColorCommand(led, 0, 0, 255))));
+
+        four.whileTrue(new ParallelCommandGroup(
+                new shootFF(shooter, 2000, feed), 
+                new feedCommand(feed, -1)));
+                
+        six.whileTrue(new climberOneCommand(climbers, 0.8));
+        seven.whileTrue(new climberTwoCommand(climbers, -0.8));
 
 
-         seven.onTrue(new setPivotPosition(pivot, 8));
-         eight.onTrue(new ParallelCommandGroup(new setPivotPosition(pivot, 47), 
-        new elevatorPositionCommand(elevator, -135, 555390)).raceWith(new WaitCommand(1)));
+         eight.onTrue(new ParallelCommandGroup(new setPivotPosition(pivot, 47),
+            new setClimberPos(climbers, 176.06430053710938, -173.01708984375),
+            new elevatorPositionCommand(elevator, -135, 555390).raceWith(
+                new WaitCommand(1))));
+        
+        
+            
      }      
 
 
@@ -218,7 +245,6 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
        // An ExampleCommand will run in autonomous
         // return new exampleAuto(s_Swerve);
-        return autoChooser.getSelected();
-        //return null;
+         return autoChooser.getSelected();
     }
 }

@@ -37,16 +37,9 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Auto1Path2"
-                }
-              }
-            ]
+            "pathName": "Auto1Path2"
           }
         },
         {
@@ -75,13 +68,37 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "Auto1Path4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "pivot"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Auto1Path4"
+                  "pathName": "New New Path"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "fullIntake"
                 }
               }
             ]

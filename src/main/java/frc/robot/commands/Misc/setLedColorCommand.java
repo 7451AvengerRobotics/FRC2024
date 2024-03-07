@@ -15,6 +15,8 @@ public class setLedColorCommand extends Command {
         this.rVal = red;
         this.gVal = green;
         this.bVal = blue;
+
+        addRequirements(led);
     }
 
     @Override
