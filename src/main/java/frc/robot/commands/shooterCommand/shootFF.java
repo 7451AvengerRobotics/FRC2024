@@ -8,12 +8,10 @@ import frc.robot.subsystems.Shooter;
 public class shootFF extends Command{
     private final Shooter shoot;
     private final double rpm;
-    private final Feeder feeder;
 
     public shootFF(Shooter shoot, double rpm, Feeder feed){
         this.shoot = shoot;
         this.rpm = rpm;
-        this.feeder = feed;
   
       
         addRequirements(shoot);

@@ -66,8 +66,8 @@ public class Climbers extends SubsystemBase
         kD = 0; 
         kIz = 0; 
         kFF = 0; 
-        kMaxOutput = 0.5; 
-        kMinOutput = -0.5;
+        kMaxOutput = 1; 
+        kMinOutput = -1;
 
         kP2 = .01; 
         kI2 = 0; 

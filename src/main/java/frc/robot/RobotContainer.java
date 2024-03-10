@@ -19,9 +19,9 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.Swerve;
-import frc.robot.commands.climberTwoCommand;
 import frc.robot.commands.setClimberPos;
 import frc.robot.commands.ClimberCommand.climberCommand;
+import frc.robot.commands.ClimberCommand.climberManualCommand;
 import frc.robot.commands.ClimberCommand.climberOneCommand;
 import frc.robot.commands.ElevatorCommand.elevatorPositionCommand;
 import frc.robot.commands.Misc.setLedColorCommand;
@@ -52,11 +52,6 @@ public class RobotContainer {
 
 
    private final SendableChooser<Command> autoChooser;
-
-
-
-
-
 
 
     /* Subsystems */    
@@ -94,15 +89,15 @@ public class RobotContainer {
 
         NamedCommands.registerCommand("shootFirst", new WaitCommand(1.2).andThen(
             new feedCommand(feed, -0.7)).andThen(
-                new setLedColorCommand(led, 0, 0, 255)).withTimeout(0.1));
+                new setLedColorCommand(led, 0, 0, 255)).withTimeout(2));
 
         NamedCommands.registerCommand("shoot",
-            new feedCommand(feed, -0.7).andThen(
+            new feedCommand(feed, -0.75).andThen(
                 new setLedColorCommand(led, 0, 0, 255)).withTimeout(0.1));
 
         NamedCommands.registerCommand("fullIntake", new allFeed(feed, intake, index, -0.5, -0.5, -0.2).until(feed::detected));
 
-        NamedCommands.registerCommand("pivot", new pivotWithLimelight(pivot, limelight).withTimeout(0.5));
+        NamedCommands.registerCommand("pivot", new setPivotPosition(pivot, 9.0).withTimeout(0.5));
 
 
     
@@ -189,7 +184,7 @@ public class RobotContainer {
     //Shoot
 
         d.whileTrue(new shootFF(shooter, 6000, feed).raceWith(
-            new WaitCommand(0.65)).andThen(
+            new WaitCommand(0.3)).andThen(
                 new ParallelCommandGroup(
                         new feedCommand(feed, -1), 
                         new indexCommand(index, -0.5))).andThen(
@@ -202,7 +197,7 @@ public class RobotContainer {
 
     //Stage
         a.onTrue(( 
-            new climberCommand(climbers, 0.8)
+            new climberCommand(climbers, 1)
                 .until(climbers::climbersDetected))
                     .andThen(new setPivotPosition(pivot, 10).raceWith(new WaitCommand(1))));
     
@@ -226,9 +221,16 @@ public class RobotContainer {
                 new shootFF(shooter, 2000, feed), 
                 new feedCommand(feed, -1)));
                 
-        six.whileTrue(new climberOneCommand(climbers, 0.8));
-        seven.whileTrue(new climberTwoCommand(climbers, -0.8));
+        five.whileTrue(new climberManualCommand(climbers, 0.8));
+        six.whileTrue(new climberOneCommand(climbers, -0.1));
 
+        seven.whileTrue(new ParallelCommandGroup( new shootFF(shooter, 6000, feed), 
+        new setPivotPosition(pivot, 8.9)).raceWith(
+            new WaitCommand(0.5)).andThen(
+                new ParallelCommandGroup(
+                        new feedCommand(feed, -1), 
+                        new indexCommand(index, -0.5))).andThen(
+                        new setLedColorCommand(led, 0, 0, 255)));
 
          eight.onTrue(new ParallelCommandGroup(new setPivotPosition(pivot, 47),
             new setClimberPos(climbers, 176.06430053710938, -173.01708984375),
