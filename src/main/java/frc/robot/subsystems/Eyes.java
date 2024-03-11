@@ -17,7 +17,6 @@ public class Eyes extends SubsystemBase {
 
 
     public void updateData() {
-        //TODO: This must be tuned to specific robot
         tx = LimelightHelpers.getTX("limelight");
         ty = LimelightHelpers.getTY("limelight");
         ta = LimelightHelpers.getTA("limelight");
@@ -45,7 +44,6 @@ public class Eyes extends SubsystemBase {
     public static Pose2d getRobotPose() {
 
         Pose2d pose;
-        //TODO: This must be tuned to specific robot
         pose = LimelightHelpers.getBotPose2d_wpiBlue("limelight");
         return pose;
 

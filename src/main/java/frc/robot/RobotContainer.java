@@ -121,6 +121,7 @@ public class RobotContainer {
 
     joystick.square().onTrue(ampMid);
     joystick.cross().onTrue(speakerMid);
+    joystick.R3().whileTrue(drivetrain.aim(drivetrain.getTurnAngle(Constants.FieldK.SpeakerK.kBlueCenterOpeningPose3d.toPose2d())));
 
     configureButtonBindings();
 

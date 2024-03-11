@@ -15,8 +15,12 @@ import com.pathplanner.lib.path.PathPlannerTrajectory;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
+import frc.util.AllianceFlipUtil;
 
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -38,6 +42,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
+    private Rotation2d m_desiredRot;
+    private double kPTheta = 5;    
     private final SwerveRequest.ApplyChassisSpeeds AutoRequest = new SwerveRequest.ApplyChassisSpeeds();
         /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
     private final Rotation2d BlueAlliancePerspectiveRotation = Rotation2d.fromDegrees(0);
@@ -45,6 +51,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     private final Rotation2d RedAlliancePerspectiveRotation = Rotation2d.fromDegrees(180);
     /* Keep track if we've ever applied the operator perspective before or not */
     private boolean hasAppliedOperatorPerspective = false;
+    private final PIDController m_thetaController = new PIDController(kPTheta, 0.0, 0.0);
+
 
 
 
@@ -104,10 +112,10 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
             this); // Subsystem for requirements
     }
 
-    private Rotation2d getTurnAngle(Pose2d destinationPose){
+    public double getTurnAngle(Pose2d destinationPose){
         Rotation2d currentState = this.getRotation3d().toRotation2d();
         Rotation2d turnAngle = currentState.minus(destinationPose.getRotation());
-        return turnAngle;
+        return turnAngle.getRadians();
     }
 
      public Command pathfindToPose(Pose2d endPose, PathConstraints pathConstraints, double endVelocity) {
@@ -156,6 +164,25 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         });
         m_simNotifier.startPeriodic(kSimLoopPeriod);
     }
+
+
+    public Command aim(double radians) {
+		return run(() -> {
+			m_desiredRot = AllianceFlipUtil.apply(Rotation2d.fromRadians(radians));
+			var curPose = getState().Pose;
+			var thetaSpeed = m_thetaController.calculate(curPose.getRotation().getRadians(),
+				m_desiredRot.getRadians());
+			var speeds = ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, thetaSpeed, m_desiredRot);
+
+			setControl(AutoRequest.withSpeeds(speeds));
+		}).until(() -> {
+			boolean check = MathUtil.isNear(m_desiredRot.getDegrees(), getState().Pose.getRotation().getDegrees(), 1);
+			if (check) {
+				System.out.println("it should end");
+			}
+			return check;
+		});
+	}
 
     @Override
     public void periodic() {
