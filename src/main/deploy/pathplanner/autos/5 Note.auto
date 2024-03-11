@@ -1,0 +1,87 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.8912185097097467,
+      "y": 6.651395848246243
+    },
+    "rotation": 61.313852426260546
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Note 1"
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "fullIntake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "pivot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "shoot"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Note2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Note3"
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "fullIntake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "pivot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "shoot"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "folder": "5Notes",
+  "choreoAuto": false
+}
