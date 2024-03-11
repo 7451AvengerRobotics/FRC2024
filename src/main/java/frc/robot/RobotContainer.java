@@ -21,7 +21,6 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.Constants.Swerve;
 import frc.robot.commands.allFeed;
 import frc.robot.commands.climberOneCommand;
 import frc.robot.commands.elevatorPositionCommand;
@@ -66,7 +65,6 @@ public class RobotContainer {
     private final ElevatorSub elevator = new ElevatorSub();
     private final Climbers climbers = new Climbers();
     private final Pivot pivot = new Pivot();
-    public final Swerve swerve = new Swerve();
     private final Limelight limelight = new Limelight();
     private final LedHandler led = new LedHandler();
 
