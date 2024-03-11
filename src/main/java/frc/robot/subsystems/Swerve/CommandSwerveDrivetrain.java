@@ -9,11 +9,15 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.PathPlannerTrajectory;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -98,6 +102,44 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
                 return false;
             }, // Change this if the path needs to be flipped on red vs blue
             this); // Subsystem for requirements
+    }
+
+    private Rotation2d getTurnAngle(Pose2d destinationPose){
+        Rotation2d currentState = this.getRotation3d().toRotation2d();
+        Rotation2d turnAngle = currentState.minus(destinationPose.getRotation());
+        return turnAngle;
+    }
+
+     public Command pathfindToPose(Pose2d endPose, PathConstraints pathConstraints, double endVelocity) {
+        return AutoBuilder.pathfindToPose(endPose, pathConstraints, endVelocity);
+    }
+
+    public Rotation2d faceAnySideOfRobotInDirectionOfTravel(PathPlannerTrajectory.State state) {
+        var currentHolonomicRotation = getState().Pose.getRotation();
+        var travelDirection = state.heading;
+
+        var diff = travelDirection.minus(currentHolonomicRotation);
+
+        var diffDegrees = diff.getDegrees() % 360; // -360 to 360
+        while (diffDegrees < -45) {
+            diffDegrees += 90;
+        }
+        while (diffDegrees > 45) {
+            diffDegrees -= 90;
+        }
+        // diffDegrees between -45 to 45;
+
+        return Rotation2d.fromDegrees(currentHolonomicRotation.getDegrees() % 360 + diffDegrees);
+    }
+
+    public Rotation2d faceFrontTowardsRobotDirectionOfTravel(PathPlannerTrajectory.State state) {
+        var travelDirection = state.heading;
+
+        return Rotation2d.fromDegrees(travelDirection.getDegrees() % 360);
+    }
+
+    public Command followPath(PathPlannerPath path) {
+        return AutoBuilder.followPath(path);
     }
 
     private void startSimThread() {

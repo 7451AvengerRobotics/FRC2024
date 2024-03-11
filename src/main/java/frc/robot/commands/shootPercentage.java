@@ -13,7 +13,6 @@ public class shootPercentage extends Command{
   
       
         addRequirements(shoot);
-
     }
 
     @Override
