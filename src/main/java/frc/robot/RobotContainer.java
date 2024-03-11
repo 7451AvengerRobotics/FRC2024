@@ -3,11 +3,14 @@ package frc.robot;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -46,8 +49,10 @@ public class RobotContainer {
     /* Controllers */
     private final Joystick buttonPanel = new Joystick(0);
 
- private final CommandPS4Controller joystick = new CommandPS4Controller(1);
+    private final CommandPS4Controller joystick = new CommandPS4Controller(1);
     /* Drive Controls */
+
+    private final Pose2d targetPose = new Pose2d(10, 5, Rotation2d.fromDegrees(180));
 
 
 
@@ -90,30 +95,41 @@ public class RobotContainer {
         NamedCommands.registerCommand("shootFirst", new WaitCommand(1.2).andThen(
             new feedCommand(feed, -0.7)).andThen(
                 new setLedColorCommand(led, 0, 0, 255)).withTimeout(2));
-
         NamedCommands.registerCommand("shoot",
             new feedCommand(feed, -0.75).andThen(
                 new setLedColorCommand(led, 0, 0, 255)).withTimeout(0.1));
-
         NamedCommands.registerCommand("fullIntake", new allFeed(feed, intake, index, -0.5, -0.5, -0.2).until(feed::detected));
-
         NamedCommands.registerCommand("pivot", new setPivotPosition(pivot, 9.0).withTimeout(0.5));
 
+        PathPlannerPath ampFromMid = PathPlannerPath.fromPathFile("ampFromMid");
+        PathPlannerPath speakerFromMid = PathPlannerPath.fromPathFile("sourceFromMid");
 
-    
+        PathConstraints constraints = new PathConstraints(
+        3.0, 4.0,
+            Units.degreesToRadians(540), Units.degreesToRadians(720));
 
+        Command ampMid = AutoBuilder.pathfindThenFollowPath(
+            ampFromMid,
+            constraints,
+            3.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
+        );
+
+        Command speakerMid = AutoBuilder.pathfindThenFollowPath(
+            speakerFromMid,
+            constraints,
+            3.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
+        );
+
+    joystick.square().onTrue(ampMid);
+    joystick.cross().onTrue(speakerMid);
 
     configureButtonBindings();
 
-
-
     led.setDefaultCommand(new setLedColorCommand(led, 0, 0, 255));
+
     shooter.setDefaultCommand(new shootFF(shooter, 5000, feed));
 
-
-
     autoChooser = AutoBuilder.buildAutoChooser();
-
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
 
@@ -132,8 +148,8 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
 
-         drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
-        drivetrain.applyRequest(() -> drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with
+    drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
+    drivetrain.applyRequest(() -> drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with
                                                                                            // negative Y (forward)
             .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
             .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
@@ -156,6 +172,7 @@ public class RobotContainer {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
     }
     drivetrain.registerTelemetry(logger::telemeterize);
+
 
         JoystickButton w = new JoystickButton(buttonPanel, Constants.w);
         JoystickButton a = new JoystickButton(buttonPanel, Constants.a);
