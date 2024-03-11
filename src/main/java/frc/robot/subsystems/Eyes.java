@@ -42,13 +42,11 @@ public class Eyes extends SubsystemBase {
         return data;
     }
 
-    public Pose2d getRobotPose() {
+    public static Pose2d getRobotPose() {
 
         Pose2d pose;
-
         //TODO: This must be tuned to specific robot
         pose = LimelightHelpers.getBotPose2d_wpiBlue("limelight");
-
         return pose;
 
     }

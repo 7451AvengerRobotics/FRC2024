@@ -4,10 +4,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Climbers;
 
 
-public class climberCommand extends Command{
+public class climberAutoCommand extends Command{
     private final Climbers climbers;
     private final double percent;
-    public climberCommand(Climbers climb, double percent){
+    public climberAutoCommand(Climbers climb, double percent){
         this.climbers = climb;
         this.percent = percent;
   

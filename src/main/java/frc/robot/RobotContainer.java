@@ -19,16 +19,15 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.Swerve;
+import frc.robot.commands.allFeed;
+import frc.robot.commands.climberOneCommand;
+import frc.robot.commands.elevatorPositionCommand;
+import frc.robot.commands.indexCommand;
 import frc.robot.commands.setClimberPos;
-import frc.robot.commands.ClimberCommand.climberCommand;
+import frc.robot.commands.setLedColorCommand;
+import frc.robot.commands.setPivotPosition;
+import frc.robot.commands.ClimberCommand.climberAutoCommand;
 import frc.robot.commands.ClimberCommand.climberManualCommand;
-import frc.robot.commands.ClimberCommand.climberOneCommand;
-import frc.robot.commands.ElevatorCommand.elevatorPositionCommand;
-import frc.robot.commands.Misc.setLedColorCommand;
-import frc.robot.commands.PivotCommands.pivotWithLimelight;
-import frc.robot.commands.PivotCommands.setPivotPosition;
-import frc.robot.commands.RetrieveDisc.allFeed;
-import frc.robot.commands.RetrieveDisc.indexCommand;
 import frc.robot.commands.shooterCommand.feedCommand;
 import frc.robot.commands.shooterCommand.shootFF;
 import frc.robot.subsystems.*;
@@ -197,7 +196,7 @@ public class RobotContainer {
 
     //Stage
         a.onTrue(( 
-            new climberCommand(climbers, 1)
+            new climberAutoCommand(climbers, 1)
                 .until(climbers::climbersDetected))
                     .andThen(new setPivotPosition(pivot, 10).raceWith(new WaitCommand(1))));
     
