@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.8912185097097467,
-      "y": 6.651395848246243
+      "x": 1.3366633613457033,
+      "y": 4.148470076299583
     },
-    "rotation": 61.313852426260546
+    "rotation": -0.881403996582113
   },
   "command": {
     "type": "sequential",
@@ -18,15 +18,34 @@
           }
         },
         {
-          "type": "sequential",
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        },
+        {
+          "type": "parallel",
           "data": {
             "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Note2"
+                }
+              },
               {
                 "type": "named",
                 "data": {
                   "name": "fullIntake"
                 }
-              },
+              }
+            ]
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
               {
                 "type": "named",
                 "data": {
@@ -43,19 +62,7 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "Note2"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Note3"
-          }
-        },
-        {
-          "type": "sequential",
+          "type": "parallel",
           "data": {
             "commands": [
               {
@@ -65,23 +72,79 @@
                 }
               },
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "pivot"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "shoot"
+                  "pathName": "Note3"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "fullIntake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Note4"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "fullIntake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Note5Path1"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Note5Path2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
           }
         }
       ]
     }
   },
-  "folder": "5Notes",
+  "folder": null,
   "choreoAuto": false
 }
