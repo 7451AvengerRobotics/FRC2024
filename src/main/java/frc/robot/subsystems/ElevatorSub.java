@@ -6,6 +6,7 @@ import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -79,13 +80,28 @@ public class ElevatorSub extends SubsystemBase
     }
 
 
+   
 
-    public void setElevatorPosition(double ele1Pos, double ele2Pos){
+
+
+
+
+    public void setElevatorPosition(double ele1Pos){
         controller1.setReference(ele1Pos, CANSparkMax.ControlType.kPosition);
     }
 
-    @Override
-    public void periodic(){
-        SmartDashboard.putNumber("ElevatorOnePosition", this.getEncoderEle1Position());
+     public Command resetElevatorPosition(){
+        return runOnce(
+            () -> {
+                setElevatorPosition(0);
+            });
     }
+
+    public Command setElePosCMD(double position){
+        return runOnce(
+            () -> setElevatorPosition(position)
+        );
+    }
+
+ 
 }

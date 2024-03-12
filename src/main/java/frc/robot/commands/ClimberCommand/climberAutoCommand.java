@@ -37,7 +37,7 @@ public class climberAutoCommand extends Command{
     
     @Override
     public void end(boolean interrupted){
-        climbers.setPower(0);
+        climbers.setPower(0, 0);
     }
 
     @Override

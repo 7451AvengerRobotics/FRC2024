@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import frc.robot.Constants;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
@@ -24,6 +25,18 @@ public class Intake extends SubsystemBase {
     public double getEncoderPosition(){
         return encoder.getPosition();
     }
+
+    public Command setintakePower(double power){
+        return runEnd(
+            () -> {
+                intake(power);
+            }, 
+            () -> {
+                intake(0);
+            });
+    }
+
+
 
 
 }

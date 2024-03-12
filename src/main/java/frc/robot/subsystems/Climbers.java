@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -93,10 +94,10 @@ public class Climbers extends SubsystemBase
     }
 
     //Sets power of the Elevator 
-    public void setPower(double power)
+    public void setPower(double climberOnePow, double climberTwoPow)
     {
-        climberOne.set(-power);
-        climberTwo.set(power);
+        climberOne.set(-climberOnePow);
+        climberTwo.set(climberTwoPow);
     }
     public boolean climber2Detected(){
         return !climber2LimitSwitch.get();
@@ -130,6 +131,24 @@ public class Climbers extends SubsystemBase
             controller2.setReference(climb2, CANSparkMax.ControlType.kPosition);
     }
 
+
+    public Command runClimbersPower(double leftClimberPower, double rightClimberPower){
+        return runEnd(
+            () -> {
+                setPower(rightClimberPower, leftClimberPower);
+            }, 
+            () -> {
+                setPower(0, 0);
+            });
+    }
+
+    public Command setClimberPos(double leftClimberPos, double rightClimberPos){
+        return runOnce(
+            () -> {
+                setClimberOne(rightClimberPos);
+                setClibmerTwo(leftClimberPos);
+            });
+    }
 
    @Override
     public void periodic(){

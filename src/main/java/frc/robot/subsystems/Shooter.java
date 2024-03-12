@@ -150,6 +150,22 @@ public class Shooter extends SubsystemBase {
 
 
 
+
+  public Command shootFF(double rpm){
+    return runEnd(
+      () -> {
+        setFF(rpm);
+      },
+      () -> {
+        setFF(3000);
+      });
+  }
+
+
+
+
+
+
   // @Override
   //  public void periodic(){
   //       SmartDashboard.putNumber("ShooterTop Current", this.getshootTopCurrent());

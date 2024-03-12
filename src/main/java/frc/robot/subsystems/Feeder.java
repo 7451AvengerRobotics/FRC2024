@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -32,9 +33,17 @@ public class Feeder extends SubsystemBase {
     public void feed(double power){
         feeder.set(power);
     }
-    
-     @Override
-    public void periodic(){
-        SmartDashboard.putBoolean("Dtected", this.detected());
+
+    public Command setFeederPower(double power){
+        return runEnd(
+            () -> {
+                feed(power);
+            },
+            () -> {
+                feed(0);
+            }
+            );
     }
+    
+
 }
