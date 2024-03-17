@@ -7,11 +7,9 @@ import frc.robot.subsystems.ElevatorSub;
 public class elevatorPositionCommand extends Command{
     private final ElevatorSub elevator;
     private final double ele1Pos;
-    private final double ele2Pos;
     public elevatorPositionCommand(ElevatorSub elevator, double ele1Pos, double ele2Pos){
         this.elevator = elevator;
         this.ele1Pos = ele1Pos;
-        this.ele2Pos = ele2Pos;
   
       
         addRequirements(elevator);

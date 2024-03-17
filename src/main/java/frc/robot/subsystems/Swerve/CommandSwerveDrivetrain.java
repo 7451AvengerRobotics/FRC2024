@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.Eyes;
 import frc.robot.subsystems.Swerve.generated.TunerConstants;
@@ -112,11 +113,23 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
             this); // Subsystem for requirements
     }
 
-    public double getTurnAngle(Pose2d destinationPose){
-        Rotation2d currentState = this.getRotation3d().toRotation2d();
-        Rotation2d turnAngle = currentState.minus(destinationPose.getRotation());
-        return turnAngle.getRadians();
+    public Supplier<Rotation2d> getTurnAngle(){
+        return () -> getState().Pose.getTranslation()
+        .minus(Constants.FieldConstants.getSpeakerPose()
+        .getTranslation())
+        .getAngle()
+        .minus(Rotation2d.fromRadians(Math.PI));
     }
+
+    public Command aimToGoal(){
+        var desirePose = getTurnAngle().get().getRadians();
+        var thetaSpeed = m_thetaController.calculate(getState().Pose.getRotation().getRadians(),
+				desirePose);
+        var speeds = ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, thetaSpeed, (Rotation2d) getTurnAngle());
+        return run(() -> AutoRequest.withSpeeds(speeds));
+    }
+
+
 
      public Command pathfindToPose(Pose2d endPose, PathConstraints pathConstraints, double endVelocity) {
         return AutoBuilder.pathfindToPose(endPose, pathConstraints, endVelocity);
