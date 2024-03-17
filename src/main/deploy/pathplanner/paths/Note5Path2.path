@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.05,
-        "y": 7.45
+        "x": 8.163136421172013,
+        "y": 7.469193775872724
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.184039202684003,
-        "y": 7.394633415221029
+        "x": 7.297175623856015,
+        "y": 7.413827191093753
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.598948709347801,
-        "y": 5.566863856374023
+        "x": 4.725554409590433,
+        "y": 6.320087041123074
       },
       "prevControl": {
-        "x": 3.808996788477036,
-        "y": 6.115501075785867
+        "x": 5.935602488719671,
+        "y": 6.868724260534918
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,18 +32,18 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.75,
-    "maxAcceleration": 4.0,
+    "maxVelocity": 5.0,
+    "maxAcceleration": 5.0,
     "maxAngularVelocity": 400.0,
     "maxAngularAcceleration": 500.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 16.460014812040086,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Pray",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

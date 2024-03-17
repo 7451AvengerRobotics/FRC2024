@@ -32,18 +32,18 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.75,
-    "maxAcceleration": 4.0,
+    "maxVelocity": 5.0,
+    "maxAcceleration": 5.0,
     "maxAngularVelocity": 400.0,
     "maxAngularAcceleration": 500.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -31.328692867804136,
+    "rotation": -42.13759477388828,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Pray",
   "previewStartingState": {
     "rotation": -0.9181982816530669,
     "velocity": 0

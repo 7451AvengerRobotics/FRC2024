@@ -92,11 +92,14 @@ public class RobotContainer {
         NamedCommands.registerCommand("shootFirst", new WaitCommand(1.2).andThen(
             new feedCommand(feed, -0.7)).andThen(
                 new setLedColorCommand(led, 0, 0, 255)).withTimeout(2));
-        NamedCommands.registerCommand("shoot",
-            new feedCommand(feed, -0.75).andThen(
-                new setLedColorCommand(led, 0, 0, 255)).withTimeout(0.1));
-        NamedCommands.registerCommand("fullIntake", new allFeed(feed, intake, index, -0.5, -0.5, -0.2).until(feed::detected));
-        NamedCommands.registerCommand("pivot", new setPivotPosition(pivot, 9.0).withTimeout(0.5));
+        NamedCommands.registerCommand("shoot", new ParallelCommandGroup(
+            new feedCommand(feed, -0.75), new feedCommand(feed, -0.5)).andThen(
+                new setLedColorCommand(led, 0, 0, 255)).withTimeout(0.2));
+        NamedCommands.registerCommand("fullIntake", new ParallelCommandGroup(
+                                            new setPivotPosition(pivot, 3), 
+                                                    new allFeed(feed, intake, index, -1, -0.7, -0.2))
+                                                        .until(feed::detected).andThen(new setLedColorCommand(led, 0, 255, 255)).withTimeout(0.1));
+        NamedCommands.registerCommand("pivot", new setPivotPosition(pivot, 9.0).withTimeout(0.2));
 
         PathPlannerPath ampFromMid = PathPlannerPath.fromPathFile("ampFromMid");
         PathPlannerPath speakerFromMid = PathPlannerPath.fromPathFile("sourceFromMid");

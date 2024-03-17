@@ -3,24 +3,24 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.64,
-        "y": 6.86
+        "x": 2.7389631054469707,
+        "y": 6.933593179167379
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.64,
-        "y": 6.86
+        "x": 3.7389631054469707,
+        "y": 6.933593179167379
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.046278109163573,
+        "x": 8.133921843169903,
         "y": 7.449717390537984
       },
       "prevControl": {
-        "x": 7.046278109163573,
+        "x": 7.133921843169903,
         "y": 7.449717390537984
       },
       "nextControl": null,
@@ -32,8 +32,8 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.75,
-    "maxAcceleration": 4.0,
+    "maxVelocity": 5.0,
+    "maxAcceleration": 5.0,
     "maxAngularVelocity": 400.0,
     "maxAngularAcceleration": 500.0
   },
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Pray",
   "previewStartingState": {
     "rotation": 37.59757596159797,
     "velocity": 0
