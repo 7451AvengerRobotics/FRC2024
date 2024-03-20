@@ -39,11 +39,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -42.13759477388828,
+    "rotation": -49.9235203310796,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Pray",
+  "folder": null,
   "previewStartingState": {
     "rotation": -0.9181982816530669,
     "velocity": 0

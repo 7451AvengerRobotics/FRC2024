@@ -38,6 +38,8 @@ public class Shooter extends SubsystemBase {
 
 
 
+
+
     private double topkS = 0.041971;
     private double topkV = 0.0018209;
     private double topkA = 0.00021685;
@@ -54,6 +56,9 @@ public class Shooter extends SubsystemBase {
         
         shooterTop =  new CANSparkFlex(Constants.shooterTop, MotorType.kBrushless);
         shooterBottom =  new CANSparkFlex(Constants.shooterBottom, MotorType.kBrushless);
+
+        shooterTop.setSmartCurrentLimit(40);
+        shooterBottom.setSmartCurrentLimit(40);
 
         
 

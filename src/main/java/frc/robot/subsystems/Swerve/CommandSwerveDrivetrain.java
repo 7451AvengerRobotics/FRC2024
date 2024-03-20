@@ -26,11 +26,12 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.Constants;
+import frc.robot.Constants.FieldConstants;
 import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.Eyes;
 import frc.robot.subsystems.Swerve.generated.TunerConstants;
@@ -113,21 +114,34 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
             this); // Subsystem for requirements
     }
 
-    public Supplier<Rotation2d> getTurnAngle(){
-        return () -> getState().Pose.getTranslation()
-        .minus(Constants.FieldConstants.getSpeakerPose()
-        .getTranslation())
-        .getAngle()
-        .minus(Rotation2d.fromRadians(Math.PI));
+public Supplier<Rotation2d> angleToSpeakerSupplier(final Supplier<Pose2d> currentPoseSupplier) {
+        return () -> currentPoseSupplier.get()
+                .getTranslation()
+                .minus(FieldConstants.getSpeakerPose().getTranslation())
+                .getAngle()
+                .minus(Rotation2d.fromRadians(Math.PI));
     }
 
-    public Command aimToGoal(){
-        var desirePose = getTurnAngle().get().getRadians();
-        var thetaSpeed = m_thetaController.calculate(getState().Pose.getRotation().getRadians(),
-				desirePose);
-        var speeds = ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, thetaSpeed, (Rotation2d) getTurnAngle());
-        return run(() -> AutoRequest.withSpeeds(speeds));
+
+
+    public Command faceAngle(final Supplier<Rotation2d> rotationTargetSupplier) {
+        return 
+                run(() -> {
+                    m_desiredRot = AllianceFlipUtil.apply(rotationTargetSupplier.get());
+                    var curPose = getState().Pose;
+                    var thetaSpeed = m_thetaController.calculate(curPose.getRotation().getRadians(), 
+                                                                    rotationTargetSupplier.get().getRadians());
+                    var speeds = ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, thetaSpeed, m_desiredRot);
+                   
+                   setControl(AutoRequest.withSpeeds(speeds));
+                });
     }
+
+    public Pose2d getPose(){
+        return getState().Pose;
+    }
+
+
 
 
 
@@ -209,11 +223,16 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
                 this.setOperatorPerspectiveForward(
                         allianceColor == Alliance.Red ? RedAlliancePerspectiveRotation
                                 : BlueAlliancePerspectiveRotation);
-                hasAppliedOperatorPerspective = true;
+                hasAppliedOperatorPerspective  = true;
             });
 
             this.addVisionMeasurement(Eyes.getRobotPose(), (LimelightHelpers.getLatency_Pipeline("limelight")/1000.0) - 
                 (LimelightHelpers.getLatency_Capture("limelight")/1000.0), VecBuilder.fill(0.7, 0.7, 9999999));
+
+            
+            SmartDashboard.putNumber("Vision Pose X", Eyes.getRobotPose().getX());
+            SmartDashboard.putNumber("Vision Pose y", Eyes.getRobotPose().getY());
+            SmartDashboard.putNumber("Vision Pose Rot", Eyes.getRobotPose().getRotation().getRadians());
         }
     }
 }

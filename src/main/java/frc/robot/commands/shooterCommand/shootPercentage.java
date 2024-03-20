@@ -28,7 +28,6 @@ public class shootPercentage extends Command{
     
     @Override
     public void end(boolean interrupted){
-      shoot.shoot(0);
     }
 
     @Override

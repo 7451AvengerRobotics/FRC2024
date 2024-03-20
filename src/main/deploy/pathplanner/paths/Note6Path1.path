@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 8.133921843169903,
-        "y": 5.813701022419839
+        "x": 8.305389050150424,
+        "y": 5.773442417070284
       },
       "prevControl": {
-        "x": 7.133921843169903,
-        "y": 5.813701022419839
+        "x": 7.305389050150424,
+        "y": 5.773442417070284
       },
       "nextControl": null,
       "isLocked": false,
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Pray",
+  "folder": null,
   "previewStartingState": {
     "rotation": 17.740534463067974,
     "velocity": 0

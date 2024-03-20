@@ -6,10 +6,10 @@ import frc.robot.subsystems.ElevatorSub;
 
 public class elevatorPositionCommand extends Command{
     private final ElevatorSub elevator;
-    private final double ele2Pos;
-    public elevatorPositionCommand(ElevatorSub elevator, double ele1Pos, double ele2Pos){
+    private final double ele1Pos;
+    public elevatorPositionCommand(ElevatorSub elevator, double ele1Pos){
         this.elevator = elevator;
-        this.ele2Pos = ele2Pos;
+        this.ele1Pos = ele1Pos;
   
       
         addRequirements(elevator);
@@ -22,7 +22,7 @@ public class elevatorPositionCommand extends Command{
     
     @Override 
     public void execute(){
-        elevator.setElevatorPosition(ele2Pos);
+        elevator.setElevatorPosition(ele1Pos);
 
     }
     
