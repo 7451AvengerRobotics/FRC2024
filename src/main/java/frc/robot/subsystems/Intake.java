@@ -16,6 +16,7 @@ public class Intake extends SubsystemBase {
         super();
         intake = new CANSparkMax(Constants.intake, MotorType.kBrushless);
         encoder = intake.getEncoder();
+        intake.enableVoltageCompensation(12);
     }
 
     public void intake(double power){

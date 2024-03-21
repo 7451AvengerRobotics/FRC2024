@@ -59,6 +59,8 @@ public class Shooter extends SubsystemBase {
 
         shooterTop.setSmartCurrentLimit(40);
         shooterBottom.setSmartCurrentLimit(40);
+        shooterTop.enableVoltageCompensation(12);
+        shooterBottom.enableVoltageCompensation(12);
 
         
 

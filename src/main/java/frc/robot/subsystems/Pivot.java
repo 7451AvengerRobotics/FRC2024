@@ -1,9 +1,13 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
+
+import java.util.function.Supplier;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -24,6 +28,8 @@ public class Pivot extends SubsystemBase {
         encoder = pivot.getEncoder();
 
         m_pidController = pivot.getPIDController();
+        pivot.enableVoltageCompensation(12);
+        pivot.setIdleMode(IdleMode.kBrake);
 
 
         encoder.setPosition(0);
@@ -64,7 +70,6 @@ public class Pivot extends SubsystemBase {
     public void setPower(double power){
         pivot.set(power);
     }
-
 
 
     public Command setPivotPosition(double position){

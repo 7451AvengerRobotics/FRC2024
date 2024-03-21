@@ -100,7 +100,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "pivot"
+                  "name": "pivot1"
                 }
               },
               {
@@ -139,6 +139,12 @@
                 "type": "named",
                 "data": {
                   "name": "pivot"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.5
                 }
               },
               {
@@ -182,7 +188,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "pivot"
+                  "name": "pivot2"
                 }
               },
               {
@@ -214,25 +220,6 @@
           }
         },
         {
-          "type": "sequential",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "pivot"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "shoot"
-                }
-              }
-            ]
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -258,7 +245,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "pivot"
+                  "name": "pivot2"
                 }
               },
               {

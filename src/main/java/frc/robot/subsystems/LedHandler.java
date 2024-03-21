@@ -29,12 +29,12 @@ public class LedHandler extends SubsystemBase
         configAll.brightnessScalar = 0.2;
         indexstrobe = new StrobeAnimation(0, 255, 0, 0, 0.5, 200, 10);
         feederstrobe = new StrobeAnimation(255, 0, 255, 0, 0.5, 200, 10);
-        // configAll.vBatOutputMode = VBatOutputMode.Modulated;
-      
+
         candle.configAllSettings(configAll, 100);
         //fire = new FireAnimation(1, 1, 0, 1, 0.3);
        // candle.animate(fire);
         candle.setLEDs(255, 0, 255);
+    
     }
 
     // changing colors

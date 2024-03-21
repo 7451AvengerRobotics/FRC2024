@@ -118,8 +118,7 @@ public Supplier<Rotation2d> angleToSpeakerSupplier(final Supplier<Pose2d> curren
         return () -> currentPoseSupplier.get()
                 .getTranslation()
                 .minus(FieldConstants.getSpeakerPose().getTranslation())
-                .getAngle()
-                .minus(Rotation2d.fromRadians(Math.PI));
+                .getAngle();
     }
 
 
