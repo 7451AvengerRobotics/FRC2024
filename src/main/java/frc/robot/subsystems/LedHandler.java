@@ -33,7 +33,7 @@ public class LedHandler extends SubsystemBase
         candle.configAllSettings(configAll, 100);
         //fire = new FireAnimation(1, 1, 0, 1, 0.3);
        // candle.animate(fire);
-        candle.setLEDs(255, 0, 255);
+        candle.setLEDs(0, 255, 100);
     
     }
 

@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.73,
-        "y": 6.32
+        "x": 1.3140618588929502,
+        "y": 4.745999491998984
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.777279217666384,
-        "y": 6.631709206478911
+        "x": 2.3140618588929516,
+        "y": 4.745999491998984
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.293678213604645,
-        "y": 5.5040931765173085
+        "x": 2.695433852406168,
+        "y": 4.124382094918037
       },
       "prevControl": {
-        "x": 7.293678213604645,
-        "y": 5.5040931765173085
+        "x": 1.6954338524061678,
+        "y": 4.124382094918037
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": -1.2730300200568259,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "WaltonPath",
   "previewStartingState": {
-    "rotation": 17.740534463067974,
+    "rotation": -34.75591255354135,
     "velocity": 0
   },
   "useDefaultConstraints": true

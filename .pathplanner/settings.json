@@ -7,8 +7,10 @@
     "2NoteRight",
     "3NoteAutoFar",
     "4NoteAuto1",
+    "3noterightPath",
+    "Pray",
     "Test",
-    "Pray"
+    "WaltonPath"
   ],
   "autoFolders": [
     "2Notes",
@@ -17,8 +19,8 @@
     "5Notes",
     "Testing"
   ],
-  "defaultMaxVel": 5.0,
-  "defaultMaxAccel": 5.0,
+  "defaultMaxVel": 4.75,
+  "defaultMaxAccel": 4.0,
   "defaultMaxAngVel": 400.0,
   "defaultMaxAngAccel": 500.0,
   "maxModuleSpeed": 5.0
