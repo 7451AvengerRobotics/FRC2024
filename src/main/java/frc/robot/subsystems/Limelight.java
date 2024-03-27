@@ -1,10 +1,12 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Limelight extends SubsystemBase {
     NetworkTable table;
@@ -19,7 +21,8 @@ public class Limelight extends SubsystemBase {
     double steering_adjust;
     double limelightMountAngleDegrees = 24.0; 
     double limelightLensHeightInches = 15.0 + (3/16); 
-    double goalHeightInches = 58.33;
+    double heightOfGoal = 57.13;
+    double limelight_kP = 0.015;
 
     public Limelight(){
         table = NetworkTableInstance.getDefault().getTable("limelight");
@@ -57,31 +60,27 @@ public class Limelight extends SubsystemBase {
 
   
     public double getDistance(){
-        double targetOffsetAngle_Vertical = ty.getDouble(0.0);
+        
+        double distance = 0.0;
+
+        double targetOffsetAngle_Vertical = Rotation2d.fromDegrees(limelightMountAngleDegrees + ty.getDouble(0.0)).getRadians();
+
+        distance = (heightOfGoal-limelightLensHeightInches) / Math.tan(targetOffsetAngle_Vertical);
+  
+        return distance;
+      }
     
-        // how many degrees back is your limelight rotated from perfectly vertical?
-    
-        // distance from the center of the Limelight lens to the floor
-    
-        // distance from the target to the floor
-    
-        double angleToGoalDegrees = limelightMountAngleDegrees + targetOffsetAngle_Vertical;
-        double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
-    
-        //calculate distance
-        double distanceFromLimelightToGoalInches = (goalHeightInches - limelightLensHeightInches) / Math.tan(angleToGoalRadians);
-        return distanceFromLimelightToGoalInches;
+      public double aimToTag(){
+  
+          double heading_error = -getXPos();
+          double steering_adjust = heading_error * limelight_kP;
+
+          return steering_adjust; 
       }
 
-    public double getRotationAdjust() {
-        double tx = table.getEntry("tx").getDouble(0);
-        double heading_error = -tx;
-        if (tx > 1.0) {
-          steering_adjust = Kp * heading_error - min_command;
-        } else if (tx < 1.0) {
-          steering_adjust = Kp * heading_error + min_command;
-        }
-        return steering_adjust;
+      public boolean isAimedAtSpeaker(){
+        double m_tx = Math.abs(getXPos());
+        return m_tx > 0.0 && m_tx < 0.1;
       }
 
 
@@ -94,6 +93,7 @@ public class Limelight extends SubsystemBase {
         SmartDashboard.putNumber("Area", getArea());
         SmartDashboard.putNumber("April Tag", getID());
         SmartDashboard.putNumber("Distance", getDistance());
+        SmartDashboard.putBoolean("is Aligned", isAimedAtSpeaker());
 
     }
 

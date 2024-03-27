@@ -33,6 +33,7 @@ import frc.robot.commands.setLedColorCommand;
 import frc.robot.commands.setPivotPosition;
 import frc.robot.commands.ClimberCommand.climberAutoCommand;
 import frc.robot.commands.ClimberCommand.climberManualCommand;
+import frc.robot.commands.Misc.AutoAimToSpeaker;
 import frc.robot.commands.shooterCommand.feedCommand;
 import frc.robot.commands.shooterCommand.shootFF;
 import frc.robot.commands.shooterCommand.shootPercentage;
@@ -67,6 +68,8 @@ public class RobotContainer {
         put(60.01, 0.0);
 
     }};
+
+    
 
 
     /* Subsystems */    
@@ -117,27 +120,9 @@ public class RobotContainer {
         NamedCommands.registerCommand("pivot2", new setPivotPosition(pivot, 14).withTimeout(0.5));
 
 
+    //joystick.square().whileTrue(drivetrain.faceAngle(drivetrain.angleToSpeakerSupplier(drivetrain::getPose)));
 
-        PathPlannerPath ampFromMid = PathPlannerPath.fromPathFile("ampFromMid");
-        PathPlannerPath speakerFromMid = PathPlannerPath.fromPathFile("sourceFromMid");
-
-        PathConstraints constraints = new PathConstraints(
-        3.0, 4.0,
-            Units.degreesToRadians(540), Units.degreesToRadians(720));
-
-        Command ampMid = AutoBuilder.pathfindThenFollowPath(
-            ampFromMid,
-            constraints,
-            3.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
-        );
-
-        Command speakerMid = AutoBuilder.pathfindThenFollowPath(
-            speakerFromMid,
-            constraints,
-            3.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
-        );
-
-    joystick.square().whileTrue(drivetrain.faceAngle(drivetrain.angleToSpeakerSupplier(drivetrain::getPose)));
+    joystick.square().whileTrue(new AutoAimToSpeaker(limelight));
 
     configureButtonBindings();
 
