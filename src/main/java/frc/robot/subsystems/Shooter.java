@@ -66,6 +66,10 @@ public class Shooter extends SubsystemBase {
         shooterTop.setInverted(true);
         controlTop = new SimpleMotorFeedforward(topkS, topkV, topkA);
         controlBot = new SimpleMotorFeedforward(botKS, botKv, botKa);
+        shooterBottom.setOpenLoopRampRate(0.25);
+        shooterTop.setOpenLoopRampRate(0.25);
+        shooterTop.enableVoltageCompensation(12);
+        shooterBottom.enableVoltageCompensation(12);
         
         setSysIdRoutine(shooterBottom, "bot-motor");
  

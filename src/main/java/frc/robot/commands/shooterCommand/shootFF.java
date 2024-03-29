@@ -14,7 +14,7 @@ public class shootFF extends Command{
         this.rpm = rpm;
   
       
-        addRequirements(shoot);
+        
 
     }
 

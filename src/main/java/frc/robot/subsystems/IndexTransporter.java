@@ -52,7 +52,7 @@ public class IndexTransporter extends SubsystemBase {
 
     @Override
     public void periodic(){
-        SmartDashboard.putBoolean("Feeder", this.indexDetected());
+        SmartDashboard.putBoolean("IndexBB", this.indexDetected());
     }
 
 

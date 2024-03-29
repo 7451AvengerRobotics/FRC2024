@@ -23,6 +23,7 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -41,6 +42,7 @@ import frc.robot.subsystems.Swerve.generated.TunerConstants;
  * so it can be used in command-based projects easily.
  */
 public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsystem {
+    
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
@@ -99,8 +101,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
             this::seedFieldRelative,  // Consumer for seeding pose against auto
             this::getCurrentRobotChassisSpeeds,
             (speeds)->this.setControl(AutoRequest.withSpeeds(speeds)), // Consumer of ChassisSpeeds to drive the robot
-            new HolonomicPathFollowerConfig(new PIDConstants(5, 0, 0),
-                                            new PIDConstants(5, 0, 0),
+            new HolonomicPathFollowerConfig(new PIDConstants(13, 0, 0),
+                                            new PIDConstants(15, 0, 0),
                                             TunerConstants.kSpeedAt12VoltsMps,
                                             driveBaseRadius,
                                             new ReplanningConfig()),
@@ -115,11 +117,22 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     }
 
 public Supplier<Rotation2d> angleToSpeakerSupplier(final Supplier<Pose2d> currentPoseSupplier) {
+
+    // Translation2d targetTranslation = getPose().getTranslation().minus(FieldConstants.getSpeakerPose().getTranslation());
+
+    // double x = targetTranslation.getX();
+
+    // double y = targetTranslation.getY();
+
+    // double angle = Math.atan(y/x);
+
+    
+
+
         return () -> currentPoseSupplier.get()
                 .getTranslation()
                 .minus(FieldConstants.getSpeakerPose().getTranslation())
-                .getAngle()
-                .minus(Rotation2d.fromRadians(Math.PI));
+                .getAngle();
     }
 
 
@@ -227,7 +240,7 @@ public Supplier<Rotation2d> angleToSpeakerSupplier(final Supplier<Pose2d> curren
             });
 
             this.addVisionMeasurement(Eyes.getRobotPose(), (LimelightHelpers.getLatency_Pipeline("limelight")/1000.0) - 
-                (LimelightHelpers.getLatency_Capture("limelight")/1000.0), VecBuilder.fill(0.7, 0.7, 9999999));
+                (LimelightHelpers.getLatency_Capture("limelight")/1000.0), VecBuilder.fill(0.9, 0.9, .9));
 
             
             SmartDashboard.putNumber("Vision Pose X", Eyes.getRobotPose().getX());

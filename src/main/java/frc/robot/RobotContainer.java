@@ -22,8 +22,8 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants.FieldConstants;
 import frc.robot.commands.allFeed;
-import frc.robot.commands.changeLedState;
 import frc.robot.commands.climberOneCommand;
 import frc.robot.commands.elevatorPositionCommand;
 import frc.robot.commands.indexCommand;
@@ -65,12 +65,39 @@ public class RobotContainer {
    private final SendableChooser<Command> autoChooser;
 
     private InterpolatingTreeMap<Double, Double> shooterAngleMap = new InterpolatingTreeMap<>() {{
-        put(60.01, 0.0);
-
+        put(49.19, 0.0);
+        put(61.64, 3.0);
+        put(75.99, 4.5);
+        put(78.7, 6.1);
+        put(83.6, 5.8);
+        put(97.32, 6.25); 
+        put(97.8, 7.35); 
+        put(108.34, 8.0); 
+        put(111.6, 8.35);
+        put(114.95, 8.5); 
+        put(129.32, 9.0);  
     }};
 
-    
-
+    /*  Home Data
+     *  put(49.19, 0.0);
+        put(61.64, 3.0);
+        put(75.99, 4.5);
+        put(78.7, 6.1);
+        put(83.6, 5.8);
+        put(97.32, 6.25); 
+        put(97.8, 7.35); 
+        put(108.34, 8.0); 
+        put(111.6, 8.35);
+        put(114.95, 8.5); 
+        put(129.32, 9.0); 
+     */
+/* Carrolton Data
+ *         put(40.0, 0.0);
+        put(48.19, 0.0);//
+        put(49.0, 0.0);
+        put(63.7, 3.0); //range workde from 63.7-69
+        put(89.96, 7.0);  //    
+ */
 
     /* Subsystems */    
     private final Shooter shooter = new Shooter();
@@ -78,20 +105,19 @@ public class RobotContainer {
     private final Intake intake = new Intake();
     private final Feeder feed = new Feeder();
     private final ElevatorSub elevator = new ElevatorSub();
-    private final Climbers climbers = new Climbers();
     private final Pivot pivot = new Pivot();
     private final Limelight limelight = new Limelight();
     private final LedHandler led = new LedHandler();
 
 
   private double MaxSpeed = TunerConstants.kSpeedAt12VoltsMps; // kSpeedAt12VoltsMps desired top speed
-  private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
+  private double MaxAngularRate = 3 * Math.PI; // 3/4 of a rotation per second max angular velocity
 
   /* Setting up bindings for necessary control of the swerve drive platform */
   private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
 
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-      .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
+      .withDeadband(MaxSpeed * 0.12).withRotationalDeadband(MaxAngularRate * 0.12) // Add a 10% deadband
       .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
                                                                // driving in open loop
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
@@ -103,35 +129,69 @@ public class RobotContainer {
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
 
-        NamedCommands.registerCommand("shootFirst", new WaitCommand(1.2).andThen(
+        NamedCommands.registerCommand("shootFirst", new WaitCommand(0.7).andThen(
                 new ParallelCommandGroup(
                         new feedCommand(feed, -1), 
                         new indexCommand(index, -0.5)).withTimeout(0.2)));
-        NamedCommands.registerCommand("shoot",
+        
+        NamedCommands.registerCommand("shootFirst", new WaitCommand(0.7).andThen(
                 new ParallelCommandGroup(
                         new feedCommand(feed, -1), 
-                        new indexCommand(index, -0.5)).withTimeout(0.2));
+                        new indexCommand(index, -0.5)).withTimeout(0.2)));
+        
+        NamedCommands.registerCommand("ramp", new shootFF(shooter, 6000, feed));
+
+        NamedCommands.registerCommand("shoot1", new feedCommand(feed, -1).withTimeout(0.2)); 
+                //Maybe run Index
+            
+        NamedCommands.registerCommand("shootFirst",  new ParallelCommandGroup(
+            new shootFF(shooter, 6000, feed)).withTimeout(1.25).andThen(new ParallelCommandGroup(
+                            new feedCommand(feed, -1), 
+                            new indexCommand(index, -0.5)).withTimeout(0.2)));
+        NamedCommands.registerCommand("shoot", new ParallelCommandGroup(
+            new shootFF(shooter, 6000, feed)).withTimeout(0.75).andThen(new ParallelCommandGroup(
+                            new feedCommand(feed, -1), 
+                            new indexCommand(index, -0.5)).withTimeout(0.2)));
         NamedCommands.registerCommand("fullIntake", new ParallelCommandGroup(
                                             new setPivotPosition(pivot, 3).withTimeout(0.1), 
-                                                    new allFeed(feed, intake, index, -1, -0.4, -0.4))
+                                                    new allFeed(feed, intake, index,  -0.4, -0.25, -0.18))
                                                         .until(feed::detected));
-        NamedCommands.registerCommand("pivot", new setPivotPosition(pivot,  6).withTimeout(0.2));
-        NamedCommands.registerCommand("pivot1", new setPivotPosition(pivot, 8.85).withTimeout(0.3));
-        NamedCommands.registerCommand("pivot2", new setPivotPosition(pivot, 14).withTimeout(0.5));
+        NamedCommands.registerCommand("pivot", new setPivotPosition(pivot,  7).withTimeout(0.2));
+        NamedCommands.registerCommand("pivot1", new setPivotPosition(pivot, 9.8).withTimeout(0.3));
+        NamedCommands.registerCommand("pivot2", new setPivotPosition(pivot, 7.75).withTimeout(0.3));
 
+
+
+        PathPlannerPath ampFromMid = PathPlannerPath.fromPathFile("ampFromMid");
+        PathPlannerPath speakerFromMid = PathPlannerPath.fromPathFile("sourceFromMid");
+
+        PathConstraints constraints = new PathConstraints(
+        3.0, 4.0,
+            Units.degreesToRadians(540), Units.degreesToRadians(720));
+
+        Command ampMid = AutoBuilder.pathfindThenFollowPath(
+            ampFromMid,
+            constraints,
+            3.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
+        );
+
+        Command speakerMid = AutoBuilder.pathfindThenFollowPath(
+            speakerFromMid,
+            constraints,
+            3.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
+        );
+
+        joystick.square().whileTrue(new AutoAimToSpeaker(limelight));
 
     //joystick.square().whileTrue(drivetrain.faceAngle(drivetrain.angleToSpeakerSupplier(drivetrain::getPose)));
-
-    joystick.square().whileTrue(new AutoAimToSpeaker(limelight));
-
     configureButtonBindings();
 
    //led.setDefaultCommand(new setLedColorCommand(led, 0, 0, 255).until(index::indexDetected).andThen(new setAnimationCommand(led).until(feed::detected).andThen(new setLedColorCommand(led, 0, 255, 0))));
    // led.setDefaultCommand(new changeLedState(led, index, feed));
     led.setDefaultCommand(
         new setLedColorCommand(led, 0, 255, 100).until(feed::detected).andThen(new ledAnimationCommand(led)).withTimeout(0.5).andThen(new setLedColorCommand(led, 0, 255, 0).until(feed::notDetected)));
-
-   shooter.setDefaultCommand(new shootPercentage(shooter, 1));
+    
+    shooter.setDefaultCommand(new shootPercentage(shooter, 0).until(feed::detected).andThen(new shootPercentage(shooter, 0.3)));
 
     autoChooser = AutoBuilder.buildAutoChooser();
 
@@ -153,21 +213,22 @@ public class RobotContainer {
     private void configureButtonBindings() {
 
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
-    drivetrain.applyRequest(() -> drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with
+    drivetrain.applyRequest(() -> drive.withVelocityX(joystick.getLeftY() * MaxSpeed) // Drive forward with
                                                                                            // negative Y (forward)
-            .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+            .withVelocityY(joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
             .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
         ));
 
-    joystick.R1().whileTrue( drivetrain.applyRequest(() -> drive.withVelocityX(-joystick.getLeftY() * MaxSpeed*0.3) // Drive forward with
+    joystick.R1().whileTrue( drivetrain.applyRequest(() -> drive.withVelocityX(joystick.getLeftY() * MaxSpeed*0.3) // Drive forward with
                                                                                            // negative Y (forward)
-            .withVelocityY(-joystick.getLeftX() * MaxSpeed*0.3) // Drive left with negative X (left)
+            .withVelocityY(joystick.getLeftX() * MaxSpeed*0.3) // Drive left with negative X (left)
             .withRotationalRate(-joystick.getRightX() * MaxAngularRate*0.3) // Drive counterclockwise with negative X (left)
         ));    
 
-    joystick.triangle().whileTrue(drivetrain.applyRequest(() -> brake));
-    joystick.circle().whileTrue(drivetrain
-        .applyRequest(() -> point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))));
+    joystick.triangle().whileTrue(drivetrain.faceAngle(drivetrain.angleToSpeakerSupplier(drivetrain::getPose)));
+
+   
+   
 
     // reset the field-centric heading on left bumper press
     joystick.L1().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
@@ -186,7 +247,7 @@ public class RobotContainer {
         JoystickButton d = new JoystickButton(buttonPanel, Constants.d);
         JoystickButton intakeButton = new JoystickButton(buttonPanel, Constants.one); 
         JoystickButton outtakeButton = new JoystickButton(buttonPanel, Constants.two); 
-        JoystickButton eject = new JoystickButton(buttonPanel, Constants.three);
+        JoystickButton three = new JoystickButton(buttonPanel, Constants.three);
         JoystickButton four = new JoystickButton(buttonPanel, Constants.four);
         JoystickButton five = new JoystickButton(buttonPanel, Constants.five);
         JoystickButton six = new JoystickButton(buttonPanel, Constants.six);
@@ -201,64 +262,95 @@ public class RobotContainer {
 
     //Amp 
       w.onTrue(new ParallelCommandGroup(new setPivotPosition(pivot, 38), 
-                new elevatorPositionCommand(elevator, -99.145751953125)));
+                new elevatorPositionCommand(elevator, -95.145751953125)));
+        
+
+    five.whileTrue(new ParallelCommandGroup(
+            new setPivotPosition(pivot, shooterAngleMap.get(limelight.getDistance())), new shootPercentage(shooter, 0.9)).withTimeout(0.85).andThen(new ParallelCommandGroup(
+                            new feedCommand(feed, -1), 
+                            new indexCommand(index, -0.5))));
 
 
     //Shoot
-
-        d.whileTrue(new shootFF(shooter, 6000, feed).raceWith(
-            new WaitCommand(0.3)).andThen(new setPivotPosition(pivot, (.0822*limelight.getDistance()) -4.36 ).raceWith(new WaitCommand(0.2)).andThen(
-                new ParallelCommandGroup(
-                        new feedCommand(feed, -1), 
-                        new indexCommand(index, -0.5)))));
+        d.whileTrue(new ParallelCommandGroup(
+            new setPivotPosition(pivot, 0), new shootPercentage(shooter, 0.9)).withTimeout(0.85).andThen(new ParallelCommandGroup(
+                            new feedCommand(feed, -1), 
+                            new indexCommand(index, -0.5))));
+        
+        // d.whileTrue(new shootFF(shooter, 6000, feed).raceWith(
+        //     new WaitCommand(0.3)).andThen(new ParallelCommandGroup(
+        //         new setPivotPosition(pivot, shooterAngleMap.get(limelight.getDistance())),
+        //         drivetrain.faceAngle(drivetrain.angleToSpeakerSupplier(drivetrain::getPose))
+        //         ).withTimeout(1).andThen(
+        //             new ParallelCommandGroup(
+        //                     new feedCommand(feed, -1), 
+        //                     new indexCommand(index, -0.5)))));
 
   //Reset
         s.onTrue(new ParallelCommandGroup(new setPivotPosition(pivot, 2), 
-            new elevatorPositionCommand(elevator, 0),
-            new setClimberPos(climbers, 0, 0)));
+            new elevatorPositionCommand(elevator, 0)));
 
     //Stage
 
-        a.toggleOnTrue(new ParallelCommandGroup(new setPivotPosition(pivot, 47),
-            new setClimberPos(climbers, 176.06430053710938, -173.01708984375),
-            new elevatorPositionCommand(elevator, -135).raceWith(
-                new WaitCommand(1))));
+        // a.toggleOnTrue(new ParallelCommandGroup(new setPivotPosition(pivot, 47),
+        //     new setClimberPos(climbers, 176.06430053710938, -173.01708984375),
+        //     new elevatorPositionCommand(elevator, -135).raceWith(
+        //         new WaitCommand(1))));
         
-        a.toggleOnFalse(new climberAutoCommand(climbers, 1)
-                .until(climbers::climbersDetected).andThen(new setPivotPosition(pivot, 10)));
+        // a.toggleOnFalse(new climberAutoCommand(climbers, 1)
+        //         .until(climbers::climbersDetected).andThen(new setPivotPosition(pivot, 10)));
 
     
         intakeButton.onTrue(new ParallelCommandGroup(
             new setPivotPosition(pivot, 3), 
-            new allFeed(feed, intake, index, -0.7, -0.4, -0.4)).until(feed::detected).andThen(
+            new allFeed(feed, intake, index, -1, -0.5, -0.35)).until(feed::detected).andThen(
                     new feedCommand(feed, 0.1).raceWith(new WaitCommand(0.2))));
 
         
          outtakeButton.onTrue(new ParallelCommandGroup(
             new allFeed(feed, intake, index, 0.5, 0.5, 0.2)));
 
-        eject.whileTrue(Commands.parallel(new setLedColorCommand(led, 255, 0, 0), 
-            new ParallelCommandGroup(new setPivotPosition(pivot, 40), 
-            new feedCommand(feed, 0.2))));
+        // eject.whileTrue(Commands.parallel(new setLedColorCommand(led, 255, 0, 0), 
+        //     new ParallelCommandGroup(new setPivotPosition(pivot, 40), 
+        //     new feedCommand(feed, 0.2))));
 
         four.whileTrue(new ParallelCommandGroup(
                 new shootFF(shooter, 2000, feed), 
                 new feedCommand(feed, -1)));
+
                 
-        five.whileTrue(new climberManualCommand(climbers, 0.8));
-        six.whileTrue(new climberOneCommand(climbers, -0.1));
-
-        seven.whileTrue(new ParallelCommandGroup( new shootFF(shooter, 6000, feed), 
-        new setPivotPosition(pivot, 8.9)).raceWith(
-            new WaitCommand(0.5)).andThen(
-                new ParallelCommandGroup(
-                        new feedCommand(feed, -1), 
-                        new indexCommand(index, -0.5))));
-
-        eight.onTrue(new climberAutoCommand(climbers, 1)
-                .until(climbers::climbersDetected).andThen(new setPivotPosition(pivot, 10)));
 
         
+        three.whileTrue(new ParallelCommandGroup(
+            new setPivotPosition(pivot, 5.25), new shootPercentage(shooter, 0.9)).withTimeout(1.5).andThen(new ParallelCommandGroup(
+                            new feedCommand(feed, -1), 
+                            new indexCommand(index, -0.5))));
+
+        
+        // six.onTrue(
+        //     new ParallelCommandGroup(
+        //         new setPivotPosition(pivot, 5),
+        //         new elevatorPositionCommand(elevator, -99.145751953125)
+        //     ).andThen(new feedCommand(feed, -0.1)).until(feed::detected).andThen(new ParallelCommandGroup(
+        //         new setPivotPosition(pivot, 0),
+        //         new elevatorPositionCommand(elevator, 0)
+        //     ))
+        // );
+     
+        six.whileTrue(new ParallelCommandGroup(
+            new setPivotPosition(pivot, 10), new shootPercentage(shooter, 0.9)).withTimeout(0.85).andThen(new ParallelCommandGroup(
+                            new feedCommand(feed, -1), 
+                            new indexCommand(index, -0.5))));
+
+         seven.whileTrue(new ParallelCommandGroup(
+            new setPivotPosition(pivot, 9.8), new shootPercentage(shooter, 0.98)).withTimeout(0.85).andThen(new ParallelCommandGroup(
+                            new feedCommand(feed, -1), 
+                            new indexCommand(index, -0.5))));
+
+            eight.whileTrue(new ParallelCommandGroup(
+            new setPivotPosition(pivot, 9.8), new shootFF(shooter, 6000, feed)).withTimeout(0.85).andThen(new ParallelCommandGroup(
+                            new feedCommand(feed, -1), 
+                            new indexCommand(index, -0.5))));
         
             
      }      
@@ -273,6 +365,13 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
        // An ExampleCommand will run in autonomous
         // return new exampleAuto(s_Swerve);
+
+        System.out.println(SmartDashboard.putNumber("ArcTan",
+    drivetrain.getState().Pose.getTranslation()
+    .minus(FieldConstants.getSpeakerPose().getTranslation())
+    .getAngle().getRadians()));
          return autoChooser.getSelected();
     }
+
+
 }

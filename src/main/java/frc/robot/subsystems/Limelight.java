@@ -21,7 +21,7 @@ public class Limelight extends SubsystemBase {
     double steering_adjust;
     double limelightMountAngleDegrees = 24.0; 
     double limelightLensHeightInches = 15.0 + (3/16); 
-    double heightOfGoal = 57.13;
+    double heightOfGoal = 58.33;
     double limelight_kP = 0.015;
 
     public Limelight(){

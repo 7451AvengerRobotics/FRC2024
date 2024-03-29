@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3366633613457033,
-      "y": 4.148470076299583
+      "x": 1.3491521419562087,
+      "y": 5.468960666879964
     },
     "rotation": -0.881403996582113
   },
@@ -18,22 +18,9 @@
           }
         },
         {
-          "type": "sequential",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "pivot"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "shoot"
-                }
-              }
-            ]
+            "name": "shoot"
           }
         },
         {
