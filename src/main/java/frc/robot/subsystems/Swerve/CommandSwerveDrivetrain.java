@@ -134,7 +134,8 @@ public Supplier<Rotation2d> angleToSpeakerSupplier(final Supplier<Pose2d> curren
                    
                    setControl(AutoRequest.withSpeeds(speeds));
                 });
-    }
+    } 
+
 
     public Pose2d getPose(){
         return getState().Pose;

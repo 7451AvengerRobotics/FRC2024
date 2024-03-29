@@ -17,14 +17,11 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.allFeed;
-import frc.robot.commands.autoAimCommand;
-import frc.robot.commands.climberOneCommand;
 import frc.robot.commands.elevatorPositionCommand;
 import frc.robot.commands.indexCommand;
 import frc.robot.commands.ledAnimationCommand;
@@ -40,7 +37,6 @@ import frc.robot.subsystems.*;
 import frc.robot.subsystems.Swerve.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Swerve.Telemetry;
 import frc.robot.subsystems.Swerve.generated.TunerConstants;
-import frc.util.InterpolatingTreeMap;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -55,7 +51,6 @@ public class RobotContainer {
     private final CommandPS4Controller joystick = new CommandPS4Controller(1);
     /* Drive Controls */
 
-    private final Pose2d targetPose = new Pose2d(10, 5, Rotation2d.fromDegrees(180));
 
     
 
@@ -63,13 +58,6 @@ public class RobotContainer {
 
    private final SendableChooser<Command> autoChooser;
 
-    private InterpolatingTreeMap<Double, Double> shooterAngleMap = new InterpolatingTreeMap<>() {{
-        put(40.0, 0.0);
-        put(48.19, 0.0);//
-        put(49.0, 0.0);
-        put(63.7, 3.0); //range workde from 63.7-69
-        put(89.96, 7.0);  //     
-    }};
 
     /*
      *  put(49.19, 0.0);
@@ -96,11 +84,14 @@ public class RobotContainer {
     private final Pivot pivot = new Pivot();
     private final Limelight limelight = new Limelight();
     private final LedHandler led = new LedHandler();
-
+ 
 
   private double MaxSpeed = TunerConstants.kSpeedAt12VoltsMps; // kSpeedAt12VoltsMps desired top speed
-  private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
+  private static double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
 
+  public static double getMaxAngularRate() {
+    return MaxAngularRate;
+  }
   /* Setting up bindings for necessary control of the swerve drive platform */
   private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
 
@@ -201,6 +192,11 @@ public class RobotContainer {
             .withRotationalRate(-joystick.getRightX() * MaxAngularRate*0.3) // Drive counterclockwise with negative X (left)
         ));    
 
+    joystick.square().whileTrue( drivetrain.applyRequest(() -> drive.withVelocityX(-joystick.getLeftY() * MaxSpeed*0.3) // Drive forward with
+                                                                                           // negative Y (forward)
+            .withVelocityY(-joystick.getLeftX() * MaxSpeed*0.3) // Drive left with negative X (left)
+            .withRotationalRate(limelight.limelight_aim_proportional()) // Drive counterclockwise with negative X (left)
+        )); 
    
    
 
