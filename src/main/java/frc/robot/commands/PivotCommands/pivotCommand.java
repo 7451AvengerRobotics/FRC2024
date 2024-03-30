@@ -35,4 +35,3 @@ public class pivotCommand extends Command{
         return false;
     }
 }
-

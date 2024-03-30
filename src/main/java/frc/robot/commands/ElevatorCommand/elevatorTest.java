@@ -36,4 +36,3 @@ public class elevatorTest extends Command{
         return false;
     }
 }
-

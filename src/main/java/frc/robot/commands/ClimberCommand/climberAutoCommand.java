@@ -45,4 +45,3 @@ public class climberAutoCommand extends Command{
         return false;
     }
 }
-

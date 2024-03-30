@@ -23,18 +23,16 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.FieldConstants;
-import frc.robot.commands.allFeed;
-import frc.robot.commands.climberOneCommand;
-import frc.robot.commands.elevatorPositionCommand;
-import frc.robot.commands.indexCommand;
-import frc.robot.commands.ledAnimationCommand;
-import frc.robot.commands.setClimberPos;
-import frc.robot.commands.setLedColorCommand;
-import frc.robot.commands.setPivotPosition;
 import frc.robot.commands.ClimberCommand.climberAutoCommand;
 import frc.robot.commands.ClimberCommand.climberManualCommand;
+import frc.robot.commands.ElevatorCommand.elevatorPositionCommand;
+import frc.robot.commands.LedCommands.ledAnimationCommand;
+import frc.robot.commands.LedCommands.setLedColorCommand;
 import frc.robot.commands.Misc.AutoAimToSpeaker;
+import frc.robot.commands.PivotCommands.setPivotPosition;
 import frc.robot.commands.PivotCommands.setPivotWithShooterMap;
+import frc.robot.commands.RetrieveDisc.allFeed;
+import frc.robot.commands.RetrieveDisc.indexCommand;
 import frc.robot.commands.shooterCommand.feedCommand;
 import frc.robot.commands.shooterCommand.shootFF;
 import frc.robot.commands.shooterCommand.shootPercentage;
@@ -185,11 +183,10 @@ public class RobotContainer {
 
         joystick.square().whileTrue(new AutoAimToSpeaker(limelight));
 
-    //joystick.square().whileTrue(drivetrain.faceAngle(drivetrain.angleToSpeakerSupplier(drivetrain::getPose)));
+  
     configureButtonBindings();
 
-   //led.setDefaultCommand(new setLedColorCommand(led, 0, 0, 255).until(index::indexDetected).andThen(new setAnimationCommand(led).until(feed::detected).andThen(new setLedColorCommand(led, 0, 255, 0))));
-   // led.setDefaultCommand(new changeLedState(led, index, feed));
+
     led.setDefaultCommand(
         new setLedColorCommand(led, 0, 255, 100).until(feed::detected).andThen(new ledAnimationCommand(led)).withTimeout(0.5).andThen(new setLedColorCommand(led, 0, 255, 0).until(feed::notDetected)));
     
@@ -292,7 +289,7 @@ public class RobotContainer {
 
   //Reset
         s.onTrue(new ParallelCommandGroup(new setPivotPosition(pivot, 2), 
-            new elevatorPositionCommand(elevator, 0)));
+            new elevatorPositionCommand(elevator, 0.0)));
 
     //Stage
 

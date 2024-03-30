@@ -45,4 +45,3 @@ public class climberManualCommand extends Command{
         return false;
     }
 }
-
