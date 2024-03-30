@@ -34,6 +34,7 @@ import frc.robot.commands.setPivotPosition;
 import frc.robot.commands.ClimberCommand.climberAutoCommand;
 import frc.robot.commands.ClimberCommand.climberManualCommand;
 import frc.robot.commands.Misc.AutoAimToSpeaker;
+import frc.robot.commands.PivotCommands.setPivotWithShooterMap;
 import frc.robot.commands.shooterCommand.feedCommand;
 import frc.robot.commands.shooterCommand.shootFF;
 import frc.robot.commands.shooterCommand.shootPercentage;
@@ -65,17 +66,12 @@ public class RobotContainer {
    private final SendableChooser<Command> autoChooser;
 
     private InterpolatingTreeMap<Double, Double> shooterAngleMap = new InterpolatingTreeMap<>() {{
-        put(49.19, 0.0);
-        put(61.64, 3.0);
-        put(75.99, 4.5);
-        put(78.7, 6.1);
-        put(83.6, 5.8);
-        put(97.32, 6.25); 
-        put(97.8, 7.35); 
-        put(108.34, 8.0); 
-        put(111.6, 8.35);
-        put(114.95, 8.5); 
-        put(129.32, 9.0);  
+     put(44.55, 0.0);
+     put(45.5, 0.0);
+     put(46.0, 0.0);
+     put(57.0, 0.0);
+     put(58.54, 3.0);
+     put(68.79, 4.6);
     }};
 
     /*  Home Data
@@ -110,8 +106,14 @@ public class RobotContainer {
     private final LedHandler led = new LedHandler();
 
 
+
+
   private double MaxSpeed = TunerConstants.kSpeedAt12VoltsMps; // kSpeedAt12VoltsMps desired top speed
-  private double MaxAngularRate = 3 * Math.PI; // 3/4 of a rotation per second max angular velocity
+  private static double MaxAngularRate = 3 * Math.PI; // 3/4 of a rotation per second max angular velocity
+
+      public static double getMaxAngularRate() {
+        return MaxAngularRate;
+      }
 
   /* Setting up bindings for necessary control of the swerve drive platform */
   private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
@@ -192,7 +194,7 @@ public class RobotContainer {
         new setLedColorCommand(led, 0, 255, 100).until(feed::detected).andThen(new ledAnimationCommand(led)).withTimeout(0.5).andThen(new setLedColorCommand(led, 0, 255, 0).until(feed::notDetected)));
     
     shooter.setDefaultCommand(new shootPercentage(shooter, 0).until(feed::detected).andThen(new shootPercentage(shooter, 0.3)));
-
+    //pivot.setDefaultCommand(new setPivotWithShooterMap(pivot, limelight));
     autoChooser = AutoBuilder.buildAutoChooser();
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -225,8 +227,11 @@ public class RobotContainer {
             .withRotationalRate(-joystick.getRightX() * MaxAngularRate*0.3) // Drive counterclockwise with negative X (left)
         ));    
 
-    joystick.triangle().whileTrue(drivetrain.faceAngle(drivetrain.angleToSpeakerSupplier(drivetrain::getPose)));
-
+    joystick.triangle().whileTrue( drivetrain.applyRequest(() -> drive.withVelocityX(joystick.getLeftY() * MaxSpeed*0.3) // Drive forward with
+        // negative Y (forward)
+        .withVelocityY(-joystick.getLeftX() * MaxSpeed*0.3) // Drive left with negative X (left)
+        .withRotationalRate(limelight.limelight_aim_proportional()) // Drive counterclockwise with negative X (left)
+        )); 
    
    
 
@@ -263,17 +268,16 @@ public class RobotContainer {
     //Amp 
       w.onTrue(new ParallelCommandGroup(new setPivotPosition(pivot, 38), 
                 new elevatorPositionCommand(elevator, -95.145751953125)));
+
+    joystick.circle().onTrue(new setPivotPosition(pivot, shooterAngleMap.get(limelight.getDistance())));
         
 
-    five.whileTrue(new ParallelCommandGroup(
-            new setPivotPosition(pivot, shooterAngleMap.get(limelight.getDistance())), new shootPercentage(shooter, 0.9)).withTimeout(0.85).andThen(new ParallelCommandGroup(
-                            new feedCommand(feed, -1), 
-                            new indexCommand(index, -0.5))));
+    five.whileTrue(new setPivotPosition(pivot, limelight.getShooterMapAngle()));
 
 
     //Shoot
         d.whileTrue(new ParallelCommandGroup(
-            new setPivotPosition(pivot, 0), new shootPercentage(shooter, 0.9)).withTimeout(0.85).andThen(new ParallelCommandGroup(
+           new setPivotWithShooterMap(pivot, limelight), new shootPercentage(shooter, 0.9)).withTimeout(0.85).andThen(new ParallelCommandGroup(
                             new feedCommand(feed, -1), 
                             new indexCommand(index, -0.5))));
         
@@ -303,7 +307,7 @@ public class RobotContainer {
     
         intakeButton.onTrue(new ParallelCommandGroup(
             new setPivotPosition(pivot, 3), 
-            new allFeed(feed, intake, index, -1, -0.5, -0.35)).until(feed::detected).andThen(
+            new allFeed(feed, intake, index, -1, -0.5, -0.25)).until(feed::detected).andThen(
                     new feedCommand(feed, 0.1).raceWith(new WaitCommand(0.2))));
 
         
@@ -338,21 +342,22 @@ public class RobotContainer {
         // );
      
         six.whileTrue(new ParallelCommandGroup(
-            new setPivotPosition(pivot, 10), new shootPercentage(shooter, 0.9)).withTimeout(0.85).andThen(new ParallelCommandGroup(
+            new setPivotPosition(pivot, 11.5), new shootFF(shooter, 6000, feed)).withTimeout(0.85).andThen(new ParallelCommandGroup(
                             new feedCommand(feed, -1), 
                             new indexCommand(index, -0.5))));
 
          seven.whileTrue(new ParallelCommandGroup(
-            new setPivotPosition(pivot, 9.8), new shootPercentage(shooter, 0.98)).withTimeout(0.85).andThen(new ParallelCommandGroup(
+            new setPivotPosition(pivot, 11.55), new shootFF(shooter, 6000, feed)).withTimeout(0.85).andThen(new ParallelCommandGroup(
                             new feedCommand(feed, -1), 
                             new indexCommand(index, -0.5))));
 
             eight.whileTrue(new ParallelCommandGroup(
-            new setPivotPosition(pivot, 9.8), new shootFF(shooter, 6000, feed)).withTimeout(0.85).andThen(new ParallelCommandGroup(
+            new setPivotPosition(pivot, 11.555), new shootFF(shooter, 6000, feed)).withTimeout(0.85).andThen(new ParallelCommandGroup(
                             new feedCommand(feed, -1), 
                             new indexCommand(index, -0.5))));
-        
-            
+
+    
+           
      }      
 
 
@@ -372,6 +377,7 @@ public class RobotContainer {
     .getAngle().getRadians()));
          return autoChooser.getSelected();
     }
+
 
 
 }

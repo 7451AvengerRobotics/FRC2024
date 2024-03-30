@@ -239,8 +239,8 @@ public Supplier<Rotation2d> angleToSpeakerSupplier(final Supplier<Pose2d> curren
                 hasAppliedOperatorPerspective  = true;
             });
 
-            this.addVisionMeasurement(Eyes.getRobotPose(), (LimelightHelpers.getLatency_Pipeline("limelight")/1000.0) - 
-                (LimelightHelpers.getLatency_Capture("limelight")/1000.0), VecBuilder.fill(0.9, 0.9, .9));
+             this.addVisionMeasurement(Eyes.getRobotPose(), (LimelightHelpers.getLatency_Pipeline("limelight")/1000.0) - 
+                 (LimelightHelpers.getLatency_Capture("limelight")/1000.0), VecBuilder.fill(0.9, 0.9, .9));
 
             
             SmartDashboard.putNumber("Vision Pose X", Eyes.getRobotPose().getX());
