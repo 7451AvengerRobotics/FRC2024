@@ -67,7 +67,7 @@ public class RobotContainer {
      *  put(49.19, 0.0);
         put(61.64, 3.0);
         put(75.99, 4.5);
-        put(78.7, 6.1);
+        put(78.7, 6.1);f
         put(83.6, 5.8);
         put(97.32, 6.25); 
         put(97.8, 7.35); 
@@ -193,7 +193,9 @@ public class RobotContainer {
                                                                                            // negative Y (forward)
             .withVelocityY(joystick.getLeftX() * MaxSpeed*0.3) // Drive left with negative X (left)
             .withRotationalRate(-joystick.getRightX() * MaxAngularRate*0.3) // Drive counterclockwise with negative X (left)
-        ));    
+        ));
+        
+    joystick.R2().whileTrue(drivetrain.applyRequest(() -> brake));
 
     joystick.cross().whileTrue(drivetrain.applyRequest(() -> drive.withVelocityX(joystick.getLeftY() * MaxSpeed*0.3) // Drive forward with
         // negative Y (forward)
@@ -260,7 +262,7 @@ public class RobotContainer {
 
     //Shoot
         d.whileTrue(new ParallelCommandGroup(
-           new setPivotWithShooterMap(pivot, limelight), new shootPercentage(shooter, 0.9)).withTimeout(0.85).andThen(new ParallelCommandGroup(
+           new setPivotWithShooterMap(pivot, limelight), new shootPercentage(shooter, 0.9), drivetrain.applyRequest(() -> brake)).withTimeout(0.85).andThen(new ParallelCommandGroup(
                             new feedCommand(feed, -1), 
                             new indexCommand(index, -0.5))));
     
