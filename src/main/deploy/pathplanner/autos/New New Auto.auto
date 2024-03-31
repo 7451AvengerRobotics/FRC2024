@@ -14,13 +14,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "c1"
+            "pathName": null
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "c2"
+            "pathName": null
           }
         }
       ]

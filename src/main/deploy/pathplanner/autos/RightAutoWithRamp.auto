@@ -1,0 +1,131 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.3950925173499227,
+      "y": 7.342597271196915
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ramp"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Note1Right"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "pivot"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "shoot1"
+                      }
+                    },
+                    {
+                      "type": "parallel",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "path",
+                            "data": {
+                              "pathName": "Note2Right"
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "fullIntake"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Note2RightShoot"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "pivot"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "shoot1"
+                      }
+                    },
+                    {
+                      "type": "parallel",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "path",
+                            "data": {
+                              "pathName": "Note3Right"
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "fullIntake"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Note3RightShoot"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "pivot"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "shoot"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "folder": "4Notes",
+  "choreoAuto": false
+}

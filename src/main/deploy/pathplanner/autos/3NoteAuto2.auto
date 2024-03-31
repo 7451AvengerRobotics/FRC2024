@@ -64,13 +64,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Auto2Path3"
+            "pathName": null
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Auto2Path4"
+            "pathName": null
           }
         },
         {
