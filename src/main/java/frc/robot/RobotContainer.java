@@ -150,7 +150,7 @@ public class RobotContainer {
                                             new setPivotPosition(pivot, 3).withTimeout(0.1), 
                                                     new allFeed(feed, intake, index,  -0.4, -0.25, -0.18))
                                                         .until(feed::detected));
-        NamedCommands.registerCommand("pivot", new setPivotPosition(pivot,  7).withTimeout(0.2));
+        NamedCommands.registerCommand("pivot", new setPivotWithShooterMap(pivot,  limelight).withTimeout(0.2));
         NamedCommands.registerCommand("pivot1", new setPivotPosition(pivot, 9.8).withTimeout(0.3));
         NamedCommands.registerCommand("pivot2", new setPivotPosition(pivot, 7.75).withTimeout(0.3));
   
