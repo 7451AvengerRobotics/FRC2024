@@ -18,11 +18,10 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.Constants.FieldConstants;
 import frc.robot.commands.ElevatorCommand.elevatorPositionCommand;
+import frc.robot.commands.ElevatorCommand.elevatorTest;
 import frc.robot.commands.LedCommands.ledAnimationCommand;
 import frc.robot.commands.LedCommands.setLedColorCommand;
-import frc.robot.commands.Misc.AutoAimToSpeaker;
 import frc.robot.commands.PivotCommands.setPivotPosition;
 import frc.robot.commands.PivotCommands.setPivotWithShooterMap;
 import frc.robot.commands.RetrieveDisc.allFeed;
@@ -107,6 +106,7 @@ public class RobotContainer {
         return MaxAngularRate;
       }
 
+
   /* Setting up bindings for necessary control of the swerve drive platform */
   private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
 
@@ -150,18 +150,9 @@ public class RobotContainer {
                                             new setPivotPosition(pivot, 3).withTimeout(0.1), 
                                                     new allFeed(feed, intake, index,  -0.4, -0.25, -0.18))
                                                         .until(feed::detected));
-        NamedCommands.registerCommand("pivot", new setPivotWithShooterMap(pivot, limelight).withTimeout(0.2));
+        NamedCommands.registerCommand("pivot", new setPivotPosition(pivot,  7).withTimeout(0.2));
         NamedCommands.registerCommand("pivot1", new setPivotPosition(pivot, 9.8).withTimeout(0.3));
         NamedCommands.registerCommand("pivot2", new setPivotPosition(pivot, 7.75).withTimeout(0.3));
-
-
-
-
-
-
-
-        joystick.square().whileTrue(new AutoAimToSpeaker(limelight));
-
   
     configureButtonBindings();
 
@@ -169,10 +160,7 @@ public class RobotContainer {
     led.setDefaultCommand(
         new setLedColorCommand(led, 0, 255, 100).until(feed::detected).andThen(new ledAnimationCommand(led)).withTimeout(0.5).andThen(new setLedColorCommand(led, 0, 255, 0).until(feed::notDetected)));
     
-    shooter.setDefaultCommand(new shootFF(shooter, 0).until(feed::detected).andThen(
-        new shootFF(shooter, 1800)).until(limelight::withinrampUpRange).andThen(
-        new shootFF(shooter, 6000)).until(feed::notDetected).andThen(
-        new shootPercentage(shooter, 0)));
+    shooter.setDefaultCommand(new shootPercentage(shooter, 0).until(feed::detected).andThen(new shootPercentage(shooter, 0.3)));
     //pivot.setDefaultCommand(new setPivotWithShooterMap(pivot, limelight));
     autoChooser = AutoBuilder.buildAutoChooser();
 
@@ -206,9 +194,15 @@ public class RobotContainer {
             .withRotationalRate(-joystick.getRightX() * MaxAngularRate*0.3) // Drive counterclockwise with negative X (left)
         ));    
 
-    joystick.triangle().whileTrue( drivetrain.applyRequest(() -> drive.withVelocityX(joystick.getLeftY() * MaxSpeed*0.3) // Drive forward with
+    joystick.cross().whileTrue( drivetrain.applyRequest(() -> drive.withVelocityX(joystick.getLeftY() * MaxSpeed*0.3) // Drive forward with
         // negative Y (forward)
-        .withVelocityY(-joystick.getLeftX() * MaxSpeed*0.3) // Drive left with negative X (left)
+        .withVelocityY(joystick.getLeftX() * MaxSpeed*0.3) // Drive left with negative X (left)
+        .withRotationalRate(limelight.limelight_aim_proportional()) // Drive counterclockwise with negative X (left)
+        )); 
+
+    joystick.square().whileTrue(drivetrain.applyRequest(() -> drive.withVelocityX(joystick.getLeftY() * MaxSpeed*0.3) // Drive forward with
+        // negative Y (forward)
+        .withVelocityY(limelight.limelight_range_proportional()) // Drive left with negative X (left)
         .withRotationalRate(limelight.limelight_aim_proportional()) // Drive counterclockwise with negative X (left)
         )); 
    
@@ -241,102 +235,63 @@ public class RobotContainer {
         
 
 
-        
-
-
     //Amp 
       w.onTrue(new ParallelCommandGroup(new setPivotPosition(pivot, 38), 
                 new elevatorPositionCommand(elevator, -95.145751953125)));
+    //Trap
+        a.and(eight).onTrue(new setPivotPosition(pivot, 5));
+        a.toggleOnTrue(new ParallelCommandGroup(new setPivotPosition(pivot, 38), 
+                new elevatorPositionCommand(elevator, -95.145751953125)));
 
-    joystick.circle().onTrue(new setPivotPosition(pivot, shooterAngleMap.get(limelight.getDistance())));
+        a.toggleOnFalse(new feedCommand(feed, 1).withTimeout(1).andThen(new ParallelCommandGroup(new setPivotPosition(pivot, 0), 
+                new elevatorPositionCommand(elevator, 0))));
         
+        // a.toggleOnTrue(new ParallelCommandGroup(new setPivotPosition(pivot, 0), 
+        //         new elevatorPositionCommand(elevator, -95.145751953125)));
 
-    five.whileTrue(new setPivotPosition(pivot, limelight.getShooterMapAngle()));
+        // a.toggleOnFalse(new shootPercentage(shooter, 0.5).withTimeout(1).andThen(new ParallelCommandGroup(new setPivotPosition(pivot, 0), 
+        //         new elevatorPositionCommand(elevator, 0))));
 
-
-    //Shoot
-        d.whileTrue(new ParallelCommandGroup(
-           new setPivotWithShooterMap(pivot, limelight), new shootFF(shooter, 6000)).withTimeout(0.85).andThen(new ParallelCommandGroup(
-                            new feedCommand(feed, -1), 
-                            new indexCommand(index, -0.5))));
-        
-        // d.whileTrue(new shootFF(shooter, 6000, feed).raceWith(
-        //     new WaitCommand(0.3)).andThen(new ParallelCommandGroup(
-        //         new setPivotPosition(pivot, shooterAngleMap.get(limelight.getDistance())),
-        //         drivetrain.faceAngle(drivetrain.angleToSpeakerSupplier(drivetrain::getPose))
-        //         ).withTimeout(1).andThen(
-        //             new ParallelCommandGroup(
-        //                     new feedCommand(feed, -1), 
-        //                     new indexCommand(index, -0.5)))));
-
+    
   //Reset
         s.onTrue(new ParallelCommandGroup(new setPivotPosition(pivot, 2), 
             new elevatorPositionCommand(elevator, 0.0)));
 
-    //Stage
-
-        // a.toggleOnTrue(new ParallelCommandGroup(new setPivotPosition(pivot, 47),
-        //     new setClimberPos(climbers, 176.06430053710938, -173.01708984375),
-        //     new elevatorPositionCommand(elevator, -135).raceWith(
-        //         new WaitCommand(1))));
-        
-        // a.toggleOnFalse(new climberAutoCommand(climbers, 1)
-        //         .until(climbers::climbersDetected).andThen(new setPivotPosition(pivot, 10)));
-
+    //Shoot
+        d.whileTrue(new ParallelCommandGroup(
+           new setPivotWithShooterMap(pivot, limelight), new shootPercentage(shooter, 0.9)).withTimeout(0.85).andThen(new ParallelCommandGroup(
+                            new feedCommand(feed, -1), 
+                            new indexCommand(index, -0.5))));
     
+
         intakeButton.onTrue(new ParallelCommandGroup(
             new setPivotPosition(pivot, 3), 
             new allFeed(feed, intake, index, -1, -0.5, -0.25)).until(feed::detected).andThen(
                     new feedCommand(feed, 0.1).raceWith(new WaitCommand(0.2))));
 
         
-         outtakeButton.onTrue(new ParallelCommandGroup(
+        outtakeButton.onTrue(new ParallelCommandGroup(new setLedColorCommand(led, 255, 0, 0),
             new allFeed(feed, intake, index, 0.5, 0.5, 0.2)));
 
-        // eject.whileTrue(Commands.parallel(new setLedColorCommand(led, 255, 0, 0), 
-        //     new ParallelCommandGroup(new setPivotPosition(pivot, 40), 
-        //     new feedCommand(feed, 0.2))));
+        three.whileTrue(new elevatorTest(elevator, 0.2));
 
         four.whileTrue(new ParallelCommandGroup(
                 new shootFF(shooter, 2000), 
                 new feedCommand(feed, -1)));
 
                 
+        six.whileTrue(new elevatorTest(elevator, -0.4));
 
-        
-        three.whileTrue(new ParallelCommandGroup(
-            new setPivotPosition(pivot, 5.25), new shootPercentage(shooter, 0.9)).withTimeout(1.5).andThen(new ParallelCommandGroup(
-                            new feedCommand(feed, -1), 
-                            new indexCommand(index, -0.5))));
-
-        
-        // six.onTrue(
-        //     new ParallelCommandGroup(
-        //         new setPivotPosition(pivot, 5),
-        //         new elevatorPositionCommand(elevator, -99.145751953125)
-        //     ).andThen(new feedCommand(feed, -0.1)).until(feed::detected).andThen(new ParallelCommandGroup(
-        //         new setPivotPosition(pivot, 0),
-        //         new elevatorPositionCommand(elevator, 0)
-        //     ))
-        // );
-     
-        six.whileTrue(new ParallelCommandGroup(
-            new setPivotPosition(pivot, 11.5), new shootFF(shooter, 6000)).withTimeout(0.85).andThen(new ParallelCommandGroup(
-                            new feedCommand(feed, -1), 
-                            new indexCommand(index, -0.5))));
-
-         seven.whileTrue(new ParallelCommandGroup(
+        seven.whileTrue(new ParallelCommandGroup(
             new setPivotPosition(pivot, 11.55), new shootFF(shooter, 6000)).withTimeout(0.85).andThen(new ParallelCommandGroup(
                             new feedCommand(feed, -1), 
                             new indexCommand(index, -0.5))));
 
-            eight.whileTrue(new ParallelCommandGroup(
+        eight.whileTrue(new ParallelCommandGroup(
             new setPivotPosition(pivot, 11.555), new shootFF(shooter, 6000)).withTimeout(0.85).andThen(new ParallelCommandGroup(
                             new feedCommand(feed, -1), 
                             new indexCommand(index, -0.5))));
-
     
-           
      }      
 
 
@@ -349,11 +304,6 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
        // An ExampleCommand will run in autonomous
         // return new exampleAuto(s_Swerve);
-
-        System.out.println(SmartDashboard.putNumber("ArcTan",
-    drivetrain.getState().Pose.getTranslation()
-    .minus(FieldConstants.getSpeakerPose().getTranslation())
-    .getAngle().getRadians()));
          return autoChooser.getSelected();
     }
 

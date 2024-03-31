@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.Swerve.generated.TunerConstants;
 import frc.util.InterpolatingTreeMap;
 
 public class Limelight extends SubsystemBase {
@@ -74,14 +75,36 @@ public double limelight_aim_proportional()
     // tx ranges from (-hfov/2) to (hfov/2) in degrees. If your target is on the rightmost edge of 
     // your limelight 3 feed, tx should return roughly 31 degrees.
     double targetingAngularVelocity = LimelightHelpers.getTX("limelight") * kP;
+    boolean targetValid = LimelightHelpers.getTV("limelight");
+
+    if (targetValid){
 
     // convert to radians per second for our drive method
-    targetingAngularVelocity *= RobotContainer.getMaxAngularRate();
+      targetingAngularVelocity *= RobotContainer.getMaxAngularRate();
 
     //invert since tx is positive when the target is to the right of the crosshair
-    targetingAngularVelocity *= -1.0;
+      targetingAngularVelocity *= -1.0;
+      }else{
+      //We are using the generated velocity if the tag was at the very edge of the hfov
+      targetingAngularVelocity = -31 *kP;
+
+      targetingAngularVelocity *= RobotContainer.getMaxAngularRate();
+
+      //invert since tx is positive when the target is to the right of the crosshair
+      targetingAngularVelocity *= -1.0;
+    }
 
     return targetingAngularVelocity;
+  
+  }
+
+  public double limelight_range_proportional()
+  {    
+    double kP = .01;
+    double targetingForwardSpeed = LimelightHelpers.getTY("limelight") * kP;
+    targetingForwardSpeed *= TunerConstants.kSpeedAt12VoltsMps;
+    targetingForwardSpeed *= -1.0;
+    return targetingForwardSpeed;
   }
 
     public double getTV(){
