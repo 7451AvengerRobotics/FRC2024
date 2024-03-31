@@ -150,7 +150,7 @@ public class RobotContainer {
                                             new setPivotPosition(pivot, 3).withTimeout(0.1), 
                                                     new allFeed(feed, intake, index,  -0.4, -0.25, -0.18))
                                                         .until(feed::detected));
-        NamedCommands.registerCommand("pivot", new setPivotPosition(pivot,  7).withTimeout(0.2));
+        NamedCommands.registerCommand("pivot", new setPivotWithShooterMap(pivot, limelight).withTimeout(0.2));
         NamedCommands.registerCommand("pivot1", new setPivotPosition(pivot, 9.8).withTimeout(0.3));
         NamedCommands.registerCommand("pivot2", new setPivotPosition(pivot, 7.75).withTimeout(0.3));
 
@@ -253,7 +253,7 @@ public class RobotContainer {
 
     //Shoot
         d.whileTrue(new ParallelCommandGroup(
-           new setPivotWithShooterMap(pivot, limelight), new shootPercentage(shooter, 0.9)).withTimeout(0.85).andThen(new ParallelCommandGroup(
+           new setPivotWithShooterMap(pivot, limelight), new shootFF(shooter, 6000, feed)).withTimeout(0.85).andThen(new ParallelCommandGroup(
                             new feedCommand(feed, -1), 
                             new indexCommand(index, -0.5))));
         
