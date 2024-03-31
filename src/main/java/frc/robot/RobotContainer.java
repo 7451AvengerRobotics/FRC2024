@@ -197,17 +197,19 @@ public class RobotContainer {
         
     joystick.R2().whileTrue(drivetrain.applyRequest(() -> brake));
 
-    joystick.cross().whileTrue(drivetrain.applyRequest(() -> drive.withVelocityX(joystick.getLeftY() * MaxSpeed*0.3) // Drive forward with
-        // negative Y (forward)
-        .withVelocityY(joystick.getLeftX() * MaxSpeed*0.3) // Drive left with negative X (left)
-        .withRotationalRate(limelight.limelight_aim_proportional()) // Drive counterclockwise with negative X (left)
-        ).until(limelight::isAimedAtSpeaker).andThen(new limelightAlignedLEDCommand(led, limelight))); 
-
     joystick.square().whileTrue(drivetrain.applyRequest(() -> drive.withVelocityX(joystick.getLeftY() * MaxSpeed*0.3) // Drive forward with
         // negative Y (forward)
         .withVelocityY(limelight.limelight_range_proportional()) // Drive left with negative X (left)
         .withRotationalRate(limelight.limelight_aim_proportional()) // Drive counterclockwise with negative X (left)
         ).until(limelight::isAimedAtSpeaker).andThen(new limelightAlignedLEDCommand(led, limelight))); 
+
+    joystick.cross().whileTrue(drivetrain.applyRequest(() -> 
+                                    drive.withVelocityX(joystick.getLeftY() * MaxSpeed*0.3) // Drive forward with negative Y (forward)
+                                    .withVelocityY(joystick.getLeftX() * MaxSpeed*0.3) // Drive left with negative X (left)
+                                    .withRotationalRate(limelight.limelight_aim_proportional()))
+                                .until(limelight::isAimedAtSpeaker)
+                                .andThen(
+                                    new limelightAlignedLEDCommand(led, limelight)));
    
    
 
@@ -261,10 +263,18 @@ public class RobotContainer {
             new elevatorPositionCommand(elevator, 0.0)));
 
     //Shoot
-        d.whileTrue(new ParallelCommandGroup(
-           new setPivotWithShooterMap(pivot, limelight), new shootPercentage(shooter, 0.9), drivetrain.applyRequest(() -> brake)).withTimeout(0.85).andThen(new ParallelCommandGroup(
-                            new feedCommand(feed, -1), 
-                            new indexCommand(index, -0.5))));
+        d.whileTrue(
+            new ParallelCommandGroup(
+                drivetrain.applyRequest(() -> drive.withVelocityX(joystick.getLeftY() * MaxSpeed*0.3) // Drive forward with negative Y (forward)
+                            .withVelocityY(joystick.getLeftX() * MaxSpeed*0.3) // Drive left with negative X (left)
+                            .withRotationalRate(limelight.limelight_aim_proportional())), // Drive counterclockwise with negative X (left)
+                new setPivotWithShooterMap(pivot, limelight), 
+                new shootPercentage(shooter, 0.9)).until(limelight::isAimedAtSpeaker).andThen(
+                    new ParallelCommandGroup(
+                        new limelightAlignedLEDCommand(led, limelight), 
+                        drivetrain.applyRequest(() -> brake),
+                        new feedCommand(feed, -1), 
+                        new indexCommand(index, -0.5))));
     
 
         intakeButton.onTrue(new ParallelCommandGroup(
