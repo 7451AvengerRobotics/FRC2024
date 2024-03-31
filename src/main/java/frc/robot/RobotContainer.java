@@ -133,17 +133,17 @@ public class RobotContainer {
                         new feedCommand(feed, -1), 
                         new indexCommand(index, -0.5)).withTimeout(0.2)));
         
-        NamedCommands.registerCommand("ramp", new shootFF(shooter, 6000, feed));
+        NamedCommands.registerCommand("ramp", new shootFF(shooter, 6000));
 
         NamedCommands.registerCommand("shoot1", new feedCommand(feed, -1).withTimeout(0.2)); 
                 //Maybe run Index
             
         NamedCommands.registerCommand("shootFirst",  new ParallelCommandGroup(
-            new shootFF(shooter, 6000, feed)).withTimeout(1.25).andThen(new ParallelCommandGroup(
+            new shootFF(shooter, 6000)).withTimeout(1.25).andThen(new ParallelCommandGroup(
                             new feedCommand(feed, -1), 
                             new indexCommand(index, -0.5)).withTimeout(0.2)));
         NamedCommands.registerCommand("shoot", new ParallelCommandGroup(
-            new shootFF(shooter, 6000, feed)).withTimeout(0.75).andThen(new ParallelCommandGroup(
+            new shootFF(shooter, 6000)).withTimeout(0.75).andThen(new ParallelCommandGroup(
                             new feedCommand(feed, -1), 
                             new indexCommand(index, -0.5)).withTimeout(0.2)));
         NamedCommands.registerCommand("fullIntake", new ParallelCommandGroup(
@@ -169,7 +169,10 @@ public class RobotContainer {
     led.setDefaultCommand(
         new setLedColorCommand(led, 0, 255, 100).until(feed::detected).andThen(new ledAnimationCommand(led)).withTimeout(0.5).andThen(new setLedColorCommand(led, 0, 255, 0).until(feed::notDetected)));
     
-    shooter.setDefaultCommand(new shootPercentage(shooter, 0).until(feed::detected).andThen(new shootPercentage(shooter, 0.3)));
+    shooter.setDefaultCommand(new shootFF(shooter, 0).until(feed::detected).andThen(
+        new shootFF(shooter, 1800)).until(limelight::withinrampUpRange).andThen(
+        new shootFF(shooter, 6000)).until(feed::notDetected).andThen(
+        new shootPercentage(shooter, 0)));
     //pivot.setDefaultCommand(new setPivotWithShooterMap(pivot, limelight));
     autoChooser = AutoBuilder.buildAutoChooser();
 
@@ -253,7 +256,7 @@ public class RobotContainer {
 
     //Shoot
         d.whileTrue(new ParallelCommandGroup(
-           new setPivotWithShooterMap(pivot, limelight), new shootFF(shooter, 6000, feed)).withTimeout(0.85).andThen(new ParallelCommandGroup(
+           new setPivotWithShooterMap(pivot, limelight), new shootFF(shooter, 6000)).withTimeout(0.85).andThen(new ParallelCommandGroup(
                             new feedCommand(feed, -1), 
                             new indexCommand(index, -0.5))));
         
@@ -295,7 +298,7 @@ public class RobotContainer {
         //     new feedCommand(feed, 0.2))));
 
         four.whileTrue(new ParallelCommandGroup(
-                new shootFF(shooter, 2000, feed), 
+                new shootFF(shooter, 2000), 
                 new feedCommand(feed, -1)));
 
                 
@@ -318,17 +321,17 @@ public class RobotContainer {
         // );
      
         six.whileTrue(new ParallelCommandGroup(
-            new setPivotPosition(pivot, 11.5), new shootFF(shooter, 6000, feed)).withTimeout(0.85).andThen(new ParallelCommandGroup(
+            new setPivotPosition(pivot, 11.5), new shootFF(shooter, 6000)).withTimeout(0.85).andThen(new ParallelCommandGroup(
                             new feedCommand(feed, -1), 
                             new indexCommand(index, -0.5))));
 
          seven.whileTrue(new ParallelCommandGroup(
-            new setPivotPosition(pivot, 11.55), new shootFF(shooter, 6000, feed)).withTimeout(0.85).andThen(new ParallelCommandGroup(
+            new setPivotPosition(pivot, 11.55), new shootFF(shooter, 6000)).withTimeout(0.85).andThen(new ParallelCommandGroup(
                             new feedCommand(feed, -1), 
                             new indexCommand(index, -0.5))));
 
             eight.whileTrue(new ParallelCommandGroup(
-            new setPivotPosition(pivot, 11.555), new shootFF(shooter, 6000, feed)).withTimeout(0.85).andThen(new ParallelCommandGroup(
+            new setPivotPosition(pivot, 11.555), new shootFF(shooter, 6000)).withTimeout(0.85).andThen(new ParallelCommandGroup(
                             new feedCommand(feed, -1), 
                             new indexCommand(index, -0.5))));
 

@@ -130,6 +130,19 @@ public double limelight_aim_proportional()
       }
      
 
+      public boolean withinrampUpRange(){
+        if((getID() == 7 || getID() == 3) && getDistance() <= 163){
+          return true;
+        } 
+
+        return false;
+      }
+
+
+
+
+
+
     @Override
     public void periodic(){
         SmartDashboard.putNumber("XPos", getXPos());
