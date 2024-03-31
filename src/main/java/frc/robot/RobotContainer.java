@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.ElevatorCommand.elevatorPositionCommand;
 import frc.robot.commands.ElevatorCommand.elevatorTest;
 import frc.robot.commands.LedCommands.ledAnimationCommand;
+import frc.robot.commands.LedCommands.limelightAlignedLEDCommand;
 import frc.robot.commands.LedCommands.setLedColorCommand;
 import frc.robot.commands.PivotCommands.setPivotPosition;
 import frc.robot.commands.PivotCommands.setPivotWithShooterMap;
@@ -47,9 +48,6 @@ public class RobotContainer {
 
     private final CommandPS4Controller joystick = new CommandPS4Controller(1);
     /* Drive Controls */
-
-    private final Pose2d targetPose = new Pose2d(10, 5, Rotation2d.fromDegrees(180));
-
     
 
 
@@ -160,7 +158,10 @@ public class RobotContainer {
     led.setDefaultCommand(
         new setLedColorCommand(led, 0, 255, 100).until(feed::detected).andThen(new ledAnimationCommand(led)).withTimeout(0.5).andThen(new setLedColorCommand(led, 0, 255, 0).until(feed::notDetected)));
     
-    shooter.setDefaultCommand(new shootPercentage(shooter, 0).until(feed::detected).andThen(new shootPercentage(shooter, 0.3)));
+    shooter.setDefaultCommand(new shootFF(shooter, 0).until(feed::detected).andThen(
+            new shootFF(shooter, 1800)).until(limelight::withinrampUpRange).andThen(
+            new shootFF(shooter, 6000)).until(feed::notDetected).andThen(
+            new shootPercentage(shooter, 0)));
     //pivot.setDefaultCommand(new setPivotWithShooterMap(pivot, limelight));
     autoChooser = AutoBuilder.buildAutoChooser();
 
@@ -194,17 +195,17 @@ public class RobotContainer {
             .withRotationalRate(-joystick.getRightX() * MaxAngularRate*0.3) // Drive counterclockwise with negative X (left)
         ));    
 
-    joystick.cross().whileTrue( drivetrain.applyRequest(() -> drive.withVelocityX(joystick.getLeftY() * MaxSpeed*0.3) // Drive forward with
+    joystick.cross().whileTrue(drivetrain.applyRequest(() -> drive.withVelocityX(joystick.getLeftY() * MaxSpeed*0.3) // Drive forward with
         // negative Y (forward)
         .withVelocityY(joystick.getLeftX() * MaxSpeed*0.3) // Drive left with negative X (left)
         .withRotationalRate(limelight.limelight_aim_proportional()) // Drive counterclockwise with negative X (left)
-        )); 
+        ).until(limelight::isAimedAtSpeaker).andThen(new limelightAlignedLEDCommand(led, limelight))); 
 
     joystick.square().whileTrue(drivetrain.applyRequest(() -> drive.withVelocityX(joystick.getLeftY() * MaxSpeed*0.3) // Drive forward with
         // negative Y (forward)
         .withVelocityY(limelight.limelight_range_proportional()) // Drive left with negative X (left)
         .withRotationalRate(limelight.limelight_aim_proportional()) // Drive counterclockwise with negative X (left)
-        )); 
+        ).until(limelight::isAimedAtSpeaker).andThen(new limelightAlignedLEDCommand(led, limelight))); 
    
    
 

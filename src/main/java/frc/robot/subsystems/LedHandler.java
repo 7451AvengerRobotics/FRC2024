@@ -14,6 +14,7 @@ public class LedHandler extends SubsystemBase
     //private final FireAnimation fire;
     private final StrobeAnimation indexstrobe;
     private final StrobeAnimation feederstrobe;
+    private final StrobeAnimation alignedStrobe;
     public LedHandler() {
         super();
         
@@ -29,6 +30,7 @@ public class LedHandler extends SubsystemBase
         configAll.brightnessScalar = 0.2;
         indexstrobe = new StrobeAnimation(0, 255, 0, 0, 0.5, 200, 10);
         feederstrobe = new StrobeAnimation(255, 0, 255, 0, 0.5, 200, 10);
+        alignedStrobe = new StrobeAnimation(0 ,255, 100, 0, 0.2, 200, 10);
         // configAll.vBatOutputMode = VBatOutputMode.Modulated;
       
         candle.configAllSettings(configAll, 100);
@@ -52,6 +54,10 @@ public class LedHandler extends SubsystemBase
     {
         setColor(0, 255, 0);
     }
+    public void setAlignedStrobe(){
+        candle.animate(alignedStrobe);
+    }
+
     public void setIndexStrobe(){
         candle.animate(indexstrobe);
     }
