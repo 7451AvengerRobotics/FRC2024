@@ -39,8 +39,8 @@ public class Pivot extends SubsystemBase {
         kD = 0; 
         kIz = 0; 
         kFF = 0; 
-        kMaxOutput = 0.5; 
-        kMinOutput = -0.5;
+        kMaxOutput = 1; 
+        kMinOutput = -1;
 
         m_pidController.setP(kP);
         m_pidController.setI(kI);
@@ -48,6 +48,8 @@ public class Pivot extends SubsystemBase {
         m_pidController.setIZone(kIz);
         m_pidController.setFF(kFF);
         m_pidController.setOutputRange(kMinOutput, kMaxOutput);
+
+        SmartDashboard.putNumber("Feed Forward", kFF);
 
 
     }
@@ -86,10 +88,10 @@ public class Pivot extends SubsystemBase {
     }
 
 
-
-
     @Override
-    public void periodic(){
-        SmartDashboard.putNumber("PivotEncoderPosition", this.getEncoderPosition());
+    public void periodic() {
+        double ff = SmartDashboard.getNumber("Feed Forward", 0);
+        if((ff != kFF)) { m_pidController.setFF(ff); kFF = ff; }
+      
     }
 }
