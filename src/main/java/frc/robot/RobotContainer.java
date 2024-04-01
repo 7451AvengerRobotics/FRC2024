@@ -268,8 +268,7 @@ public class RobotContainer {
                 drivetrain.applyRequest(() -> drive.withVelocityX(joystick.getLeftY() * MaxSpeed*0.3) // Drive forward with negative Y (forward)
                             .withVelocityY(joystick.getLeftX() * MaxSpeed*0.3) // Drive left with negative X (left)
                             .withRotationalRate(limelight.limelight_aim_proportional())), // Drive counterclockwise with negative X (left)
-                new setPivotWithShooterMap(pivot, limelight), 
-                new shootPercentage(shooter, 0.9))
+                new setPivotWithShooterMap(pivot, limelight))
             .until(limelight::isAimedAtSpeaker)
             .andThen(
                     new ParallelCommandGroup(
