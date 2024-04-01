@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.4896821805055864,
-      "y": 5.574358195791997
+      "x": 1.3535296301361848,
+      "y": 5.584689630917723
     },
     "rotation": 0
   },
@@ -12,53 +12,52 @@
     "data": {
       "commands": [
         {
+          "type": "path",
+          "data": {
+            "pathName": "Auto1Path1Half"
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "shootFirst"
+            "name": "pivot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
           }
         },
         {
           "type": "parallel",
           "data": {
             "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "fullIntake"
+                }
+              },
               {
                 "type": "path",
                 "data": {
                   "pathName": "Auto1Path1"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "fullIntake"
-                }
               }
             ]
           }
         },
         {
-          "type": "sequential",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "pivot"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "shoot"
-                }
-              }
-            ]
+            "name": "pivot"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Auto1Path2"
+            "name": "shoot"
           }
         },
         {
@@ -66,24 +65,55 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "Auto1Path3"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "fullIntake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Auto1Path2"
                 }
               }
             ]
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Auto1Path4"
+            "name": "pivot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "fullIntake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Auto1Path3"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "pivot"
           }
         },
         {
@@ -99,7 +129,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Auto1Path5"
+                  "pathName": "Auto1Path4"
                 }
               },
               {
@@ -112,22 +142,21 @@
           }
         },
         {
-          "type": "sequential",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "pivot"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "shoot"
-                }
-              }
-            ]
+            "pathName": "Auto1Path5"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "pivot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
           }
         }
       ]

@@ -1,4 +1,18 @@
 {
+  "HALProvider": {
+    "DIO": {
+      "window": {
+        "visible": true
+      }
+    },
+    "Other Devices": {
+      "SPARK MAX [28]": {
+        "header": {
+          "open": true
+        }
+      }
+    }
+  },
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
@@ -7,12 +21,20 @@
       "/SmartDashboard/Field": "Field2d"
     },
     "windows": {
+      "/FMSInfo": {
+        "window": {
+          "visible": true
+        }
+      },
       "/SmartDashboard/Auto Chooser": {
         "window": {
           "visible": true
         }
       },
       "/SmartDashboard/Field": {
+        "Robot": {
+          "style": "Track"
+        },
         "bottom": 1476,
         "height": 8.210550308227539,
         "left": 150,

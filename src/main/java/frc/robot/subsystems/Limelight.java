@@ -145,7 +145,7 @@ public double limelight_aim_proportional()
 
       public boolean isAimedAtSpeaker(){
         double m_tx = Math.abs(getXPos());
-        return m_tx > 0.0 && m_tx < 0.1;
+        return m_tx > 0.0 && m_tx < 2.0;
       }
 
       public double getShooterMapAngle(){

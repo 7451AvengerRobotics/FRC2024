@@ -133,14 +133,14 @@ public class RobotContainer {
         
         NamedCommands.registerCommand("ramp", new shootFF(shooter, 6000));
 
-        NamedCommands.registerCommand("shoot1", new feedCommand(feed, -1).withTimeout(0.2)); 
+        NamedCommands.registerCommand("shoot", new feedCommand(feed, -1).withTimeout(0.2)); 
                 //Maybe run Index
             
         NamedCommands.registerCommand("shootFirst",  new ParallelCommandGroup(
             new shootFF(shooter, 6000)).withTimeout(1.25).andThen(new ParallelCommandGroup(
                             new feedCommand(feed, -1), 
                             new indexCommand(index, -0.5)).withTimeout(0.2)));
-        NamedCommands.registerCommand("shoot", new ParallelCommandGroup(
+        NamedCommands.registerCommand("shoot1", new ParallelCommandGroup(
             new shootFF(shooter, 6000)).withTimeout(0.75).andThen(new ParallelCommandGroup(
                             new feedCommand(feed, -1), 
                             new indexCommand(index, -0.5)).withTimeout(0.2)));

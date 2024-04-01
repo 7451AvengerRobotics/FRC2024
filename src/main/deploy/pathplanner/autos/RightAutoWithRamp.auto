@@ -40,7 +40,7 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "shoot1"
+                        "name": "shoot"
                       }
                     },
                     {
@@ -77,7 +77,7 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "shoot1"
+                        "name": "shoot"
                       }
                     },
                     {
@@ -114,7 +114,44 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "shoot1"
+                        "name": "shoot"
+                      }
+                    },
+                    {
+                      "type": "parallel",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "fullIntake"
+                            }
+                          },
+                          {
+                            "type": "path",
+                            "data": {
+                              "pathName": "Note4Right"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Note4RightShoot"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "pivot"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "shoot"
                       }
                     }
                   ]
