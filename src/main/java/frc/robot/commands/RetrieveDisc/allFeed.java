@@ -32,11 +32,9 @@ public class allFeed extends Command{
     
     @Override 
     public void execute(){
-        feed.feed(feedPercent);
-        intake.intake(intakePercent);
-        index.spinMotor(indexPercent);
-
-
+            feed.feed(feedPercent);
+            intake.intake(intakePercent);
+            index.spinMotor(indexPercent);
     }
     
     @Override

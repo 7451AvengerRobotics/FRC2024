@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3950925173499227,
-      "y": 7.342597271196915
+      "x": 1.3535296301361848,
+      "y": 5.584689630917723
     },
     "rotation": 0
   },
@@ -28,87 +28,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Note1Right"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "pivot5"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "shoot"
-                      }
-                    },
-                    {
-                      "type": "parallel",
-                      "data": {
-                        "commands": [
-                          {
-                            "type": "path",
-                            "data": {
-                              "pathName": "Note2Right"
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "fullIntake"
-                            }
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Note2RightShoot"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "pivot"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "shoot"
-                      }
-                    },
-                    {
-                      "type": "parallel",
-                      "data": {
-                        "commands": [
-                          {
-                            "type": "path",
-                            "data": {
-                              "pathName": "Note3Right"
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "fullIntake"
-                            }
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Note3RightShoot"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "pivot"
+                        "pathName": "Auto1Path1Half"
                       }
                     },
                     {
@@ -130,22 +50,85 @@
                           {
                             "type": "path",
                             "data": {
-                              "pathName": "Note4Right"
+                              "pathName": "Auto1Pathone"
                             }
                           }
                         ]
                       }
                     },
                     {
-                      "type": "path",
+                      "type": "named",
                       "data": {
-                        "pathName": "Note4RightShoot"
+                        "name": "shoot"
+                      }
+                    },
+                    {
+                      "type": "parallel",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "fullIntake"
+                            }
+                          },
+                          {
+                            "type": "path",
+                            "data": {
+                              "pathName": "Auto1Pathtwo"
+                            }
+                          }
+                        ]
                       }
                     },
                     {
                       "type": "named",
                       "data": {
-                        "name": "pivot"
+                        "name": "shoot"
+                      }
+                    },
+                    {
+                      "type": "parallel",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "fullIntake"
+                            }
+                          },
+                          {
+                            "type": "path",
+                            "data": {
+                              "pathName": "Auto1Paththree"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "shoot"
+                      }
+                    },
+                    {
+                      "type": "parallel",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "fullIntake"
+                            }
+                          },
+                          {
+                            "type": "path",
+                            "data": {
+                              "pathName": "Auto1Pathfour"
+                            }
+                          }
+                        ]
                       }
                     },
                     {

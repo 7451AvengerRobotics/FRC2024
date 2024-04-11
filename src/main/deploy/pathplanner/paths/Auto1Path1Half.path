@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.680110221247908,
-        "y": 5.866655125508444
+        "x": 1.6298040288388285,
+        "y": 5.959633457728454
       },
       "isLocked": false,
       "linkedName": null
@@ -31,25 +31,43 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.5,
-      "rotationDegrees": 43.0,
+      "rotationDegrees": 35.0,
       "rotateFast": true
     }
   ],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "pivot3"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
-    "maxVelocity": 4.0,
-    "maxAcceleration": 4.0,
-    "maxAngularVelocity": 400.0,
-    "maxAngularAcceleration": 500.0
+    "maxVelocity": 3.85,
+    "maxAcceleration": 3.85,
+    "maxAngularVelocity": 300.0,
+    "maxAngularAcceleration": 200.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 43.315315682103645,
+    "rotation": 28.749179698800692,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "4NoteAutoMid",
+  "folder": null,
   "previewStartingState": {
     "rotation": 0.0,
     "velocity": 0

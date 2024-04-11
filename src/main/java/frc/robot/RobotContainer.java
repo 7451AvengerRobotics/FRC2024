@@ -14,12 +14,13 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.ElevatorCommand.elevatorPositionCommand;
-import frc.robot.commands.ElevatorCommand.elevatorTest;
 import frc.robot.commands.LedCommands.ledAnimationCommand;
 import frc.robot.commands.LedCommands.limelightAlignedLEDCommand;
 import frc.robot.commands.LedCommands.setLedColorCommand;
@@ -133,37 +134,50 @@ public class RobotContainer {
         
         NamedCommands.registerCommand("ramp", new shootFF(shooter, 6000));
 
-        NamedCommands.registerCommand("shoot", new feedCommand(feed, -1).withTimeout(0.2)); 
+        //NamedCommands.registerCommand("shoot",
+        //new setPivotWithShooterMap(pivot, limelight).withTimeout(0.2).andThen(new allFeed(feed, intake, index, 0, -1, -1)).withTimeout(0.6));
+        
+        NamedCommands.registerCommand("shoot",
+                new ParallelCommandGroup(
+                        new feedCommand(feed, -1), 
+                        new indexCommand(index, -0.5)).withTimeout(0.2));
                 //Maybe run Index
             
-        NamedCommands.registerCommand("shootFirst",  new ParallelCommandGroup(
-            new shootFF(shooter, 6000)).withTimeout(1.25).andThen(new ParallelCommandGroup(
-                            new feedCommand(feed, -1), 
-                            new indexCommand(index, -0.5)).withTimeout(0.2)));
+                NamedCommands.registerCommand("shootFirst", new WaitCommand(0.7).andThen(
+                new ParallelCommandGroup(
+                        new feedCommand(feed, -1), 
+                        new indexCommand(index, -0.5)).withTimeout(0.2)));
         NamedCommands.registerCommand("shoot1", new ParallelCommandGroup(
             new shootFF(shooter, 6000)).withTimeout(0.75).andThen(new ParallelCommandGroup(
                             new feedCommand(feed, -1), 
                             new indexCommand(index, -0.5)).withTimeout(0.2)));
         NamedCommands.registerCommand("fullIntake", new ParallelCommandGroup(
-                                            new setPivotPosition(pivot, 3).withTimeout(0.1), 
-                                                    new allFeed(feed, intake, index,  -0.4, -0.25, -0.18))
+                                            new setPivotPosition(pivot, 2.25).withTimeout(0.1), 
+                                                    new allFeed(feed, intake, index,  -1, -0.3, -0.2))
                                                         .until(feed::detected));
+
         NamedCommands.registerCommand("pivot", new setPivotWithShooterMap(pivot,  limelight).withTimeout(0.2));
-        NamedCommands.registerCommand("pivot1", new setPivotPosition(pivot, 9.8).withTimeout(0.3));
-        NamedCommands.registerCommand("pivot2", new setPivotPosition(pivot, 7.75).withTimeout(0.3));
-  
+        NamedCommands.registerCommand("pivot1", new setPivotPosition(pivot, 11.2).withTimeout(0.3));
+        NamedCommands.registerCommand("pivot2", new setPivotPosition(pivot, 10.64).withTimeout(0.3));
+        NamedCommands.registerCommand("pivot3", new setPivotPosition(pivot, 6).withTimeout(0.3));
+        NamedCommands.registerCommand("pivot4", new setPivotPosition(pivot, 9).withTimeout(0.3));
+        NamedCommands.registerCommand("pivot5", new setPivotPosition(pivot, 11.15).withTimeout(0.3));
+        NamedCommands.registerCommand("pivot6", new setPivotPosition(pivot,  7).withTimeout(0.2));
+
     configureButtonBindings();
 
 
-    led.setDefaultCommand(
-        new setLedColorCommand(led, 0, 255, 100).until(feed::detected).andThen(new ledAnimationCommand(led)).withTimeout(0.5).andThen(new setLedColorCommand(led, 0, 255, 0).until(feed::notDetected)));
+  //  led.setDefaultCommand(
+   //     new setLedColorCommand(led, 0, 255, 100).until(feed::detected).andThen(new ledAnimationCommand(led)).withTimeout(0.5).andThen(new setLedColorCommand(led, 0, 255, 0).until(feed::notDetected)));
     
-    shooter.setDefaultCommand(new shootFF(shooter, 0).until(feed::detected).andThen(
-            new shootFF(shooter, 1800)).until(limelight::withinrampUpRange).andThen(
-            new shootFF(shooter, 6000)).until(feed::notDetected).andThen(
-            new shootPercentage(shooter, 0)));
-    //pivot.setDefaultCommand(new setPivotWithShooterMap(pivot, limelight));
-    autoChooser = AutoBuilder.buildAutoChooser();
+    
+    led.setDefaultCommand(new setLedColorCommand(led, 255, 0, 0).until(index::indexDetected).andThen
+    (new ledAnimationCommand(led)).until(feed::detected).andThen(new setLedColorCommand(led, 0, 255, 0)).until(feed::notDetected));
+
+        // shooter.setDefaultCommand(new shootPercentage(shooter, 0).until(feed::detected).andThen(new shootPercentage(shooter, 0.3)));
+        //pivot.setDefaultCommand(new setPivotWithShooterMap(pivot, limelight));
+         shooter.setDefaultCommand(new shootFF(shooter, 6000).until(joystick.options()).andThen(new shootFF(shooter, 0).until(feed::detected).andThen(new shootPercentage(shooter, 0.3))));
+        autoChooser = AutoBuilder.buildAutoChooser();
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
 
@@ -183,34 +197,31 @@ public class RobotContainer {
     private void configureButtonBindings() {
 
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
-    drivetrain.applyRequest(() -> drive.withVelocityX(joystick.getLeftY() * MaxSpeed) // Drive forward with
+    drivetrain.applyRequest(() -> drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with
                                                                                            // negative Y (forward)
-            .withVelocityY(joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+            .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
             .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
         ));
 
-    joystick.R1().whileTrue( drivetrain.applyRequest(() -> drive.withVelocityX(joystick.getLeftY() * MaxSpeed*0.3) // Drive forward with
+    joystick.R1().whileTrue( drivetrain.applyRequest(() -> drive.withVelocityX(-joystick.getLeftY() * MaxSpeed*0.3) // Drive forward with
                                                                                            // negative Y (forward)
-            .withVelocityY(joystick.getLeftX() * MaxSpeed*0.3) // Drive left with negative X (left)
+            .withVelocityY(-joystick.getLeftX() * MaxSpeed*0.3) // Drive left with negative X (left)
             .withRotationalRate(-joystick.getRightX() * MaxAngularRate*0.3) // Drive counterclockwise with negative X (left)
         ));
         
-    joystick.R2().whileTrue(drivetrain.applyRequest(() -> brake));
-
-    joystick.square().whileTrue(drivetrain.applyRequest(() -> drive.withVelocityX(joystick.getLeftY() * MaxSpeed*0.3) // Drive forward with
-        // negative Y (forward)
-        .withVelocityY(limelight.limelight_range_proportional()) // Drive left with negative X (left)
-        .withRotationalRate(limelight.limelight_aim_proportional()) // Drive counterclockwise with negative X (left)
-        ).until(limelight::isAimedAtSpeaker).andThen(new limelightAlignedLEDCommand(led, limelight))); 
-
-    joystick.cross().whileTrue(drivetrain.applyRequest(() -> 
-                                    drive.withVelocityX(joystick.getLeftY() * MaxSpeed*0.3) // Drive forward with negative Y (forward)
-                                    .withVelocityY(joystick.getLeftX() * MaxSpeed*0.3) // Drive left with negative X (left)
-                                    .withRotationalRate(limelight.limelight_aim_proportional()))
-                                .until(limelight::isAimedAtSpeaker)
-                                .andThen(
-                                    new limelightAlignedLEDCommand(led, limelight)));
+    //joystick.rightTrigger().whileTrue(drivetrain.applyRequest(() -> brake));
+    joystick.R2().whileTrue( drivetrain.applyRequest(() -> drive.withVelocityX(-joystick.getLeftY() * MaxSpeed*0.3) // Drive forward with
+    // negative Y (forward)
+    .withVelocityY(-joystick.getLeftX() * MaxSpeed*0.3) // Drive left with negative X (left)
+    .withRotationalRate(limelight.limelight_aim_proportional()) // Drive counterclockwise with negative X (left)
+    ).andThen(new limelightAlignedLEDCommand(led, limelight))); 
+ 
    
+        joystick.triangle().whileTrue( drivetrain.applyRequest(() -> drive.withVelocityX(-joystick.getLeftY() * MaxSpeed*0.3) // Drive forward with
+        // negative Y (forward)
+        .withVelocityY(-joystick.getLeftX() * MaxSpeed*0.3) // Drive left with negative X (left)
+        .withRotationalRate(limelight.limelight_aim_proportional()) // Drive counterclockwise with negative X (left)
+        )); 
    
 
     // reset the field-centric heading on left bumper press
@@ -242,71 +253,61 @@ public class RobotContainer {
 
     //Amp 
       w.onTrue(new ParallelCommandGroup(new setPivotPosition(pivot, 38), 
-                new elevatorPositionCommand(elevator, -95.145751953125)));
-    //Trap
-        a.and(eight).onTrue(new setPivotPosition(pivot, 5));
-        a.toggleOnTrue(new ParallelCommandGroup(new setPivotPosition(pivot, 38), 
-                new elevatorPositionCommand(elevator, -95.145751953125)));
-
-        a.toggleOnFalse(new feedCommand(feed, 1).withTimeout(1).andThen(new ParallelCommandGroup(new setPivotPosition(pivot, 0), 
-                new elevatorPositionCommand(elevator, 0))));
-        
-        // a.toggleOnTrue(new ParallelCommandGroup(new setPivotPosition(pivot, 0), 
-        //         new elevatorPositionCommand(elevator, -95.145751953125)));
-
-        // a.toggleOnFalse(new shootPercentage(shooter, 0.5).withTimeout(1).andThen(new ParallelCommandGroup(new setPivotPosition(pivot, 0), 
-        //         new elevatorPositionCommand(elevator, 0))));
-
-    
+                new elevatorPositionCommand(elevator, -95.145751953125), new indexCommand(index, -0.2).withTimeout(0.2)));
+           
   //Reset
-        s.onTrue(new ParallelCommandGroup(new setPivotPosition(pivot, 2), 
-            new elevatorPositionCommand(elevator, 0.0)));
+        s.onTrue(new ParallelCommandGroup(
+            new setPivotPosition(pivot, 0), 
+            new elevatorPositionCommand(elevator, 0.0),
+            new allFeed(feed, intake, index, 0, 0, 0),
+            new shootFF(shooter, 0)
+            ));
+    
+        a.whileTrue(new ParallelCommandGroup(
+            new feedCommand(feed, -1),
+            new indexCommand(index, -0.45)
+        ));
 
     //Shoot
-        d.whileTrue(
-            new ParallelCommandGroup(
-                drivetrain.applyRequest(() -> drive.withVelocityX(joystick.getLeftY() * MaxSpeed*0.3) // Drive forward with negative Y (forward)
-                            .withVelocityY(joystick.getLeftX() * MaxSpeed*0.3) // Drive left with negative X (left)
-                            .withRotationalRate(limelight.limelight_aim_proportional())), // Drive counterclockwise with negative X (left)
-                new setPivotWithShooterMap(pivot, limelight))
-            .until(limelight::isAimedAtSpeaker)
-            .andThen(
-                    new ParallelCommandGroup(
-                        new limelightAlignedLEDCommand(led, limelight), 
-                        drivetrain.applyRequest(() -> brake),
-                        new feedCommand(feed, -1), 
-                        new indexCommand(index, -0.5))));
-    
-
+    d.whileTrue(new ParallelCommandGroup(
+        new setPivotPosition(pivot, 0), new shootFF(shooter, 6000)).withTimeout(0.85).andThen(new ParallelCommandGroup(
+                         new feedCommand(feed, -1), 
+                         new indexCommand(index, -0.5)).andThen(new setLedColorCommand(led, 255, 0, 0))));
+                         
         intakeButton.onTrue(new ParallelCommandGroup(
             new setPivotPosition(pivot, 3), 
-            new allFeed(feed, intake, index, -1, -0.5, -0.25)).until(feed::detected).andThen(
+            new allFeed(feed, intake, index, -1, -0.45, -0.2)).until(feed::detected).andThen(
                     new feedCommand(feed, 0.1).raceWith(new WaitCommand(0.2))));
 
         
         outtakeButton.onTrue(new ParallelCommandGroup(new setLedColorCommand(led, 255, 0, 0),
             new allFeed(feed, intake, index, 0.5, 0.5, 0.2)));
 
-        three.whileTrue(new elevatorTest(elevator, 0.2));
+        
 
         four.whileTrue(new ParallelCommandGroup(
                 new shootFF(shooter, 2000), 
-                new feedCommand(feed, -1)));
+                new feedCommand(feed, -1)).andThen(new setLedColorCommand(led, 255, 0, 0)));
 
+        six.whileTrue(new ParallelCommandGroup(
+             new shootFF(shooter, 3500)).withTimeout(0.5).andThen(new ParallelCommandGroup(
+                         new feedCommand(feed, -1), 
+                         new indexCommand(index, -0.5))));
+
+        three.onTrue(new shootFF(shooter, 6000));
+
+         seven.whileTrue(new ParallelCommandGroup(
+        new setPivotWithShooterMap(pivot, limelight), new shootFF(shooter, 6000)).withTimeout(0.85).andThen(new ParallelCommandGroup(
+                         new feedCommand(feed, -1), 
+                         new indexCommand(index, -0.5)).andThen(new setLedColorCommand(led, 255, 0, 0))));
                 
-        six.whileTrue(new elevatorTest(elevator, -0.4));
+        eight.onTrue(new allFeed(feed, intake, index, 0, 0, 0));
+        
+     }  
+     
 
-        seven.whileTrue(new ParallelCommandGroup(
-            new setPivotPosition(pivot, 11.55), new shootFF(shooter, 6000)).withTimeout(0.85).andThen(new ParallelCommandGroup(
-                            new feedCommand(feed, -1), 
-                            new indexCommand(index, -0.5))));
 
-        eight.whileTrue(new ParallelCommandGroup(
-            new setPivotPosition(pivot, 11.555), new shootFF(shooter, 6000)).withTimeout(0.85).andThen(new ParallelCommandGroup(
-                            new feedCommand(feed, -1), 
-                            new indexCommand(index, -0.5))));
-    
-     }      
+
 
 
 
@@ -318,7 +319,7 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
        // An ExampleCommand will run in autonomous
         // return new exampleAuto(s_Swerve);
-         return autoChooser.getSelected();
+         return Commands.parallel(autoChooser.getSelected(), new shootFF(shooter, 6000));
     }
 
     

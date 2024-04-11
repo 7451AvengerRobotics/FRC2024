@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -33,14 +34,15 @@ public class Pivot extends SubsystemBase {
 
         pivot.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
         pivot.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
+        pivot.setIdleMode(IdleMode.kBrake);
 
         kP = 1; 
         kI = 0;
-        kD = 0; 
+        kD = 0.0002; 
         kIz = 0; 
-        kFF = 0; 
-        kMaxOutput = 1; 
-        kMinOutput = -1;
+        kFF = 0.0; 
+        kMaxOutput = 0.5; 
+        kMinOutput = -0.5;
 
         m_pidController.setP(kP);
         m_pidController.setI(kI);
@@ -49,7 +51,7 @@ public class Pivot extends SubsystemBase {
         m_pidController.setFF(kFF);
         m_pidController.setOutputRange(kMinOutput, kMaxOutput);
 
-        SmartDashboard.putNumber("Feed Forward", kFF);
+
 
 
     }
@@ -88,10 +90,10 @@ public class Pivot extends SubsystemBase {
     }
 
 
+
+
     @Override
-    public void periodic() {
-        double ff = SmartDashboard.getNumber("Feed Forward", 0);
-        if((ff != kFF)) { m_pidController.setFF(ff); kFF = ff; }
-      
+    public void periodic(){
+        SmartDashboard.putNumber("PivotEncoderPosition", this.getEncoderPosition());
     }
 }

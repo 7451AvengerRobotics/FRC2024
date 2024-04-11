@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3535296301361848,
-      "y": 5.584689630917723
+      "x": 1.3842846515935527,
+      "y": 5.574358195791997
     },
     "rotation": 0
   },
@@ -14,13 +14,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Auto1Path1Half"
+            "pathName": "finesse"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "shoot"
+            "name": "shootFirst"
           }
         },
         {
@@ -28,92 +28,75 @@
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "fullIntake"
+                  "pathName": "Auto1Path1"
                 }
               },
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "Auto1Pathone"
+                  "name": "fullIntake"
                 }
               }
             ]
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "pivot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot"
-          }
-        },
-        {
-          "type": "parallel",
+          "type": "sequential",
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "fullIntake"
+                  "pathName": "Auto1Path2"
                 }
               },
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "Auto1Pathtwo"
+                  "name": "shoot"
                 }
               }
             ]
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "pivot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "fullIntake"
+                  "pathName": "Auto1Path3"
                 }
               },
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "Auto1Paththree"
+                  "name": "fullIntake"
                 }
               }
             ]
           }
         },
         {
-          "type": "named",
+          "type": "sequential",
           "data": {
-            "name": "pivot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Auto1Path4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "shoot"
+                }
+              }
+            ]
           }
         },
         {
@@ -123,7 +106,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Auto1Pathfour"
+                  "pathName": "Auto1Path5"
                 }
               },
               {
@@ -138,19 +121,20 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Auto1Pathfive"
+            "pathName": "Auto1Path6"
           }
         },
         {
-          "type": "named",
+          "type": "sequential",
           "data": {
-            "name": "pivot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "shoot"
+                }
+              }
+            ]
           }
         }
       ]

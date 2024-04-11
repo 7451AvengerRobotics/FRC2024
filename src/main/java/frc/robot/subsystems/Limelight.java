@@ -26,6 +26,7 @@ public class Limelight extends SubsystemBase {
     double limelightLensHeightInches = 15.0 + (3/16); 
     double heightOfGoal = 58.33;
     double limelight_kP = 0.015;
+    double mapOffset = 0;
  private InterpolatingTreeMap<Double, Double> shooterAngleMap;
     public Limelight(){
         table = NetworkTableInstance.getDefault().getTable("limelight");
@@ -35,23 +36,29 @@ public class Limelight extends SubsystemBase {
         tv = table.getEntry("tv");
         tid = table.getEntry("tid");
         table.getEntry("pipeline").setNumber(0);
+
+        SmartDashboard.putNumber("Dist Offset", mapOffset);
+
         
     shooterAngleMap = new InterpolatingTreeMap<>() {{
      put(44.55, 0.0);
      put(45.5, 0.0);
-     put(58.54, 3.0);
-     put(68.79, 4.6);
-     put(69.72, 5.2);
-     put(79.27, 6.6);
-     put(83.5, 7.2);
-     put(94.83, 8.4);
-     put(105.41, 9.46);
-     put(108.6, 9.6);
-     put(119.86, 9.8);
-     put(128.1, 10.8);
-     put(138.36, 11.15);
-     put(149.82, 11.4);
-     put(158.2, 11.555);
+     put(58.54, 3.00 - mapOffset);
+     put(68.79, 4.6 - mapOffset);
+     put(69.72, 5.2 - mapOffset);
+     put(79.27, 6.6 - mapOffset);
+     put(83.5, 7.2 - mapOffset);
+     put(94.83, 8.4 - mapOffset);
+     put(105.41, 9.46 - mapOffset);
+     put(108.6, 9.6 - mapOffset);
+     put(118.97, 9.6 - mapOffset);
+     put(127.1, 10.615 - mapOffset);
+     put(128.1, 10.8 - mapOffset);
+     put(136.54, 9.9 - mapOffset);
+     put(140.32, 11- mapOffset);
+     put(149.82, 11.4 - mapOffset);
+     put(154.82, 11.265 - mapOffset);
+     put(158.2, 11.555 - mapOffset);
     }};
 
 
@@ -70,29 +77,19 @@ public double limelight_aim_proportional()
     // if it is too high, the robot will oscillate.
     // if it is too low, the robot will never reach its target
     // if the robot never turns in the correct direction, kP should be inverted.
-    double kP = .01;
+    double kP = .011555;
 
     // tx ranges from (-hfov/2) to (hfov/2) in degrees. If your target is on the rightmost edge of 
     // your limelight 3 feed, tx should return roughly 31 degrees.
     double targetingAngularVelocity = LimelightHelpers.getTX("limelight") * kP;
-    boolean targetValid = LimelightHelpers.getTV("limelight");
-
-    if (targetValid){
-
-    // convert to radians per second for our drive method
-      targetingAngularVelocity *= RobotContainer.getMaxAngularRate();
-
-    //invert since tx is positive when the target is to the right of the crosshair
-      targetingAngularVelocity *= -1.0;
-      }else{
       //We are using the generated velocity if the tag was at the very edge of the hfov
-      targetingAngularVelocity = -31 *kP;
 
       targetingAngularVelocity *= RobotContainer.getMaxAngularRate();
 
       //invert since tx is positive when the target is to the right of the crosshair
-      targetingAngularVelocity *= -1.0;
-    }
+        targetingAngularVelocity *= -1.0;
+      
+   
 
     return targetingAngularVelocity;
   
@@ -100,7 +97,7 @@ public double limelight_aim_proportional()
 
   public double limelight_range_proportional()
   {    
-    double kP = .01;
+    double kP = .013555555;
     double targetingForwardSpeed = LimelightHelpers.getTY("limelight") * kP;
     targetingForwardSpeed *= TunerConstants.kSpeedAt12VoltsMps;
     targetingForwardSpeed *= -1.0;
@@ -145,7 +142,7 @@ public double limelight_aim_proportional()
 
       public boolean isAimedAtSpeaker(){
         double m_tx = Math.abs(getXPos());
-        return m_tx > 0.0 && m_tx < 2.0;
+        return m_tx > -2.0 && m_tx < 2.0;
       }
 
       public double getShooterMapAngle(){
@@ -175,6 +172,11 @@ public double limelight_aim_proportional()
         SmartDashboard.putNumber("Distance", getDistance());
         SmartDashboard.putBoolean("is Aligned", isAimedAtSpeaker());
         SmartDashboard.putNumber("ShooterMap", getShooterMapAngle());
+
+
+        double newMapOffset = SmartDashboard.getNumber("Dist Offset", 0);
+
+        if((mapOffset != newMapOffset)) { mapOffset = newMapOffset;}
     }
 
     

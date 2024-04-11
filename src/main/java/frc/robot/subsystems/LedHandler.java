@@ -28,8 +28,8 @@ public class LedHandler extends SubsystemBase
         configAll.disableWhenLOS = false;
         configAll.stripType = LEDStripType.RGB;
         configAll.brightnessScalar = 0.2;
-        indexstrobe = new StrobeAnimation(0, 255, 0, 0, 0.5, 200, 10);
-        feederstrobe = new StrobeAnimation(255, 0, 255, 0, 0.5, 200, 10);
+        indexstrobe = new StrobeAnimation(0, 255, 0, 0, 0.2, 200, 10);
+        feederstrobe = new StrobeAnimation(255, 0, 255, 0, 0.2, 200, 10);
         alignedStrobe = new StrobeAnimation(0 ,255, 100, 0, 0.2, 200, 10);
         // configAll.vBatOutputMode = VBatOutputMode.Modulated;
       

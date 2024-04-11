@@ -22,7 +22,7 @@ public class setPivotWithShooterMap extends Command{
     
     @Override 
     public void execute(){
-        if(lime.getID() == 7 || lime.getID() == 3){
+        if(lime.getID() == 7 || lime.getID() == 4){
              pivot.setPosition(lime.getShooterMapAngle());
         }
     

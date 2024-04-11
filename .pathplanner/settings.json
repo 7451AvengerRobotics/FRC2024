@@ -1,12 +1,14 @@
 {
-  "robotWidth": 0.8128,
+  "robotWidth": 0.81,
   "robotLength": 0.95,
   "holonomicMode": true,
   "pathFolders": [
-    "3NoteLeft",
-    "4NoteRight",
+    "2NoteLeft",
+    "2NoteRight",
     "3NoteAutoFar",
-    "4NoteAutoMid",
+    "4NoteAuto1",
+    "leftSide3",
+    "Pray",
     "Test"
   ],
   "autoFolders": [
@@ -16,9 +18,9 @@
     "5Notes",
     "Testing"
   ],
-  "defaultMaxVel": 4.0,
-  "defaultMaxAccel": 4.0,
-  "defaultMaxAngVel": 400.0,
-  "defaultMaxAngAccel": 500.0,
+  "defaultMaxVel": 3.85,
+  "defaultMaxAccel": 3.85,
+  "defaultMaxAngVel": 300.0,
+  "defaultMaxAngAccel": 200.0,
   "maxModuleSpeed": 5.0
 }
