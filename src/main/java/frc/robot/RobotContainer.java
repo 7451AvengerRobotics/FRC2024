@@ -252,12 +252,12 @@ public class RobotContainer {
 
 
     //Amp 
-      w.onTrue(new ParallelCommandGroup(new setPivotPosition(pivot, 38), 
+      w.onTrue(new ParallelCommandGroup(new setPivotPosition(pivot, -38), 
                 new elevatorPositionCommand(elevator, -95.145751953125), new indexCommand(index, -0.2).withTimeout(0.2)));
            
   //Reset
         s.onTrue(new ParallelCommandGroup(
-            new setPivotPosition(pivot, 0), 
+            new setPivotPosition(pivot, -3), 
             new elevatorPositionCommand(elevator, 0.0),
             new allFeed(feed, intake, index, 0, 0, 0),
             new shootFF(shooter, 0)
@@ -275,7 +275,7 @@ public class RobotContainer {
                          new indexCommand(index, -0.5)).andThen(new setLedColorCommand(led, 255, 0, 0))));
                          
         intakeButton.onTrue(new ParallelCommandGroup(
-            new setPivotPosition(pivot, 3), 
+            new setPivotPosition(pivot, -3), 
             new allFeed(feed, intake, index, -1, -0.45, -0.2)).until(feed::detected).andThen(
                     new feedCommand(feed, 0.1).raceWith(new WaitCommand(0.2))));
 
@@ -302,7 +302,7 @@ public class RobotContainer {
                          new indexCommand(index, -0.5)).andThen(new setLedColorCommand(led, 255, 0, 0))));
                 
         eight.onTrue(new allFeed(feed, intake, index, 0, 0, 0));
-        
+        five.onTrue(new setPivotPosition(pivot, -30));
      }  
      
 
