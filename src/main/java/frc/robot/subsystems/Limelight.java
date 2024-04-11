@@ -43,22 +43,22 @@ public class Limelight extends SubsystemBase {
     shooterAngleMap = new InterpolatingTreeMap<>() {{
      put(44.55, 0.0);
      put(45.5, 0.0);
-     put(58.54, 3.00 - mapOffset);
-     put(68.79, 4.6 - mapOffset);
-     put(69.72, 5.2 - mapOffset);
-     put(79.27, 6.6 - mapOffset);
-     put(83.5, 7.2 - mapOffset);
-     put(94.83, 8.4 - mapOffset);
-     put(105.41, 9.46 - mapOffset);
-     put(108.6, 9.6 - mapOffset);
-     put(118.97, 9.6 - mapOffset);
-     put(127.1, 10.615 - mapOffset);
-     put(128.1, 10.8 - mapOffset);
-     put(136.54, 9.9 - mapOffset);
-     put(140.32, 11- mapOffset);
-     put(149.82, 11.4 - mapOffset);
-     put(154.82, 11.265 - mapOffset);
-     put(158.2, 11.555 - mapOffset);
+     put(58.54, -3.00 - mapOffset);
+     put(68.79, -4.6 - mapOffset);
+     put(69.72, -5.2 - mapOffset);
+     put(79.27, -6.6 - mapOffset);
+     put(83.5, -7.2 - mapOffset);
+     put(94.83, -8.4 - mapOffset);
+     put(105.41, -9.46 - mapOffset);
+     put(108.6, -9.6 - mapOffset);
+     put(118.97, -9.6 - mapOffset);
+     put(127.1, -10.615 - mapOffset);
+     put(128.1, -10.8 - mapOffset);
+     put(136.54, -9.9 - mapOffset);
+     put(140.32, -11- mapOffset);
+     put(149.82, -11.4 - mapOffset);
+     put(154.82, -11.265 - mapOffset);
+     put(158.2, -11.555 - mapOffset);
     }};
 
 
@@ -158,7 +158,14 @@ public double limelight_aim_proportional()
         return false;
       }
 
-
+      public double setPivotAngleRegression(){
+        double a = -8.28941;
+        double b = 108.595;
+        double c = 1.34439;
+        double d = 6.79585;
+    
+        return -(a * Math.atan((b / getDistance()) - c) + d);
+     }
 
 
 

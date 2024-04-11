@@ -25,6 +25,7 @@ import frc.robot.commands.LedCommands.ledAnimationCommand;
 import frc.robot.commands.LedCommands.limelightAlignedLEDCommand;
 import frc.robot.commands.LedCommands.setLedColorCommand;
 import frc.robot.commands.PivotCommands.setPivotPosition;
+import frc.robot.commands.PivotCommands.setPivotPositionwithRegression;
 import frc.robot.commands.PivotCommands.setPivotWithShooterMap;
 import frc.robot.commands.RetrieveDisc.allFeed;
 import frc.robot.commands.RetrieveDisc.indexCommand;
@@ -297,7 +298,7 @@ public class RobotContainer {
         three.onTrue(new shootFF(shooter, 6000));
 
          seven.whileTrue(new ParallelCommandGroup(
-        new setPivotWithShooterMap(pivot, limelight), new shootFF(shooter, 6000)).withTimeout(0.85).andThen(new ParallelCommandGroup(
+        new setPivotPositionwithRegression(pivot, limelight), new shootFF(shooter, 6000)).withTimeout(0.85).andThen(new ParallelCommandGroup(
                          new feedCommand(feed, -1), 
                          new indexCommand(index, -0.5)).andThen(new setLedColorCommand(led, 255, 0, 0))));
                 

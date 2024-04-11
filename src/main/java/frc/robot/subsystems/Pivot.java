@@ -37,7 +37,10 @@ public class Pivot extends SubsystemBase {
 
        pivotconfig.CurrentLimits.StatorCurrentLimitEnable = true;
        pivotconfig.CurrentLimits.StatorCurrentLimit = 40; //amps
-       pivotconfig.Slot0.kP = 0.055; // Need to Tune
+       pivotconfig.Slot0.kP = 0.45; // Need to Tune
+       pivotconfig.Slot0.kI =0.01;
+
+       pivotconfig.Slot0.kS = 0.005;
       pivotconfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
        pivotconfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = -48; 
        pivotconfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
