@@ -7,7 +7,6 @@
           "incKey": 68
         },
         {
-          "decKey": 87,
           "incKey": 83
         },
         {
@@ -74,7 +73,7 @@
       "axisCount": 2,
       "buttonCount": 6,
       "buttonKeys": [
-        260,
+        87,
         268,
         266,
         261,
@@ -87,6 +86,11 @@
       "axisCount": 0,
       "buttonCount": 0,
       "povCount": 0
+    }
+  ],
+  "robotJoysticks": [
+    {
+      "guid": "Keyboard0"
     }
   ]
 }
